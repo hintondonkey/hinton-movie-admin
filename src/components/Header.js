@@ -13,7 +13,6 @@ const Header = () => {
             <Nav className="me-auto">
               <Nav.Link href="listmovie">Posts</Nav.Link>
               <Nav.Link href="addmovie">Add Movie</Nav.Link>
-              <Nav.Link to = "" className="nav-link" onClick = {() => localStorage.clear()} >Logout</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

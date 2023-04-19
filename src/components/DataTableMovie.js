@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import { putMovie, deleteMovie } from "../services/UserService";
 import { useNavigate } from 'react-router-dom'
 
-
 const Table = props => {
   const token = localStorage.getItem('mytoken');
   const navigate = useNavigate()
@@ -76,7 +75,8 @@ const Table = props => {
       // window.location.href = '/listmovie';
       const res = await deleteMovie(config, param.id);
       console.log('res delete', res);
-      window.location.reload();
+      window.location.reload()
+
     }
 
   };

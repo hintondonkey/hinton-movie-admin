@@ -4,10 +4,13 @@ import DataTable from "react-data-table-component";
 import FilterComponent from "./FilterComponent";
 import Button from 'react-bootstrap/Button';
 import { putMovie } from "../services/UserService";
+import { useNavigate } from 'react-router-dom'
 
 
 const Table = props => {
   const token = localStorage.getItem('mytoken');
+  const navigate = useNavigate()
+  const [value, setValue] = useState('active')
   const config = {
     headers: {
       'content-type': 'application/json',
@@ -55,7 +58,11 @@ const Table = props => {
   const addUpdateDelete = (param) => {
     return (
       <>
-        <Button variant="primary" onClick={() => handleEdit(param)}>
+        <Button
+          variant="primary"
+          className="mx-2"
+          onClick={() => handleEdit(param)}
+        >
           Edit
         </Button>
         <Button onClick={() => deleteMovei(param)} variant="danger">Delete</Button>
@@ -118,17 +125,15 @@ const Table = props => {
   };
 
   const handleEdit = (data) => {
-    console.log(data);
-
-    // setBtnName("Edit");
-    // setOpen(true);
-    // setEditData(data);
+    console.log('handleEdit: ', data)
+    navigate(`/listmovie/${data.id}`)
   };
 
   const [filterText, setFilterText] = React.useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = React.useState(
     false
   );
+
   // const filteredItems = data.filter(
   //   item => item.name && item.name.includes(filterText)
   // );
@@ -139,6 +144,7 @@ const Table = props => {
         .indexOf(filterText.toLowerCase()) !== -1
   );
 
+
   const subHeaderComponent = useMemo(() => {
     const handleClear = () => {
       if (filterText) {
@@ -146,13 +152,23 @@ const Table = props => {
         setFilterText("");
       }
     };
+    const handleChangeItem = (event) => {
+      console.log("handleChangeItem :", event.target.value);
+      console.log("handleChangeItem :", filteredItems);
+    };
 
     return (
-      <FilterComponent
-        onFilter={e => setFilterText(e.target.value)}
-        onClear={handleClear}
-        filterText={filterText}
-      />
+      <>
+        {/* <select onChange={handleChangeItem}>
+          <option value={true}>Active</option>
+          <option value={false}>UnActive</option>
+        </select> */}
+        <FilterComponent
+          onFilter={e => setFilterText(e.target.value)}
+          onClear={handleClear}
+          filterText={filterText}
+        />
+      </>
     );
   }, [filterText, resetPaginationToggle]);
 

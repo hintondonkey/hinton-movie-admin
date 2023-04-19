@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 import FilterComponent from "./FilterComponent";
 import Button from 'react-bootstrap/Button';
-import { putMovie } from "../services/UserService";
+import { putMovie, deleteMovie } from "../services/UserService";
 import { useNavigate } from 'react-router-dom'
 
 
@@ -65,17 +65,18 @@ const Table = props => {
         >
           Edit
         </Button>
-        <Button onClick={() => deleteMovei(param)} variant="danger">Delete</Button>
+        <Button onClick={() => removeMovie(param)} variant="danger">Delete</Button>
       </>
     );
   };
 
-  const deleteMovei = (param) => {
-    if (window.confirm(`Delete? ${param.title}`)) {
+  const removeMovie = async (param) => {
+    if (window.confirm(`Delete ${param.title} ?`)) {
       console.log("Delete : ", param.id);
       // window.location.href = '/listmovie';
-      filteredItems.filter(item => item.id !== param.id)
-
+      const res = await deleteMovie(config, param.id);
+      console.log('res delete', res);
+      window.location.reload();
     }
 
   };
@@ -89,7 +90,7 @@ const Table = props => {
     console.log("handleChange : ", tobody);
     const res = await putMovie(tobody, config, id);
     console.log("handleChange : ", res);
-
+    window.location.reload();
   };
 
   const checkActive = (param) => {

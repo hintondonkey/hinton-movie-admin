@@ -9,8 +9,11 @@ import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
 import TableTicket from './DataTicketMovie'
 import { createMovie } from '../services/UserService'
+import { useNavigate } from 'react-router-dom'
 
 const AddMovieTicket = () => {
+  const navigate = useNavigate()
+
   const token = localStorage.getItem('mytoken')
   const [file, setFile] = useState()
   const [startDate, setStartDate] = useState(new Date())
@@ -94,6 +97,7 @@ const AddMovieTicket = () => {
     }
     // console.log(data)
     await createMovie(data, config)
+    navigate('/listmovie');
   }
 
   return (

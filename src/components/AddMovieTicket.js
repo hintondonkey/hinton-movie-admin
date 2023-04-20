@@ -92,6 +92,7 @@ const AddMovieTicket = () => {
       time_close_date: closeDate.toLocaleTimeString().slice(0, -3),
       watchlist: ticketInfoList
     }
+    // console.log(data)
     await createMovie(data, config)
   }
 

@@ -108,7 +108,7 @@ const AddMovieTicket = () => {
       <div className="container mt-5 movie-ticket">
         <div className="mb-3">
           <h2>Add Image</h2>
-          <img src={file ? URL.createObjectURL(file) : ''} />
+          <img src={file ? URL.createObjectURL(file) : ''} class="responsive" />
           <input type="file" onChange={handleChange} />
           <button onClick={handleCreateMovie} className="btn btn-success">
             Create Movie

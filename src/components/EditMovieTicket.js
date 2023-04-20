@@ -158,7 +158,7 @@ const EditMovieTicket = () => {
                   : URL.createObjectURL(file)
                 : ''
             }
-            className="mx-2 rounded"
+            className="mx-2 rounded responsive"
           />
           <input type="file" onChange={handleChange} />
           <button onClick={handleUpdateMovie} className="btn btn-success">
@@ -237,13 +237,13 @@ const EditMovieTicket = () => {
             onChange={(date) => {
               watchSelected
                 ? setWatchSelected({
-                    ...watchSelected,
-                    date_picker: moment(date).format('YYYY-MM-DD')
-                  })
+                  ...watchSelected,
+                  date_picker: moment(date).format('YYYY-MM-DD')
+                })
                 : setTicketInfo({
-                    ...ticketInfo,
-                    date
-                  })
+                  ...ticketInfo,
+                  date
+                })
             }}
             timeIntervals={15}
             timeCaption="Time"
@@ -258,20 +258,20 @@ const EditMovieTicket = () => {
             selected={
               watchSelected
                 ? new Date(
-                    `${watchSelected?.date_picker} ${watchSelected?.time_show_date}`
-                  )
+                  `${watchSelected?.date_picker} ${watchSelected?.time_show_date}`
+                )
                 : ticketInfo.time
             }
             onChange={(date) => {
               watchSelected
                 ? setWatchSelected({
-                    ...watchSelected,
-                    time_show_date: date.toLocaleTimeString().slice(0, -3)
-                  })
+                  ...watchSelected,
+                  time_show_date: date.toLocaleTimeString().slice(0, -3)
+                })
                 : setTicketInfo({
-                    ...ticketInfo,
-                    time: date
-                  })
+                  ...ticketInfo,
+                  time: date
+                })
             }}
             showTimeSelect
             showTimeSelectOnly
@@ -290,13 +290,13 @@ const EditMovieTicket = () => {
             onChange={(e) => {
               watchSelected
                 ? setWatchSelected({
-                    ...watchSelected,
-                    price: Number(e.target.value)
-                  })
+                  ...watchSelected,
+                  price: Number(e.target.value)
+                })
                 : setTicketInfo({
-                    ...ticketInfo,
-                    price: e.target.value
-                  })
+                  ...ticketInfo,
+                  price: e.target.value
+                })
             }}
             name="price"
             className="text-center"
@@ -311,13 +311,13 @@ const EditMovieTicket = () => {
             onChange={(e) => {
               watchSelected
                 ? setWatchSelected({
-                    ...watchSelected,
-                    website: e.target.value
-                  })
+                  ...watchSelected,
+                  website: e.target.value
+                })
                 : setTicketInfo({
-                    ...ticketInfo,
-                    link: e.target.value
-                  })
+                  ...ticketInfo,
+                  link: e.target.value
+                })
             }}
             name="link"
             className="text-center"

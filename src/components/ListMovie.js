@@ -39,9 +39,6 @@ function Listmovie() {
       <Header />
       <br />
       <br />
-      <Link to={`/addmovie`}>
-        <Button variant="primary">Add Movie </Button>
-      </Link>
       <Table data={listMovie} />
     </>
   )

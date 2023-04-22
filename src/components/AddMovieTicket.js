@@ -1,25 +1,32 @@
-import React, { useMemo, useState } from 'react'
-import { useEffect } from 'react'
-import Header from './Header'
-import Container from 'react-bootstrap/Container'
-import './AddMovieTicket.scss'
-import DatePicker from 'react-datepicker'
-import moment from 'moment'
+import React, { useMemo, useState } from 'react';
+import { useEffect } from 'react';
+import Header from './Header';
+import Container from 'react-bootstrap/Container';
+import './AddMovieTicket.scss';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
-import 'react-datepicker/dist/react-datepicker.css'
-import TableTicket from './DataTicketMovie'
-import { createMovie } from '../services/UserService'
-import { useNavigate } from 'react-router-dom'
+import 'react-datepicker/dist/react-datepicker.css';
+import TableTicket from './DataTicketMovie';
+import { postcreateMovie, putMovie } from '../services/UserService';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { addMonths } from 'date-fns';
 
-const AddMovieTicket = () => {
+const AddMovieTicket = (props) => {
   const navigate = useNavigate()
 
   const token = localStorage.getItem('mytoken')
   const [file, setFile] = useState()
-  const [startDate, setStartDate] = useState(new Date())
-  const [closeDate, setCloseDate] = useState(new Date())
-  const [movieTitle, setMovieTitle] = useState('')
-  const [movieSummary, setMovieSummary] = useState('')
+  const [startDate, setStartDate] = useState(null);
+  const [closeDate, setCloseDate] = useState(null);
+  const [movieTitle, setMovieTitle] = useState('');
+  const [movieSummary, setMovieSummary] = useState('');
+
+  let handleColor = (time) => {
+    return time.getHours() > 12 ? "text-success" : "text-error";
+  };
 
   const [ticketInfo, setTicketInfo] = useState({
     id: '',
@@ -33,6 +40,13 @@ const AddMovieTicket = () => {
   const config = {
     headers: {
       'content-type': 'multipart/form-data',
+      Authorization: `Token ${token}`
+    }
+  }
+
+  const config_json = {
+    headers: {
+      'content-type': 'application/json',
       Authorization: `Token ${token}`
     }
   }
@@ -85,19 +99,66 @@ const AddMovieTicket = () => {
 
   const handleCreateMovie = async () => {
     ticketInfoList.forEach((tk) => delete tk.id)
-    const data = {
-      title: movieTitle,
-      description: movieSummary,
-      image: file,
-      show_date: moment(startDate).format('YYYY-MM-DD'),
-      time_show_date: startDate.toLocaleTimeString().slice(0, -3),
-      close_date: moment(closeDate).format('YYYY-MM-DD'),
-      time_close_date: closeDate.toLocaleTimeString().slice(0, -3),
-      watchlist: ticketInfoList
+    if (!file) {
+      toast.error("Please input Image!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
     }
-    // console.log(data)
-    await createMovie(data, config)
-    navigate('/listmovie');
+    if (startDate === null) {
+      toast.error("Please input start Date!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (closeDate === null) {
+      toast.error("Please input Close Date!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (!movieTitle) {
+      toast.error("Please input Movie Title!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (!movieSummary) {
+      toast.error("Please input Movie Summary!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (ticketInfoList?.length === 0) {
+      toast.error("Please create a ticket before saving !", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (ticketInfoList?.length > 0 && startDate && closeDate && movieTitle && movieSummary) {
+      const data = {
+        title: movieTitle,
+        description: movieSummary,
+        show_date: moment(startDate).format('YYYY-MM-DD'),
+        time_show_date: startDate.toLocaleTimeString().slice(0, -3),
+        close_date: moment(closeDate).format('YYYY-MM-DD'),
+        time_close_date: closeDate.toLocaleTimeString().slice(0, -3),
+        watchlist: ticketInfoList
+      }
+      const res = await postcreateMovie(data, config_json)
+      if (res) {
+        const data_image = {
+          image: file
+        }
+        const res_image = await putMovie(data_image, config, res.id)
+        if (res_image) {
+          navigate('/listmovie');
+          toast.success("Create Movie Success !", {
+            position: toast.POSITION.TOP_RIGHT
+          });
+        }
+      }
+    }
   }
 
   return (
@@ -108,7 +169,7 @@ const AddMovieTicket = () => {
       <div className="container mt-5 movie-ticket">
         <div className="mb-3">
           <h2>Add Image</h2>
-          <img src={file ? URL.createObjectURL(file) : ''} class="responsive" />
+          <img src={file ? URL.createObjectURL(file) : ''} className="responsive" />
           <input type="file" onChange={handleChange} />
           <button onClick={handleCreateMovie} className="btn btn-success">
             Create Movie
@@ -124,6 +185,10 @@ const AddMovieTicket = () => {
             timeIntervals={15}
             timeCaption="time"
             dateFormat="MMMM d, yyyy h:mm aa"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
         <div className="mb-3">
@@ -136,6 +201,10 @@ const AddMovieTicket = () => {
             timeIntervals={15}
             timeCaption="time"
             dateFormat="MMMM d, yyyy h:mm aa"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
 
@@ -197,6 +266,10 @@ const AddMovieTicket = () => {
             timeCaption="Time"
             dateFormat="MMMM d, yyyy"
             className="text-center"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
 

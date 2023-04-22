@@ -6,6 +6,9 @@ import './AddMovieTicket.scss'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 import 'react-datepicker/dist/react-datepicker.css'
 import TableTicket from './DataTicketMovie'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -15,7 +18,8 @@ import {
   editWatchlist,
   getMovieById,
   putMovie
-} from '../services/UserService'
+} from '../services/UserService';
+import { addMonths } from 'date-fns';
 
 const EditMovieTicket = () => {
   const navigate = useNavigate()
@@ -24,10 +28,14 @@ const EditMovieTicket = () => {
   const [watchSelected, setWatchSelected] = useState(null)
   const token = localStorage.getItem('mytoken')
   const [file, setFile] = useState()
-  const [startDate, setStartDate] = useState('')
-  const [closeDate, setCloseDate] = useState('')
+  const [startDate, setStartDate] = useState(null)
+  const [closeDate, setCloseDate] = useState(null)
   const [movieTitle, setMovieTitle] = useState('')
   const [movieSummary, setMovieSummary] = useState('')
+
+  let handleColor = (time) => {
+    return time.getHours() > 12 ? "text-success" : "text-error";
+  };
 
   const [ticketInfo, setTicketInfo] = useState({
     date: '',
@@ -114,6 +122,12 @@ const EditMovieTicket = () => {
   }
 
   const handleUpdateMovie = async () => {
+    if (ticketInfoList?.length === 0) {
+      toast.error("Please create a ticket before saving !", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
     const data = {
       ...movieSelected,
       image: file,
@@ -175,6 +189,10 @@ const EditMovieTicket = () => {
             timeIntervals={15}
             timeCaption="time"
             dateFormat="MMMM d, yyyy h:mm aa"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
         <div className="mb-3">
@@ -187,6 +205,10 @@ const EditMovieTicket = () => {
             timeIntervals={15}
             timeCaption="time"
             dateFormat="MMMM d, yyyy h:mm aa"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
 
@@ -249,6 +271,10 @@ const EditMovieTicket = () => {
             timeCaption="Time"
             dateFormat="MMMM d, yyyy"
             className="text-center"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
 

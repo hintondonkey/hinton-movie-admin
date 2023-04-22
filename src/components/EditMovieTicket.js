@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import Header from './Header'
-import Container from 'react-bootstrap/Container'
 import './AddMovieTicket.scss'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 import 'react-datepicker/dist/react-datepicker.css'

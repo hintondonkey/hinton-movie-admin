@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react'
 import "./Login.scss";
 import userIcon from '../src/assets/images/user.svg';
 import passIcon from '../src/assets/images/pass.svg';
@@ -11,10 +12,21 @@ const Login = (props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const token = localStorage.getItem('mytoken');
   let navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      window.location.href = '/listmovie'
+      return
+    }
+  }, [token]);
+
 
   const login = async () => {
     let res = await handleLoginApi(username, password);
+
+
     if (res.token) {
       localStorage.setItem('mytoken', res.token);
       navigate('/listmovie');

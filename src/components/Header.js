@@ -1,19 +1,24 @@
 import React from 'react';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
+  const handleLout = () => {
+    localStorage.clear();
+    window.location.href = '/'
+  }
 
   return (
     <>
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="listmovie">Hinton Movie Admin</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/listmovie">Hinton Movie Admin</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="listmovie">Posts</Nav.Link>
-              <Nav.Link href="addmovie">Add Movie</Nav.Link>
-              <Nav.Link to = "" className="nav-link" onClick = {() => localStorage.clear()} >Logout</Nav.Link>
+              <Nav.Link as={Link} to="/listmovie">Posts</Nav.Link>
+              <Nav.Link as={Link} to="/addmovie">Add Movie</Nav.Link>
+              <Nav.Link as={Link} to="" className="nav-link" onClick={() => handleLout()} >Logout</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

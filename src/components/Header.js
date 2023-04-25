@@ -8,6 +8,10 @@ const Header = () => {
     window.location.href = '/'
   }
 
+  const handleLoad = () => {
+    window.location.href = '/addmovie'
+  }
+
   return (
     <>
       <Navbar bg="light" expand="lg">
@@ -17,7 +21,7 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/listmovie">Posts</Nav.Link>
-              <Nav.Link as={Link} to="/addmovie">Add Movie</Nav.Link>
+              <Nav.Link as={Link} to="" onClick={() => handleLoad()}>Add Movie</Nav.Link>
               <Nav.Link as={Link} to="" className="nav-link" onClick={() => handleLout()} >Logout</Nav.Link>
             </Nav>
           </Navbar.Collapse>

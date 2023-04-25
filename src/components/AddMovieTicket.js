@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useEffect } from 'react';
 import Header from './Header';
-import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
 import './AddMovieTicket.scss';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
@@ -23,6 +23,10 @@ const AddMovieTicket = (props) => {
   const [closeDate, setCloseDate] = useState(null);
   const [movieTitle, setMovieTitle] = useState('');
   const [movieSummary, setMovieSummary] = useState('');
+  const [ischecked, setIsChecked] = useState(false);
+
+  const [titleNoti, setTitleNoti] = useState('');
+  const [summaryNoti, setSummaryNoti] = useState('');
 
   let handleColor = (time) => {
     return time.getHours() > 12 ? "text-success" : "text-error";
@@ -57,6 +61,11 @@ const AddMovieTicket = (props) => {
       return
     }
   }, [token])
+
+  // useEffect(() => {
+  //   window.location.href = '/addmovie'
+  //   return
+  // }, [])
 
   function handleChange(e) {
     setFile(e.target.files[0])
@@ -135,6 +144,20 @@ const AddMovieTicket = (props) => {
       });
       return;
     }
+    if (ischecked) {
+      if (!titleNoti) {
+        toast.error("Please input Title Notification!", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        return;
+      }
+      if (!summaryNoti) {
+        toast.error("Please input Summary Notification!", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        return;
+      }
+    }
     if (ticketInfoList?.length > 0 && startDate && closeDate && movieTitle && movieSummary) {
       const data = {
         title: movieTitle,
@@ -143,6 +166,8 @@ const AddMovieTicket = (props) => {
         time_show_date: startDate.toLocaleTimeString().slice(0, -3),
         close_date: moment(closeDate).format('YYYY-MM-DD'),
         time_close_date: closeDate.toLocaleTimeString().slice(0, -3),
+        titleNoti: titleNoti,
+        summaryNoti: summaryNoti,
         watchlist: ticketInfoList
       }
       const res = await postcreateMovie(data, config_json)
@@ -224,7 +249,33 @@ const AddMovieTicket = (props) => {
             onChange={handleChangeInput(setMovieSummary)}
           />
         </div>
-        <div className="mb-3"></div>
+        <div className="mb-3">
+          <label>
+            <input type="checkbox"
+              defaultChecked={ischecked}
+              onChange={() => setIsChecked(!ischecked)}
+            />
+            Push Notification App
+          </label>
+        </div>
+        {ischecked && (<div>
+          <div className="mb-3">
+            <h2>Title Notification</h2>
+            <input value={titleNoti} onChange={handleChangeInput(setTitleNoti)} />
+
+          </div>
+
+          <div className="mb-3">
+            <h2>Message Notification</h2>
+            <textarea
+              value={summaryNoti}
+              rows={3}
+              onChange={handleChangeInput(setSummaryNoti)}
+            />
+          </div>
+        </div>)
+
+        }
         <hr />
         <div className="d-flex justify-content-center">
           <h3>Ticket Information</h3>
@@ -309,6 +360,7 @@ const AddMovieTicket = (props) => {
             value={ticketInfo?.price || ''}
           />
         </div>
+
 
         <div className="mb-3">
           <h2>Link to ticket</h2>

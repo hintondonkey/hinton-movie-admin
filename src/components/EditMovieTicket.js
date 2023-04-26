@@ -20,6 +20,7 @@ import {
 } from '../services/UserService';
 import { addMonths } from 'date-fns';
 
+
 const EditMovieTicket = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -31,6 +32,11 @@ const EditMovieTicket = () => {
   const [closeDate, setCloseDate] = useState(null)
   const [movieTitle, setMovieTitle] = useState('')
   const [movieSummary, setMovieSummary] = useState('')
+
+  const [ischecked, setIsChecked] = useState(false);
+
+  const [titleNoti, setTitleNoti] = useState('');
+  const [summaryNoti, setSummaryNoti] = useState('');
 
   let handleColor = (time) => {
     return time.getHours() > 12 ? "text-success" : "text-error";
@@ -60,6 +66,8 @@ const EditMovieTicket = () => {
     setMovieTitle(res.title)
     setMovieSummary(res.description)
     setFile(res.image)
+    setTitleNoti(res.titleNoti)
+    setSummaryNoti(res.summaryNoti)
 
     setTicketInfoList(res.watchlist)
   }
@@ -121,28 +129,71 @@ const EditMovieTicket = () => {
   }
 
   const handleUpdateMovie = async () => {
+    if (startDate === null) {
+      toast.error("Please input start Date!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (closeDate === null) {
+      toast.error("Please input Close Date!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (!movieTitle) {
+      toast.error("Please input Movie Title!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (!movieSummary) {
+      toast.error("Please input Movie Summary!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
     if (ticketInfoList?.length === 0) {
       toast.error("Please create a ticket before saving !", {
         position: toast.POSITION.TOP_RIGHT
       });
       return;
     }
-    const data = {
-      ...movieSelected,
-      image: file,
-      show_date: moment(startDate).format('YYYY-MM-DD'),
-      time_show_date: startDate.toLocaleTimeString().slice(0, -3),
-      close_date: moment(closeDate).format('YYYY-MM-DD'),
-      time_close_date: closeDate.toLocaleTimeString().slice(0, -3),
-      title: movieTitle,
-      description: movieSummary
+    if (ischecked) {
+      if (!titleNoti) {
+        toast.error("Please input Title Notification!", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        return;
+      }
+      if (!summaryNoti) {
+        toast.error("Please input Summary Notification!", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        return;
+      }
     }
+    if (ticketInfoList?.length > 0 && startDate && closeDate && movieTitle && movieSummary) {
+      const data = {
+        ...movieSelected,
+        image: file,
+        show_date: moment(startDate).format('YYYY-MM-DD'),
+        time_show_date: startDate.toLocaleTimeString().slice(0, -3),
+        close_date: moment(closeDate).format('YYYY-MM-DD'),
+        time_close_date: closeDate.toLocaleTimeString().slice(0, -3),
+        title: movieTitle,
+        description: movieSummary,
+        titleNoti: titleNoti,
+        summaryNoti: summaryNoti,
+        ischecked: ischecked
+      }
 
-    if (typeof data.image === 'string') {
-      delete data.image
+      if (typeof data.image === 'string') {
+        delete data.image
+      }
+      await putMovie(data, config, id)
+      navigate('/listmovie')
     }
-    await putMovie(data, config, id)
-    navigate('/listmovie')
   }
 
   const handleClearAllTicketInfo = async () => {
@@ -227,7 +278,33 @@ const EditMovieTicket = () => {
             onChange={handleChangeInput(setMovieSummary)}
           />
         </div>
-        <div className="mb-3"></div>
+        <div className="mb-3">
+          <label>
+            <input type="checkbox"
+              defaultChecked={ischecked}
+              onChange={() => setIsChecked(!ischecked)}
+            />
+            Push Notification App
+          </label>
+        </div>
+        {ischecked && (<div>
+          <div className="mb-3">
+            <h2>Title Notification</h2>
+            <input value={titleNoti} onChange={handleChangeInput(setTitleNoti)} />
+
+          </div>
+
+          <div className="mb-3">
+            <h2>Message Notification</h2>
+            <textarea
+              value={summaryNoti}
+              rows={3}
+              onChange={handleChangeInput(setSummaryNoti)}
+            />
+          </div>
+        </div>)
+
+        }
         <hr />
         <div className="d-flex justify-content-center">
           <h3>Ticket Information</h3>

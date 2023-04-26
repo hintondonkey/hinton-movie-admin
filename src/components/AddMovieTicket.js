@@ -63,9 +63,9 @@ const AddMovieTicket = (props) => {
   }, [token])
 
   // useEffect(() => {
-  //   window.location.href = '/addmovie'
+  //   window.location.reload();
   //   return
-  // }, [])
+  // })
 
   function handleChange(e) {
     setFile(e.target.files[0])
@@ -170,7 +170,8 @@ const AddMovieTicket = (props) => {
         summaryNoti: summaryNoti,
         watchlist: ticketInfoList
       }
-      const res = await postcreateMovie(data, config_json)
+      const res = await postcreateMovie(data, config_json);
+      console.log(res);
       if (res) {
         const data_image = {
           image: file

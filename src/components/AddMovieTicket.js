@@ -174,7 +174,8 @@ const AddMovieTicket = (props) => {
       console.log(res);
       if (res) {
         const data_image = {
-          image: file
+          image: file,
+          ischecked: false
         }
         const res_image = await putMovie(data_image, config, res.id)
         if (res_image) {

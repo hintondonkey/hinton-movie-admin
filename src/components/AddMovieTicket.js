@@ -138,6 +138,12 @@ const AddMovieTicket = (props) => {
       });
       return;
     }
+    if (movieTitle.length === movieSummary.length) {
+      toast.error("movie title and movie summary must be different !", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
     if (ticketInfoList?.length === 0) {
       toast.error("Please create a ticket before saving !", {
         position: toast.POSITION.TOP_RIGHT

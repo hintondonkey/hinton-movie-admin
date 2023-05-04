@@ -4,6 +4,12 @@
   }
 }
 
+.movie-ticket{
+  .responsive{
+    width: 30%;
+    height: auto;
+  }
+}
 
 .react-datepicker-wrapper{
   width: 35% !important;
@@ -11,4 +17,10 @@
 
 .movie-ticket{
   background-color: darkgrey;
+}
+
+.react-datepicker__tab-loop{
+  .react-datepicker-popper {
+    padding: 0 206px;
+  }
 }

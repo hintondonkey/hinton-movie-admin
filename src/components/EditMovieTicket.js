@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import Header from './Header'
-import Container from 'react-bootstrap/Container'
 import './AddMovieTicket.scss'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
+
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 import 'react-datepicker/dist/react-datepicker.css'
 import TableTicket from './DataTicketMovie'
@@ -15,7 +17,9 @@ import {
   editWatchlist,
   getMovieById,
   putMovie
-} from '../services/UserService'
+} from '../services/UserService';
+import { addMonths } from 'date-fns';
+
 
 const EditMovieTicket = () => {
   const navigate = useNavigate()
@@ -24,10 +28,19 @@ const EditMovieTicket = () => {
   const [watchSelected, setWatchSelected] = useState(null)
   const token = localStorage.getItem('mytoken')
   const [file, setFile] = useState()
-  const [startDate, setStartDate] = useState('')
-  const [closeDate, setCloseDate] = useState('')
+  const [startDate, setStartDate] = useState(null)
+  const [closeDate, setCloseDate] = useState(null)
   const [movieTitle, setMovieTitle] = useState('')
   const [movieSummary, setMovieSummary] = useState('')
+
+  const [ischecked, setIsChecked] = useState(false);
+
+  const [titleNoti, setTitleNoti] = useState('');
+  const [summaryNoti, setSummaryNoti] = useState('');
+
+  let handleColor = (time) => {
+    return time.getHours() > 12 ? "text-success" : "text-error";
+  };
 
   const [ticketInfo, setTicketInfo] = useState({
     date: '',
@@ -53,6 +66,8 @@ const EditMovieTicket = () => {
     setMovieTitle(res.title)
     setMovieSummary(res.description)
     setFile(res.image)
+    setTitleNoti(res.titleNoti)
+    setSummaryNoti(res.summaryNoti)
 
     setTicketInfoList(res.watchlist)
   }
@@ -114,22 +129,71 @@ const EditMovieTicket = () => {
   }
 
   const handleUpdateMovie = async () => {
-    const data = {
-      ...movieSelected,
-      image: file,
-      show_date: moment(startDate).format('YYYY-MM-DD'),
-      time_show_date: startDate.toLocaleTimeString().slice(0, -3),
-      close_date: moment(closeDate).format('YYYY-MM-DD'),
-      time_close_date: closeDate.toLocaleTimeString().slice(0, -3),
-      title: movieTitle,
-      description: movieSummary
+    if (startDate === null) {
+      toast.error("Please input start Date!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
     }
+    if (closeDate === null) {
+      toast.error("Please input Close Date!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (!movieTitle) {
+      toast.error("Please input Movie Title!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (!movieSummary) {
+      toast.error("Please input Movie Summary!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (ticketInfoList?.length === 0) {
+      toast.error("Please create a ticket before saving !", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      return;
+    }
+    if (ischecked) {
+      if (!titleNoti) {
+        toast.error("Please input Title Notification!", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        return;
+      }
+      if (!summaryNoti) {
+        toast.error("Please input Summary Notification!", {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        return;
+      }
+    }
+    if (ticketInfoList?.length > 0 && startDate && closeDate && movieTitle && movieSummary) {
+      const data = {
+        ...movieSelected,
+        image: file,
+        show_date: moment(startDate).format('YYYY-MM-DD'),
+        time_show_date: startDate.toLocaleTimeString().slice(0, -3),
+        close_date: moment(closeDate).format('YYYY-MM-DD'),
+        time_close_date: closeDate.toLocaleTimeString().slice(0, -3),
+        title: movieTitle,
+        description: movieSummary,
+        titleNoti: titleNoti,
+        summaryNoti: summaryNoti,
+        ischecked: ischecked
+      }
 
-    if (typeof data.image === 'string') {
-      delete data.image
+      if (typeof data.image === 'string') {
+        delete data.image
+      }
+      await putMovie(data, config, id)
+      navigate('/listmovie')
     }
-    await putMovie(data, config, id)
-    navigate('/listmovie')
   }
 
   const handleClearAllTicketInfo = async () => {
@@ -158,7 +222,7 @@ const EditMovieTicket = () => {
                   : URL.createObjectURL(file)
                 : ''
             }
-            className="mx-2 rounded"
+            className="mx-2 rounded responsive"
           />
           <input type="file" onChange={handleChange} />
           <button onClick={handleUpdateMovie} className="btn btn-success">
@@ -175,6 +239,10 @@ const EditMovieTicket = () => {
             timeIntervals={15}
             timeCaption="time"
             dateFormat="MMMM d, yyyy h:mm aa"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
         <div className="mb-3">
@@ -187,6 +255,10 @@ const EditMovieTicket = () => {
             timeIntervals={15}
             timeCaption="time"
             dateFormat="MMMM d, yyyy h:mm aa"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
 
@@ -206,7 +278,33 @@ const EditMovieTicket = () => {
             onChange={handleChangeInput(setMovieSummary)}
           />
         </div>
-        <div className="mb-3"></div>
+        <div className="mb-3">
+          <label>
+            <input type="checkbox"
+              defaultChecked={ischecked}
+              onChange={() => setIsChecked(!ischecked)}
+            />
+            Push Notification App
+          </label>
+        </div>
+        {ischecked && (<div>
+          <div className="mb-3">
+            <h2>Title Notification</h2>
+            <input value={titleNoti} onChange={handleChangeInput(setTitleNoti)} />
+
+          </div>
+
+          <div className="mb-3">
+            <h2>Message Notification</h2>
+            <textarea
+              value={summaryNoti}
+              rows={3}
+              onChange={handleChangeInput(setSummaryNoti)}
+            />
+          </div>
+        </div>)
+
+        }
         <hr />
         <div className="d-flex justify-content-center">
           <h3>Ticket Information</h3>
@@ -237,18 +335,22 @@ const EditMovieTicket = () => {
             onChange={(date) => {
               watchSelected
                 ? setWatchSelected({
-                    ...watchSelected,
-                    date_picker: moment(date).format('YYYY-MM-DD')
-                  })
+                  ...watchSelected,
+                  date_picker: moment(date).format('YYYY-MM-DD')
+                })
                 : setTicketInfo({
-                    ...ticketInfo,
-                    date
-                  })
+                  ...ticketInfo,
+                  date
+                })
             }}
             timeIntervals={15}
             timeCaption="Time"
             dateFormat="MMMM d, yyyy"
             className="text-center"
+            timeClassName={handleColor}
+            minDate={new Date()}
+            maxDate={addMonths(new Date(), 5)}
+            showDisabledMonthNavigation
           />
         </div>
 
@@ -258,20 +360,20 @@ const EditMovieTicket = () => {
             selected={
               watchSelected
                 ? new Date(
-                    `${watchSelected?.date_picker} ${watchSelected?.time_show_date}`
-                  )
+                  `${watchSelected?.date_picker} ${watchSelected?.time_show_date}`
+                )
                 : ticketInfo.time
             }
             onChange={(date) => {
               watchSelected
                 ? setWatchSelected({
-                    ...watchSelected,
-                    time_show_date: date.toLocaleTimeString().slice(0, -3)
-                  })
+                  ...watchSelected,
+                  time_show_date: date.toLocaleTimeString().slice(0, -3)
+                })
                 : setTicketInfo({
-                    ...ticketInfo,
-                    time: date
-                  })
+                  ...ticketInfo,
+                  time: date
+                })
             }}
             showTimeSelect
             showTimeSelectOnly
@@ -290,13 +392,13 @@ const EditMovieTicket = () => {
             onChange={(e) => {
               watchSelected
                 ? setWatchSelected({
-                    ...watchSelected,
-                    price: Number(e.target.value)
-                  })
+                  ...watchSelected,
+                  price: Number(e.target.value)
+                })
                 : setTicketInfo({
-                    ...ticketInfo,
-                    price: e.target.value
-                  })
+                  ...ticketInfo,
+                  price: e.target.value
+                })
             }}
             name="price"
             className="text-center"
@@ -311,13 +413,13 @@ const EditMovieTicket = () => {
             onChange={(e) => {
               watchSelected
                 ? setWatchSelected({
-                    ...watchSelected,
-                    website: e.target.value
-                  })
+                  ...watchSelected,
+                  website: e.target.value
+                })
                 : setTicketInfo({
-                    ...ticketInfo,
-                    link: e.target.value
-                  })
+                  ...ticketInfo,
+                  link: e.target.value
+                })
             }}
             name="link"
             className="text-center"

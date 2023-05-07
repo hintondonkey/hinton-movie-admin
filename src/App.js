@@ -1,12 +1,13 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './Login';
 import Listmovie from './components/ListMovie';
-import AddMovieTicket from './components/AddMovieTicket';
+
+import 'antd/dist/reset.css';
 import { ToastContainer } from 'react-toastify';
 import EditMovieTicket from './components/EditMovieTicket';
+
 import LoginPage from './view/login_page';
-import AddMoviePage from './view/add_movie_page';
+import AddMoviePage from './view/AddMoviePage';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                         <Route index element={<Listmovie />} />
                     </Route>
                     <Route path="/addmovie" element={<AddMoviePage />} />
+                    <Route path="/addmovie1" element={<EditMovieTicket />} />
                 </Routes>
             </BrowserRouter>
             <ToastContainer

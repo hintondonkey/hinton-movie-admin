@@ -5,10 +5,11 @@ import { IoIosAdd } from 'react-icons/io';
 import { MdDeleteOutline } from 'react-icons/md';
 import TicketModal from './TicketModal';
 
-export default function TicketForm() {
-    const [openModal, setOpenModal] = useState(false);
+export default function TicketForm(props) {
+    let { listTicket, setListTicket } = props;
 
-    const [listTicket, setListTicket] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+    const [ticketForEdit, setTicketForEdit] = useState(null);
 
     const showModal = () => {
         setOpenModal(true);
@@ -18,16 +19,24 @@ export default function TicketForm() {
         setOpenModal(false);
     };
 
+    const handleCreateTicket = (item) => {
+        const newList = [...listTicket];
+        newList.push(item);
+
+        setListTicket(newList);
+        setOpenModal(false);
+    };
+
     const columns = [
         {
             title: 'Date Picker',
-            dataIndex: 'date_picker_str',
-            key: 'date_picker_str',
+            dataIndex: 'datePickerStr',
+            key: 'datePickerStr',
         },
         {
             title: 'Time',
-            dataIndex: 'time_show_date_str',
-            key: 'time_show_date_str',
+            dataIndex: 'timeShowDateStr',
+            key: 'timeShowDateStr',
         },
         {
             title: 'Price',
@@ -62,15 +71,7 @@ export default function TicketForm() {
                             size="small"
                             onClick={() => {
                                 console.log('val', val);
-                                let {
-                                    id,
-                                    date_picker,
-                                    date_picker_str,
-                                    time_show_date,
-                                    time_show_date_str,
-                                    price,
-                                    website,
-                                } = val;
+                                setTicketForEdit(val);
 
                                 setOpenModal(true);
                             }}
@@ -123,6 +124,8 @@ export default function TicketForm() {
             <TicketModal
                 isOpenModal={openModal}
                 closeModal={handleCloseModal}
+                onSave={handleCreateTicket}
+                ticketForEdit={ticketForEdit}
             />
         </div>
     );

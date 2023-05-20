@@ -9,34 +9,58 @@ import {
     TimePicker,
 } from 'antd';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DANGER_COLOR, SUCCESS_COLOR } from '../../constants/colors';
+import { v4 as uuidv4 } from 'uuid';
+
+const validateMessages = {
+    required: '${label} is required',
+};
 
 export default function TicketModal(props) {
     const [loading, setLoading] = useState(false);
-    const [date_picker, setdate_picker] = useState('');
-    const [date_picker_str, setdate_picker_str] = useState('');
-    const [time_show_date, settime_show_date] = useState('');
-    const [time_show_date_str, settime_show_date_str] = useState('');
-    const [price, setprice] = useState('');
-    const [website, setwebsite] = useState('');
+    const [datePicker, setDatePicker] = useState('');
+    const [datePickerStr, setDatePickerStr] = useState('');
+    const [timeShowDate, setTimeShowDate] = useState('');
+    const [timeShowDateStr, setTimeShowDateStr] = useState('');
+    const [price, setPrice] = useState('');
+    const [website, setWebsite] = useState('');
 
     const [formTicket] = Form.useForm();
 
-    let { isOpenModal, closeModal } = props;
+    let { isOpenModal, closeModal, onSave, ticketForEdit } = props;
+
+    useEffect(() => {
+        if (ticketForEdit != null) {
+            console.log('Vào hàm useEffect', ticketForEdit);
+            formTicket.setFieldsValue({
+                datePicker: ticketForEdit.datePicker,
+                datePickerStr: ticketForEdit.datePickerStr,
+                timeShowDate: ticketForEdit.timeShowDate,
+                timeShowDateStr: ticketForEdit.timeShowDateStr,
+                price: ticketForEdit.price,
+                website: ticketForEdit.website,
+            });
+        }
+    }, [ticketForEdit]);
+
+    const handleCloseModal = () => {
+        formTicket.resetFields();
+        closeModal();
+    };
 
     return (
         <Modal
             title="Create New Ticket"
             open={isOpenModal}
-            onCancel={closeModal}
+            onCancel={handleCloseModal}
             width="40%"
             footer={[
                 <Row>
                     <Col span={6} offset={10}>
                         <Button
                             key="back"
-                            onClick={closeModal}
+                            onClick={handleCloseModal}
                             style={{
                                 backgroundColor: DANGER_COLOR,
                                 color: 'white',
@@ -51,7 +75,24 @@ export default function TicketModal(props) {
                             key="submit"
                             type="primary"
                             loading={loading}
-                            onClick={() => {}}
+                            onClick={() => {
+                                formTicket
+                                    .validateFields()
+                                    .then((val) => {
+                                        onSave({
+                                            key: uuidv4(),
+                                            datePicker,
+                                            datePickerStr,
+                                            timeShowDate,
+                                            timeShowDateStr,
+                                            price,
+                                            website,
+                                        });
+                                    })
+                                    .catch((error) => {
+                                        console.log('error', error);
+                                    });
+                            }}
                             style={{ backgroundColor: SUCCESS_COLOR }}
                         >
                             Save
@@ -64,6 +105,8 @@ export default function TicketModal(props) {
                 name="modalTicket"
                 form={formTicket}
                 style={{ width: '100%' }}
+                validateMessages={validateMessages}
+                initialValues={{ remember: true }}
             >
                 <Form.Item
                     name="datePicker"
@@ -77,15 +120,15 @@ export default function TicketModal(props) {
                     ]}
                 >
                     <DatePicker
-                        value={date_picker}
+                        value={datePicker}
                         onChange={(val, valString) => {
-                            setdate_picker(val);
-                            setdate_picker_str(valString);
+                            setDatePicker(val);
+                            setDatePickerStr(valString);
                         }}
                     />
                 </Form.Item>
                 <Form.Item
-                    name="time"
+                    name="timeShowDate"
                     label="Time"
                     labelCol={{ span: 6 }}
                     rules={[
@@ -96,12 +139,12 @@ export default function TicketModal(props) {
                     ]}
                 >
                     <TimePicker
-                        value={time_show_date}
+                        value={timeShowDate}
                         defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
                         format="HH:mm"
                         onChange={(val, valString) => {
-                            settime_show_date(val);
-                            settime_show_date_str(valString);
+                            setTimeShowDate(val);
+                            setTimeShowDateStr(valString);
                         }}
                     />
                 </Form.Item>
@@ -117,14 +160,13 @@ export default function TicketModal(props) {
                     ]}
                 >
                     <Input
-                        value={price}
                         onChange={(val) => {
-                            setprice(val);
+                            setPrice(val.target.value);
                         }}
                     />
                 </Form.Item>
                 <Form.Item
-                    name="linkToTicket"
+                    name="website"
                     label="Link To Ticket"
                     labelCol={{ span: 6 }}
                     rules={[
@@ -135,9 +177,10 @@ export default function TicketModal(props) {
                     ]}
                 >
                     <Input
+                        name="website"
                         value={website}
                         onChange={(val) => {
-                            setwebsite(val);
+                            setWebsite(val.target.value);
                         }}
                     />
                 </Form.Item>

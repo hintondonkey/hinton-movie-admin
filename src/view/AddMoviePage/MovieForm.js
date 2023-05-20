@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { PlusOutlined } from '@ant-design/icons';
+import { EditMovieRequest } from '../../models/edit_movie_request';
 
 const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -31,8 +32,8 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-export default function MovieForm() {
-    const [form] = Form.useForm();
+export default function MovieForm(props) {
+    let { form, handleCreateMovie } = props;
 
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -45,7 +46,7 @@ export default function MovieForm() {
         time_show_date: '',
         close_date: '',
         time_close_date: '',
-        active: false,
+        active: true,
         titleNoti: '',
         summaryNoti: '',
     });
@@ -84,6 +85,9 @@ export default function MovieForm() {
                 size={'large'}
                 layout="horizontal"
                 name="movieForm"
+                onFinish={() => {
+                    handleCreateMovie(movie);
+                }}
             >
                 <Form.Item
                     name="movie_title"
@@ -103,7 +107,6 @@ export default function MovieForm() {
                         value={movie.title}
                     />
                 </Form.Item>
-
                 <Form.Item
                     name="summary"
                     label="Summary"
@@ -184,74 +187,59 @@ export default function MovieForm() {
                         </Form.Item>
                     </Col>
                 </Row>
-
                 <Form.Item
                     label="Push Notification"
                     valuePropName="checked"
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 1 }}
                 >
-                    <Switch
-                        defaultChecked={false}
-                        onChange={(val) => {
-                            setMovie({ ...movie, active: val });
-                        }}
+                    <Switch defaultChecked={true} disabled={true} />
+                </Form.Item>{' '}
+                <Form.Item
+                    name="notification_title"
+                    label="Notification Title"
+                    labelCol={{ span: 6 }}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input notification title',
+                        },
+                    ]}
+                >
+                    <Input
+                        onChange={(val) =>
+                            setMovie({
+                                ...movie,
+                                titleNoti: val.target.value,
+                            })
+                        }
+                        value={movie.titleNoti}
                     />
                 </Form.Item>
-                {movie.active ? (
-                    <>
-                        {' '}
-                        <Form.Item
-                            name="notification_title"
-                            label="Notification Title"
-                            labelCol={{ span: 6 }}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input notification title',
-                                },
-                            ]}
-                        >
-                            <Input
-                                onChange={(val) =>
-                                    setMovie({
-                                        ...movie,
-                                        titleNoti: val.target.value,
-                                    })
-                                }
-                                value={movie.titleNoti}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="notification_summary"
-                            label="Notification Summary"
-                            labelCol={{ span: 6 }}
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        'Please input notification summary',
-                                },
-                            ]}
-                        >
-                            <TextArea
-                                rows={4}
-                                placeholder="Max length is 1000"
-                                maxLength={1000}
-                                onChange={(val) =>
-                                    setMovie({
-                                        ...movie,
-                                        summaryNoti: val.target.value,
-                                    })
-                                }
-                                value={movie.summaryNoti}
-                            />
-                        </Form.Item>
-                    </>
-                ) : (
-                    <></>
-                )}
-
+                <Form.Item
+                    name="notification_summary"
+                    label="Notification Summary"
+                    labelCol={{ span: 6 }}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input notification summary',
+                        },
+                    ]}
+                >
+                    <TextArea
+                        rows={4}
+                        placeholder="Max length is 1000"
+                        maxLength={1000}
+                        onChange={(val) =>
+                            setMovie({
+                                ...movie,
+                                summaryNoti: val.target.value,
+                            })
+                        }
+                        value={movie.summaryNoti}
+                    />
+                </Form.Item>
                 <Form.Item
                     // name="image"
                     label="Image"
@@ -292,6 +280,9 @@ export default function MovieForm() {
                         </Modal>
                     </Form.Item>
                 </Form.Item>
+                {/* <Form.Item hidden={true}>
+                    <Button hidden={true} onClick={} >On Submit</Button>
+                </Form.Item> */}
             </Form>
         </div>
     );

@@ -3,27 +3,18 @@ import React, { useState } from 'react';
 import { BiEdit } from 'react-icons/bi';
 import { IoIosAdd } from 'react-icons/io';
 import { MdDeleteOutline } from 'react-icons/md';
+import TicketModal from './TicketModal';
 
 export default function TicketForm() {
     const [openModal, setOpenModal] = useState(false);
 
     const [listTicket, setListTicket] = useState([]);
 
-    const [ticket, setTicket] = useState({
-        id: '',
-        date_picker: '',
-        date_picker_str: '',
-        time_show_date: '',
-        time_show_date_str: '',
-        price: '',
-        website: '',
-    });
-
     const showModal = () => {
         setOpenModal(true);
     };
 
-    const handleClose = () => {
+    const handleCloseModal = () => {
         setOpenModal(false);
     };
 
@@ -128,6 +119,11 @@ export default function TicketForm() {
             </Row>
 
             <Table columns={columns} dataSource={listTicket} rowKey="id" />
+
+            <TicketModal
+                isOpenModal={openModal}
+                closeModal={handleCloseModal}
+            />
         </div>
     );
 }

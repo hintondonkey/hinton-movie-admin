@@ -79,7 +79,6 @@ export default function AddMoviePage() {
                 </div>
                 <MovieForm />
                 <TicketForm />
-                <TicketModal />
             </Col>
         </Row>
     );

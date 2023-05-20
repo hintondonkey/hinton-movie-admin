@@ -27,6 +27,14 @@ export default function TicketForm(props) {
         setOpenModal(false);
     };
 
+    const handleChangeTicketInfo = (ticket) => {
+        setTicketForEdit(ticket);
+    };
+
+    const handleEditTicket = (ticket) => {
+        let abc = listTicket.filter((item) => item.id === ticket.id);
+    };
+
     const columns = [
         {
             title: 'Date Picker',
@@ -125,7 +133,8 @@ export default function TicketForm(props) {
                 isOpenModal={openModal}
                 closeModal={handleCloseModal}
                 onSave={handleCreateTicket}
-                ticketForEdit={ticketForEdit}
+                ticketForEdit={{ ...ticketForEdit }}
+                handleChangeTicketInfo={handleChangeTicketInfo}
             />
         </div>
     );

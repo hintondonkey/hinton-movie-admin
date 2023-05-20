@@ -10,7 +10,7 @@ import '../../constants/colors';
 import { SUCCESS_COLOR } from '../../constants/colors';
 import '../../models/edit_movie_request';
 import { EditMovieRequest } from '../../models/edit_movie_request';
-import { createMovie } from '../../services/UserService';
+import { createMovie, postcreateMovie } from '../../services/UserService';
 import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import Swal from 'sweetalert2';
@@ -53,11 +53,22 @@ export default function AddMoviePage() {
             });
     };
 
+    const mapTicketToRequest = (listTicket) => {
+        return listTicket.map((item) => {
+            return {
+                date_picker: item.datePickerStr,
+                time_show_date: item.timeShowDateStr,
+                price: item.price,
+                website: item.website,
+            };
+        });
+    };
+
     const handleCreateMovie = async (movie) => {
         console.log('movie: ', movie);
 
         var editMovieRequest = new EditMovieRequest(
-            listTicket,
+            mapTicketToRequest(listTicket),
             movie.title,
             movie.description,
             movie.show_date,
@@ -70,10 +81,9 @@ export default function AddMoviePage() {
         );
         setLoading(true);
 
-        createMovie(JSON.stringify(editMovieRequest), config_json)
+        postcreateMovie(JSON.stringify(editMovieRequest), config_json)
             .then((res) => {
                 setTimeout(() => {
-                    setLoading(false);
                     Swal.fire({
                         icon: 'success',
                         title: 'Create Success !!!',
@@ -85,6 +95,8 @@ export default function AddMoviePage() {
                 }, 1000);
             })
             .catch((error) => console.log('Error:', error));
+
+        setLoading(false);
     };
 
     const _buildHeader = () => (

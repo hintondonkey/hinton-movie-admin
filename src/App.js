@@ -8,6 +8,7 @@ import EditMovieTicket from './components/EditMovieTicket';
 
 import LoginPage from './view/login_page';
 import AddMoviePage from './view/AddMoviePage';
+import ListMoviePage from './view/ListMoviePage';
 
 function App() {
     return (
@@ -16,6 +17,10 @@ function App() {
                 <Routes>
                     <Route path="/" element={<LoginPage />} />
                     <Route path="/listmovie">
+                        <Route path=":id" element={<EditMovieTicket />} />
+                        <Route index element={<ListMoviePage />} />
+                    </Route>
+                    <Route path="/listmovie1">
                         <Route path=":id" element={<EditMovieTicket />} />
                         <Route index element={<Listmovie />} />
                     </Route>

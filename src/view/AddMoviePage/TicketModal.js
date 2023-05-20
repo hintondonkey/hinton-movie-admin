@@ -28,7 +28,13 @@ export default function TicketModal(props) {
 
     const [formTicket] = Form.useForm();
 
-    let { isOpenModal, closeModal, onSave, ticketForEdit } = props;
+    let {
+        isOpenModal,
+        closeModal,
+        onSave,
+        ticketForEdit,
+        handleChangeTicketInfo,
+    } = props;
 
     useEffect(() => {
         if (ticketForEdit != null) {
@@ -45,8 +51,13 @@ export default function TicketModal(props) {
     }, [ticketForEdit]);
 
     const handleCloseModal = () => {
-        formTicket.resetFields();
+        handleResetForm();
         closeModal();
+    };
+
+    const handleResetForm = () => {
+        formTicket.resetFields();
+        handleChangeTicketInfo(null);
     };
 
     return (
@@ -88,6 +99,7 @@ export default function TicketModal(props) {
                                             price,
                                             website,
                                         });
+                                        handleResetForm();
                                     })
                                     .catch((error) => {
                                         console.log('error', error);

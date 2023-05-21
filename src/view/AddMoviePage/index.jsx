@@ -10,7 +10,11 @@ import '../../constants/colors';
 import { SUCCESS_COLOR } from '../../constants/colors';
 import '../../models/edit_movie_request';
 import { EditMovieRequest } from '../../models/edit_movie_request';
-import { createMovie, postcreateMovie } from '../../services/UserService';
+import {
+    createMovie,
+    postcreateMovie,
+    putMovie,
+} from '../../services/UserService';
 import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import Swal from 'sweetalert2';
@@ -33,6 +37,7 @@ export default function AddMoviePage() {
     const [listTicket, setListTicket] = useState([]);
     const [loading, setLoading] = useState(false);
     const [movie, setMovie] = useState({
+        id: '',
         title: '',
         description: '',
         show_date: '',
@@ -75,6 +80,7 @@ export default function AddMoviePage() {
             });
 
             setMovie({
+                id: item.id,
                 title: item.title,
                 description: item.description,
                 show_date: item.show_date,
@@ -152,20 +158,27 @@ export default function AddMoviePage() {
         );
         setLoading(true);
 
-        postcreateMovie(JSON.stringify(editMovieRequest), config_json)
-            .then((res) => {
-                setTimeout(() => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Create Success !!!',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    }).then((result) => {
-                        navigate('/listmovie');
-                    });
-                }, 1000);
-            })
-            .catch((error) => console.log('Error:', error));
+        if (state !== null && state !== undefined) {
+            // TODO: Call 2 api 1 lúc
+            editMovieRequest.id = movie.id;
+            editMovieRequest.watchlist = null;
+            putMovie(JSON.stringify(editMovieRequest), config_json, movie.id);
+        } else {
+            postcreateMovie(JSON.stringify(editMovieRequest), config_json)
+                .then((res) => {
+                    setTimeout(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Create Success !!!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then((result) => {
+                            navigate('/listmovie');
+                        });
+                    }, 1000);
+                })
+                .catch((error) => console.log('Error:', error));
+        }
 
         setLoading(false);
     };

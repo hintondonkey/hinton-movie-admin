@@ -24,7 +24,10 @@ function App() {
                         <Route path=":id" element={<EditMovieTicket />} />
                         <Route index element={<Listmovie />} />
                     </Route>
-                    <Route path="/addmovie" element={<AddMoviePage />} />
+                    <Route path="/addmovie">
+                        <Route path=":id" element={<AddMoviePage />} />
+                        <Route index element={<AddMoviePage />} />
+                    </Route>
                     <Route path="/addmovie1" element={<EditMovieTicket />} />
                 </Routes>
             </BrowserRouter>

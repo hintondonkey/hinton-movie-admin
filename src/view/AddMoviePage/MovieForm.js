@@ -17,6 +17,8 @@ import TextArea from 'antd/es/input/TextArea';
 import { PlusOutlined } from '@ant-design/icons';
 import { EditMovieRequest } from '../../models/edit_movie_request';
 
+import dayjs from 'dayjs';
+
 const normFile = (e) => {
     if (Array.isArray(e)) {
         return e;
@@ -33,23 +35,12 @@ const getBase64 = (file) =>
     });
 
 export default function MovieForm(props) {
-    let { form, handleCreateMovie } = props;
+    let { form, handleCreateMovie, movie, setMovie } = props;
 
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState([]);
-    const [movie, setMovie] = useState({
-        title: '',
-        description: '',
-        show_date: '',
-        time_show_date: '',
-        close_date: '',
-        time_close_date: '',
-        active: true,
-        titleNoti: '',
-        summaryNoti: '',
-    });
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -149,6 +140,7 @@ export default function MovieForm(props) {
                                 showTime
                                 format="YYYY-MM-DD HH:mm"
                                 onChange={(val, valString) => {
+                                    console.log('show_date', val, valString);
                                     setMovie({
                                         ...movie,
                                         show_date: valString.split(' ')[0],

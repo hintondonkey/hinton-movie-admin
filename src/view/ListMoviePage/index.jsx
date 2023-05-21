@@ -7,6 +7,7 @@ import MenuNavigator from '../../components/MenuNavigator';
 import { INFO_COLOR } from '../../constants/colors';
 import { getAllMovie } from '../../services/UserService';
 import MovieCard from './MovieCard';
+import { useNavigate } from 'react-router-dom';
 
 const token = localStorage.getItem('mytoken');
 const config = {
@@ -21,9 +22,15 @@ export default function ListMoviePage() {
     const [listMovie, setListMovie] = useState([]);
     const [totalItem, setTotalItem] = useState(0);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        getFullMovie();
+        apiGetAllMovie();
     }, []);
+
+    const handleOpenDetailMovie = (item) => {
+        navigate(`/addmovie/${item.id}`, { state: { item } });
+    };
 
     const _buildHeader = () => (
         <Row>
@@ -32,7 +39,7 @@ export default function ListMoviePage() {
                     LIST MOVIE
                 </h2>
             </Col>
-            <Col offset={14}>
+            {/* <Col offset={14}>
                 <Button
                     type="primary"
                     size="large"
@@ -48,16 +55,21 @@ export default function ListMoviePage() {
                     />
                     Create New Movie
                 </Button>
-            </Col>
+            </Col> */}
         </Row>
     );
 
-    const getFullMovie = async () => {
+    const apiGetAllMovie = async () => {
+        setLoading(true);
         let res = await getAllMovie(config);
+        setLoading(false);
+
+        console.log('res', res);
 
         setTotalItem(res.length);
 
-        setListMovie(res);
+        // Đảo ngược list để lấy phim có ngày tạo mới nhất
+        setListMovie(res.reverse());
     };
 
     return (
@@ -66,7 +78,7 @@ export default function ListMoviePage() {
                 <Col span={4}>
                     <MenuNavigator />
                 </Col>
-                <Col flex={1}>
+                <Col span={20}>
                     <div
                         style={{
                             padding: '24px ',
@@ -76,20 +88,24 @@ export default function ListMoviePage() {
                     >
                         {_buildHeader()}
                     </div>
-                    <div style={{ backgroundColor: '#E8E9EB' }}>
-                        <Row gutter={[16, 16]} style={{ padding: 16 }}>
-                            <MovieCard />
-                            <MovieCard />
-                            <MovieCard />
-                            <MovieCard />
-                            <MovieCard />
+                    <Col style={{ backgroundColor: '#E8E9EB' }}>
+                        <Row gutter={[24, 24]} style={{ padding: 16 }}>
+                            {listMovie.map((item) => (
+                                <MovieCard
+                                    key={item.id}
+                                    item={item}
+                                    handleOpenDetailMovie={
+                                        handleOpenDetailMovie
+                                    }
+                                />
+                            ))}
                         </Row>
                         <Pagination
                             current={1}
                             defaultCurrent={1}
                             total={totalItem}
                         />
-                    </div>
+                    </Col>
                 </Col>
             </Row>
             {loading ? <LoadingSpin /> : <></>}

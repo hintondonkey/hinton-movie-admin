@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { HiOutlineHome } from 'react-icons/hi';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
 import { IoAddCircleOutline } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Title from 'antd/es/skeleton/Title';
 
 function getItem(label, key, icon, children, type) {
@@ -65,7 +65,7 @@ export default function MenuNavigator() {
                     onClick={({ key }) => {
                         navigate(key);
                     }}
-                />
+                ></Menu>
             </div>
         </div>
     );

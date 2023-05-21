@@ -27,13 +27,31 @@ export default function TicketForm(props) {
         setOpenModal(false);
     };
 
-    const handleChangeTicketInfo = (ticket) => {
+    const handleChangeTicketForEdit = (ticket) => {
         setTicketForEdit(ticket);
     };
 
     const handleEditTicket = (ticket) => {
-        let index = getIndex(ticket.key);
-        console.log('index: ', index);
+        let newList = listTicket.map((item) => {
+            if (item.key === ticket.key) {
+                item.datePicker = ticket.datePicker;
+                item.datePickerStr = ticket.datePickerStr;
+                item.timeShowDate = ticket.timeShowDate;
+                item.timeShowDateStr = ticket.timeShowDateStr;
+                item.price = ticket.price;
+                item.website = ticket.website;
+            }
+            return item;
+        });
+
+        setListTicket(newList);
+    };
+
+    const handleDeleteTicket = (id) => {
+        console.log('index', getIndex(id));
+        listTicket.splice(getIndex(id), 1);
+
+        setListTicket([...listTicket]);
     };
 
     const getIndex = (id) => {
@@ -92,7 +110,12 @@ export default function TicketForm(props) {
                         </Button>
                     </Col>
                     <Col span={12} style={{ padding: '0 8px' }}>
-                        <Button type="primary" size="small" danger>
+                        <Button
+                            type="primary"
+                            size="small"
+                            danger
+                            onClick={() => handleDeleteTicket(val.key)}
+                        >
                             <MdDeleteOutline size={20} />
                         </Button>
                     </Col>
@@ -137,8 +160,8 @@ export default function TicketForm(props) {
                 isOpenModal={openModal}
                 closeModal={handleCloseModal}
                 onSave={handleCreateTicket}
-                ticketForEdit={{ ...ticketForEdit }}
-                handleChangeTicketInfo={handleChangeTicketInfo}
+                ticketForEdit={ticketForEdit}
+                handleChangeTicketForEdit={handleChangeTicketForEdit}
                 handleEditTicket={handleEditTicket}
             />
         </div>

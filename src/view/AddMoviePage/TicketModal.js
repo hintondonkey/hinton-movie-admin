@@ -10,7 +10,11 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { DANGER_COLOR, SUCCESS_COLOR } from '../../constants/colors';
+import {
+    DANGER_COLOR,
+    INFO_COLOR,
+    SUCCESS_COLOR,
+} from '../../constants/colors';
 import { v4 as uuidv4 } from 'uuid';
 
 const validateMessages = {
@@ -33,13 +37,12 @@ export default function TicketModal(props) {
         closeModal,
         onSave,
         ticketForEdit,
-        handleChangeTicketInfo,
+        handleChangeTicketForEdit,
         handleEditTicket,
     } = props;
 
     useEffect(() => {
         if (ticketForEdit != null) {
-            console.log('Vào hàm useEffect', ticketForEdit);
             formTicket.setFieldsValue({
                 datePicker: ticketForEdit.datePicker,
                 datePickerStr: ticketForEdit.datePickerStr,
@@ -58,7 +61,7 @@ export default function TicketModal(props) {
 
     const handleResetForm = () => {
         formTicket.resetFields();
-        handleChangeTicketInfo(null);
+        handleChangeTicketForEdit(null);
     };
 
     return (
@@ -83,7 +86,7 @@ export default function TicketModal(props) {
                     </Col>
 
                     <Col span={6} offset={2}>
-                        {ticketForEdit === null ? (
+                        {ticketForEdit === null || ticketForEdit === {} ? (
                             <Button
                                 key="submit"
                                 type="primary"
@@ -116,12 +119,20 @@ export default function TicketModal(props) {
                                 key="submit"
                                 type="primary"
                                 loading={loading}
-                                style={{ backgroundColor: SUCCESS_COLOR }}
+                                style={{ backgroundColor: INFO_COLOR }}
                                 onClick={() => {
                                     formTicket
                                         .validateFields()
                                         .then((val) => {
-                                            handleEditTicket(ticketForEdit);
+                                            handleEditTicket({
+                                                key: ticketForEdit.key,
+                                                datePicker,
+                                                datePickerStr,
+                                                timeShowDate,
+                                                timeShowDateStr,
+                                                price,
+                                                website,
+                                            });
                                             handleCloseModal();
                                         })
                                         .catch((error) => {

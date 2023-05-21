@@ -32,7 +32,12 @@ export default function TicketForm(props) {
     };
 
     const handleEditTicket = (ticket) => {
-        let abc = listTicket.filter((item) => item.id === ticket.id);
+        let index = getIndex(ticket.key);
+        console.log('index: ', index);
+    };
+
+    const getIndex = (id) => {
+        return listTicket.findIndex((item) => item.key === id);
     };
 
     const columns = [
@@ -78,7 +83,6 @@ export default function TicketForm(props) {
                             type="primary"
                             size="small"
                             onClick={() => {
-                                console.log('val', val);
                                 setTicketForEdit(val);
 
                                 setOpenModal(true);
@@ -135,6 +139,7 @@ export default function TicketForm(props) {
                 onSave={handleCreateTicket}
                 ticketForEdit={{ ...ticketForEdit }}
                 handleChangeTicketInfo={handleChangeTicketInfo}
+                handleEditTicket={handleEditTicket}
             />
         </div>
     );

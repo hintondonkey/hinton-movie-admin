@@ -34,6 +34,7 @@ export default function TicketModal(props) {
         onSave,
         ticketForEdit,
         handleChangeTicketInfo,
+        handleEditTicket,
     } = props;
 
     useEffect(() => {
@@ -82,33 +83,55 @@ export default function TicketModal(props) {
                     </Col>
 
                     <Col span={6} offset={2}>
-                        <Button
-                            key="submit"
-                            type="primary"
-                            loading={loading}
-                            onClick={() => {
-                                formTicket
-                                    .validateFields()
-                                    .then((val) => {
-                                        onSave({
-                                            key: uuidv4(),
-                                            datePicker,
-                                            datePickerStr,
-                                            timeShowDate,
-                                            timeShowDateStr,
-                                            price,
-                                            website,
+                        {ticketForEdit === null ? (
+                            <Button
+                                key="submit"
+                                type="primary"
+                                loading={loading}
+                                style={{ backgroundColor: SUCCESS_COLOR }}
+                                onClick={() => {
+                                    formTicket
+                                        .validateFields()
+                                        .then((val) => {
+                                            onSave({
+                                                key: uuidv4(),
+                                                datePicker,
+                                                datePickerStr,
+                                                timeShowDate,
+                                                timeShowDateStr,
+                                                price,
+                                                website,
+                                            });
+                                            handleCloseModal();
+                                        })
+                                        .catch((error) => {
+                                            console.log('error', error);
                                         });
-                                        handleResetForm();
-                                    })
-                                    .catch((error) => {
-                                        console.log('error', error);
-                                    });
-                            }}
-                            style={{ backgroundColor: SUCCESS_COLOR }}
-                        >
-                            Save
-                        </Button>
+                                }}
+                            >
+                                Save
+                            </Button>
+                        ) : (
+                            <Button
+                                key="submit"
+                                type="primary"
+                                loading={loading}
+                                style={{ backgroundColor: SUCCESS_COLOR }}
+                                onClick={() => {
+                                    formTicket
+                                        .validateFields()
+                                        .then((val) => {
+                                            handleEditTicket(ticketForEdit);
+                                            handleCloseModal();
+                                        })
+                                        .catch((error) => {
+                                            console.log('error', error);
+                                        });
+                                }}
+                            >
+                                Save Edit
+                            </Button>
+                        )}
                     </Col>
                 </Row>,
             ]}

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Row, Spin } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 
 import React, { useEffect, useState } from 'react';
 import MenuNavigator from '../../components/MenuNavigator';
@@ -6,22 +6,18 @@ import './styles.css';
 
 import { FiSave } from 'react-icons/fi';
 
+import moment from 'moment';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import LoadingSpin from '../../common/LoadingSpin';
 import '../../constants/colors';
 import { SUCCESS_COLOR } from '../../constants/colors';
 import '../../models/edit_movie_request';
 import { EditMovieRequest } from '../../models/edit_movie_request';
-import {
-    createMovie,
-    postcreateMovie,
-    putMovie,
-} from '../../services/UserService';
+import { postcreateMovie, putMovie } from '../../services/UserService';
 import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
-import Swal from 'sweetalert2';
-import LoadingSpin from '../../common/LoadingSpin';
-import { useLocation, useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
-import moment from 'moment';
+import { SHOW_SUCCESS_MESSAGE } from '../../utility/AlertUtility';
 
 const token = localStorage.getItem('mytoken');
 
@@ -34,6 +30,7 @@ const config_json = {
 
 export default function AddMoviePage() {
     const [form] = Form.useForm();
+    const [formTicket] = Form.useForm();
     const [listTicket, setListTicket] = useState([]);
     const [loading, setLoading] = useState(false);
     const [movie, setMovie] = useState({
@@ -110,6 +107,26 @@ export default function AddMoviePage() {
         }
     }, [state]);
 
+    const handleUpdateMovie = async (movie) => {
+        const data = {
+            show_date: moment(movie.show_date).format('YYYY-MM-DD'),
+            time_show_date: movie.time_show_date,
+            close_date: moment(movie.close_date).format('YYYY-MM-DD'),
+            time_close_date: movie.time_close_date,
+            title: movie.title,
+            description: movie.description,
+            titleNoti: movie.titleNoti,
+            summaryNoti: movie.summaryNoti,
+            ischecked: movie.active,
+        };
+
+        await putMovie(data, config_json, movie.id).then((res) => {
+            console.log('res put movie', res);
+            SHOW_SUCCESS_MESSAGE('Update Movie Success !!!');
+            navigate('/listmovie');
+        });
+    };
+
     const handleClickSaveMovie = () => {
         form.validateFields()
             .then((val) => {
@@ -160,9 +177,7 @@ export default function AddMoviePage() {
 
         if (state !== null && state !== undefined) {
             // TODO: Call 2 api 1 lúc
-            editMovieRequest.id = movie.id;
-            editMovieRequest.watchlist = null;
-            putMovie(JSON.stringify(editMovieRequest), config_json, movie.id);
+            handleUpdateMovie(movie);
         } else {
             postcreateMovie(JSON.stringify(editMovieRequest), config_json)
                 .then((res) => {
@@ -179,8 +194,9 @@ export default function AddMoviePage() {
                 })
                 .catch((error) => console.log('Error:', error));
         }
-
-        setLoading(false);
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
     };
 
     const _buildHeader = () => (
@@ -235,6 +251,7 @@ export default function AddMoviePage() {
                     <TicketForm
                         listTicket={listTicket}
                         setListTicket={setListTicket}
+                        formTicket={formTicket}
                     />
                 </Col>
             </Row>

@@ -140,7 +140,6 @@ export default function MovieForm(props) {
                                 showTime
                                 format="YYYY-MM-DD HH:mm"
                                 onChange={(val, valString) => {
-                                    console.log('show_date', val, valString);
                                     setMovie({
                                         ...movie,
                                         show_date: valString.split(' ')[0],

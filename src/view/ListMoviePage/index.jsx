@@ -88,7 +88,7 @@ export default function ListMoviePage() {
                     >
                         {_buildHeader()}
                     </div>
-                    <Col style={{ backgroundColor: '#E8E9EB' }}>
+                    <Col style={{ backgroundColor: 'white' }}>
                         <Row gutter={[24, 24]} style={{ padding: 16 }}>
                             {listMovie.map((item) => (
                                 <MovieCard

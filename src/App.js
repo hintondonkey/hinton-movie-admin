@@ -9,6 +9,7 @@ import EditMovieTicket from './components/EditMovieTicket';
 import LoginPage from './view/login_page';
 import AddMoviePage from './view/AddMoviePage';
 import ListMoviePage from './view/ListMoviePage';
+import TestImage from './view/TestImage';
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                         <Route index element={<AddMoviePage />} />
                     </Route>
                     <Route path="/addmovie1" element={<EditMovieTicket />} />
+                    <Route path="/image" element={<TestImage />} />
                 </Routes>
             </BrowserRouter>
             <ToastContainer

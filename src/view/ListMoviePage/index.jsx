@@ -1,4 +1,4 @@
-import { Button, Card, Col, Pagination, Row } from 'antd';
+import { Button, Card, Col, Pagination, Row, Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import { IoAddCircleOutline } from 'react-icons/io5';
@@ -8,6 +8,7 @@ import { INFO_COLOR } from '../../constants/colors';
 import { getAllMovie } from '../../services/UserService';
 import MovieCard from './MovieCard';
 import { useNavigate } from 'react-router-dom';
+import MovieTable from './MovieTable';
 
 const token = localStorage.getItem('mytoken');
 const config = {
@@ -21,6 +22,7 @@ export default function ListMoviePage() {
     const [loading, setLoading] = useState(false);
     const [listMovie, setListMovie] = useState([]);
     const [totalItem, setTotalItem] = useState(0);
+    const [isCard, setIsCard] = useState(false);
 
     const navigate = useNavigate();
 
@@ -39,23 +41,6 @@ export default function ListMoviePage() {
                     LIST MOVIE
                 </h2>
             </Col>
-            {/* <Col offset={14}>
-                <Button
-                    type="primary"
-                    size="large"
-                    style={{
-                        width: 300,
-                        backgroundColor: INFO_COLOR,
-                    }}
-                >
-                    <IoAddCircleOutline
-                        size={25}
-                        color="white"
-                        style={{ marginRight: 8 }}
-                    />
-                    Create New Movie
-                </Button>
-            </Col> */}
         </Row>
     );
 
@@ -63,8 +48,6 @@ export default function ListMoviePage() {
         setLoading(true);
         let res = await getAllMovie(config);
         setLoading(false);
-
-        console.log('res', res);
 
         setTotalItem(res.length);
 
@@ -88,24 +71,56 @@ export default function ListMoviePage() {
                     >
                         {_buildHeader()}
                     </div>
-                    <Col style={{ backgroundColor: 'white' }}>
-                        <Row gutter={[24, 24]} style={{ padding: 16 }}>
-                            {listMovie.map((item) => (
-                                <MovieCard
-                                    key={item.id}
-                                    item={item}
-                                    handleOpenDetailMovie={
-                                        handleOpenDetailMovie
-                                    }
-                                />
-                            ))}
-                        </Row>
-                        <Pagination
-                            current={1}
-                            defaultCurrent={1}
-                            total={totalItem}
+
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignContent: 'flex-start',
+                            paddingLeft: 16,
+                        }}
+                    >
+                        <Switch
+                            style={{
+                                width: 80,
+                                textAlign: 'left',
+                                alignItems: 'left',
+                            }}
+                            checkedChildren="Card"
+                            unCheckedChildren="Table"
+                            onChange={(val) => {
+                                setIsCard(val);
+                            }}
                         />
-                    </Col>
+                    </div>
+                    {console.log('listMovie', listMovie)}
+                    {isCard === false ? (
+                        <MovieTable
+                            data={listMovie.map((item) => {
+                                let abc = { ...item };
+                                abc.key = item.id;
+                                return abc;
+                            })}
+                        />
+                    ) : (
+                        <Col style={{ backgroundColor: 'white' }}>
+                            <Row gutter={[24, 24]} style={{ padding: 16 }}>
+                                {listMovie.map((item) => (
+                                    <MovieCard
+                                        key={item.id}
+                                        item={item}
+                                        handleOpenDetailMovie={
+                                            handleOpenDetailMovie
+                                        }
+                                    />
+                                ))}
+                            </Row>
+                            <Pagination
+                                current={1}
+                                defaultCurrent={1}
+                                total={totalItem}
+                            />
+                        </Col>
+                    )}
                 </Col>
             </Row>
             {loading ? <LoadingSpin /> : <></>}

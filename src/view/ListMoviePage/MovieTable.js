@@ -2,7 +2,6 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Image, Input, Space, Table, Tag, Tooltip } from 'antd';
 import React, { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import jsonData from './api.json';
 
 export default function MovieTable(props) {
     let { data, handleOpenDetailMovie } = props;
@@ -34,15 +33,6 @@ export default function MovieTable(props) {
         clearFilters();
         setSearchText('');
     };
-
-    console.log(
-        'data',
-        data.map((item) => {
-            let abc = { ...item };
-            abc.key = item.id;
-            return abc;
-        })
-    );
 
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({
@@ -140,7 +130,21 @@ export default function MovieTable(props) {
                     textToHighlight={text ? text.toString() : ''}
                 />
             ) : (
-                text
+                <Tooltip title={text}>
+                    <div
+                        style={{
+                            width: 180,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            fontWeight: 'bold',
+
+                            color: ' #008080 ',
+                        }}
+                    >
+                        {text}
+                    </div>
+                </Tooltip>
             ),
     });
 
@@ -149,20 +153,7 @@ export default function MovieTable(props) {
             title: 'Title',
             dataIndex: 'title',
             key: 'title',
-            render: (text) => (
-                <Tooltip title={text}>
-                    <div
-                        style={{
-                            width: 180,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                        }}
-                    >
-                        {text}
-                    </div>
-                </Tooltip>
-            ),
+
             width: 200,
             sorter: (a, b) => a.title.localeCompare(b.title) > 0,
             ...getColumnSearchProps('title'),

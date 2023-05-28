@@ -1,4 +1,4 @@
-import { Card, Col, Image, Row } from 'antd';
+import { Card, Col, Image, Row, Tooltip } from 'antd';
 import React from 'react';
 import { SUCCESS_COLOR, WARNING_COLOR } from '../../constants/colors';
 import { useLocation } from 'react-router-dom';
@@ -40,17 +40,23 @@ export default function MovieCard(props) {
                     />
                 </div>
                 <div style={{ textAlign: 'left', padding: 8 }}>
-                    <p
-                        style={{
-                            textAlign: 'center',
-                            color: '#7c795d',
-                            fontFamily: 'Trocchi',
-                            fontSize: 30,
-                            fontWeight: 'normal',
-                        }}
-                    >
-                        {item.title}
-                    </p>
+                    <Tooltip title={item.title}>
+                        <div
+                            style={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                fontWeight: 'bold',
+                                fontFamily: 'Trocchi',
+                                fontSize: 30,
+                                textAlign: 'center',
+
+                                color: '#7c795d',
+                            }}
+                        >
+                            {item.title}
+                        </div>
+                    </Tooltip>
                     <Row>
                         <Col style={{ textAlign: 'center' }} span={12}>
                             <p style={{ color: '#CCCDC6' }}>Start:</p>

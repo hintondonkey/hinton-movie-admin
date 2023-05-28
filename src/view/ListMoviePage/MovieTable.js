@@ -138,6 +138,7 @@ export default function MovieTable(props) {
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
                             fontWeight: 'bold',
+                            fontSize: 16,
 
                             color: ' #008080 ',
                         }}
@@ -163,7 +164,9 @@ export default function MovieTable(props) {
             dataIndex: 'image',
             key: 'image',
             render: (image) => (
-                <div>
+                <div
+                    style={{ width: 80, borderRadius: 15, overflow: 'hidden' }}
+                >
                     <Image
                         width={80}
                         src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"

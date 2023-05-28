@@ -1,22 +1,30 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Image, Input, Space, Table, Tag } from 'antd';
+import { Button, Image, Input, Space, Table, Tag, Tooltip } from 'antd';
 import React, { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import jsonData from './api.json';
 
 export default function MovieTable(props) {
-    let { data } = props;
+    let { data, handleOpenDetailMovie } = props;
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: 1,
-            pageSize: 10,
-            total: data.length,
+            pageSize: 5,
         },
     });
-
     const searchInput = useRef(null);
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+    };
+
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         setSearchText(selectedKeys[0]);
@@ -141,7 +149,21 @@ export default function MovieTable(props) {
             title: 'Title',
             dataIndex: 'title',
             key: 'title',
-            render: (text) => <a>{text}</a>,
+            render: (text) => (
+                <Tooltip title={text}>
+                    <div
+                        style={{
+                            width: 180,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}
+                    >
+                        {text}
+                    </div>
+                </Tooltip>
+            ),
+            width: 200,
             sorter: (a, b) => a.title.localeCompare(b.title) > 0,
             ...getColumnSearchProps('title'),
         },
@@ -187,7 +209,13 @@ export default function MovieTable(props) {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button type="primary"> Edit</Button>
+                    <Button
+                        type="primary"
+                        onClick={() => handleOpenDetailMovie(record)}
+                    >
+                        {' '}
+                        Edit
+                    </Button>
                     <Button danger type="primary">
                         Delete
                     </Button>
@@ -210,6 +238,7 @@ export default function MovieTable(props) {
                 columns={columns}
                 dataSource={data}
                 pagination={tableParams.pagination}
+                onChange={handleTableChange}
             />
         </div>
     );

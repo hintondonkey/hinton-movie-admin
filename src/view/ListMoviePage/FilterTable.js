@@ -171,6 +171,6 @@ const FilterTable = () => {
             sortDirections: ['descend', 'ascend'],
         },
     ];
-    return <Table columns={columns} dataSource={data} pagination />;
+    return <Table columns={columns} dataSource={data} />;
 };
 export default FilterTable;

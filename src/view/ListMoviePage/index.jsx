@@ -101,6 +101,7 @@ export default function ListMoviePage() {
                                 abc.key = item.id;
                                 return abc;
                             })}
+                            handleOpenDetailMovie={handleOpenDetailMovie}
                         />
                     ) : (
                         // <FilterTable />
@@ -116,11 +117,6 @@ export default function ListMoviePage() {
                                     />
                                 ))}
                             </Row>
-                            <Pagination
-                                current={1}
-                                defaultCurrent={1}
-                                total={totalItem}
-                            />
                         </Col>
                     )}
                 </Col>

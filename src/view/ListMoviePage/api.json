@@ -1,0 +1,324 @@
+[
+    {
+        "id": 126,
+        "image": "https://stephenkiendinh.com/media/download.jpg",
+        "watchlist": [
+            {
+                "id": 153,
+                "date_picker": "2023-05-26",
+                "time_show_date": "06:15:00",
+                "price": 10,
+                "website": "http://bookingdoctor.online:3000/listmoviehttp://bookingdoctor.online:3000/listmovie",
+                "active": false,
+                "create_date": "2023-05-26T12:41:08.812509Z",
+                "platform": 126
+            },
+            {
+                "id": 152,
+                "date_picker": "2023-05-26",
+                "time_show_date": "10:00:00",
+                "price": 10,
+                "website": "http://bookingdoctor.online:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-25T15:43:54.177194Z",
+                "platform": 126
+            }
+        ],
+        "title": "Sphen Dinhhhh hhhhas dsads adasd sa dasd",
+        "description": "Howw can Ihelp uypou",
+        "show_date": "2023-05-26",
+        "time_show_date": "12:00:00",
+        "close_date": "2023-05-29",
+        "time_close_date": "12:00:00",
+        "active": true,
+        "create_date": "2023-05-25",
+        "titleNoti": "Hinton",
+        "summaryNoti": "Who are you?"
+    },
+    {
+        "id": 128,
+        "image": "https://stephenkiendinh.com/media/biet-doi-avengers.jpg",
+        "watchlist": [
+            {
+                "id": 155,
+                "date_picker": "2023-05-27",
+                "time_show_date": "07:30:00",
+                "price": 123,
+                "website": "http://bookingdoctor.online:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-26T12:43:43.384409Z",
+                "platform": 128
+            }
+        ],
+        "title": "add movie",
+        "description": "add movie 123",
+        "show_date": "2023-05-27",
+        "time_show_date": "12:00:00",
+        "close_date": "2023-06-03",
+        "time_close_date": "12:00:00",
+        "active": true,
+        "create_date": "2023-05-26",
+        "titleNoti": "add movie",
+        "summaryNoti": "add movie"
+    },
+    {
+        "id": 130,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 157,
+                "date_picker": "2023-06-03",
+                "time_show_date": "07:30:00",
+                "price": 123,
+                "website": "http://bookingdoctor.online:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-26T12:50:21.207920Z",
+                "platform": 130
+            }
+        ],
+        "title": "check images",
+        "description": "check images 123",
+        "show_date": "2023-06-03",
+        "time_show_date": "12:00:00",
+        "close_date": "2023-06-03",
+        "time_close_date": "12:00:00",
+        "active": true,
+        "create_date": "2023-05-26",
+        "titleNoti": "check images",
+        "summaryNoti": "check images"
+    },
+    {
+        "id": 132,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 159,
+                "date_picker": "2023-05-29",
+                "time_show_date": "11:30:00",
+                "price": 12323,
+                "website": "http://localhost:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-28T04:38:00.847246Z",
+                "platform": 132
+            }
+        ],
+        "title": "Korean movie",
+        "description": "123321",
+        "show_date": "2023-06-01",
+        "time_show_date": "11:45:00",
+        "close_date": "2023-05-31",
+        "time_close_date": "00:00:00",
+        "active": true,
+        "create_date": "2023-05-28",
+        "titleNoti": "123",
+        "summaryNoti": "12333"
+    },
+    {
+        "id": 120,
+        "image": "https://stephenkiendinh.com/media/Avengers_Endgame.jpg",
+        "watchlist": [
+            {
+                "id": 146,
+                "date_picker": "2023-05-26",
+                "time_show_date": "10:00:00",
+                "price": 123,
+                "website": "http://bookingdoctor.online:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-25T15:28:19.638437Z",
+                "platform": 120
+            }
+        ],
+        "title": "hello",
+        "description": "hello co ba, helloooo",
+        "show_date": "2023-05-25",
+        "time_show_date": "10:27:37",
+        "close_date": "2023-05-25",
+        "time_close_date": "10:27:37",
+        "active": true,
+        "create_date": "2023-05-25",
+        "titleNoti": "Stephen",
+        "summaryNoti": "hey loook at me 2"
+    },
+    {
+        "id": 127,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 154,
+                "date_picker": "2023-05-27",
+                "time_show_date": "07:30:00",
+                "price": 123,
+                "website": "http://bookingdoctor.online:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-26T12:43:10.544738Z",
+                "platform": 127
+            }
+        ],
+        "title": "add movie",
+        "description": "add movie 123",
+        "show_date": "2023-05-27",
+        "time_show_date": "12:00:00",
+        "close_date": "2023-06-03",
+        "time_close_date": "12:00:00",
+        "active": true,
+        "create_date": "2023-05-26",
+        "titleNoti": "add movie",
+        "summaryNoti": "add movie"
+    },
+    {
+        "id": 129,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 156,
+                "date_picker": "2023-05-27",
+                "time_show_date": "07:15:00",
+                "price": 123,
+                "website": "http://bookingdoctor.online:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-26T12:45:02.328928Z",
+                "platform": 129
+            }
+        ],
+        "title": "add movie",
+        "description": "add movie 123",
+        "show_date": "2023-05-27",
+        "time_show_date": "12:00:00",
+        "close_date": "2023-06-03",
+        "time_close_date": "12:00:00",
+        "active": true,
+        "create_date": "2023-05-26",
+        "titleNoti": "add movie",
+        "summaryNoti": "add movie"
+    },
+    {
+        "id": 131,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 158,
+                "date_picker": "2023-05-28",
+                "time_show_date": "11:35:00",
+                "price": 1232,
+                "website": "http://localhost:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-28T04:35:14.078047Z",
+                "platform": 131
+            }
+        ],
+        "title": "Korean movie",
+        "description": "123",
+        "show_date": "2023-05-28",
+        "time_show_date": "11:35:00",
+        "close_date": "2023-05-28",
+        "time_close_date": "11:35:00",
+        "active": true,
+        "create_date": "2023-05-28",
+        "titleNoti": "123",
+        "summaryNoti": "1233333"
+    },
+    {
+        "id": 131,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 158,
+                "date_picker": "2023-05-28",
+                "time_show_date": "11:35:00",
+                "price": 1232,
+                "website": "http://localhost:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-28T04:35:14.078047Z",
+                "platform": 131
+            }
+        ],
+        "title": "Korean movie",
+        "description": "123",
+        "show_date": "2023-05-28",
+        "time_show_date": "11:35:00",
+        "close_date": "2023-05-28",
+        "time_close_date": "11:35:00",
+        "active": true,
+        "create_date": "2023-05-28",
+        "titleNoti": "123",
+        "summaryNoti": "1233333"
+    },
+    {
+        "id": 131,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 158,
+                "date_picker": "2023-05-28",
+                "time_show_date": "11:35:00",
+                "price": 1232,
+                "website": "http://localhost:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-28T04:35:14.078047Z",
+                "platform": 131
+            }
+        ],
+        "title": "Korean movie",
+        "description": "123",
+        "show_date": "2023-05-28",
+        "time_show_date": "11:35:00",
+        "close_date": "2023-05-28",
+        "time_close_date": "11:35:00",
+        "active": true,
+        "create_date": "2023-05-28",
+        "titleNoti": "123",
+        "summaryNoti": "1233333"
+    },
+    {
+        "id": 131,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 158,
+                "date_picker": "2023-05-28",
+                "time_show_date": "11:35:00",
+                "price": 1232,
+                "website": "http://localhost:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-28T04:35:14.078047Z",
+                "platform": 131
+            }
+        ],
+        "title": "Korean movie",
+        "description": "123",
+        "show_date": "2023-05-28",
+        "time_show_date": "11:35:00",
+        "close_date": "2023-05-28",
+        "time_close_date": "11:35:00",
+        "active": true,
+        "create_date": "2023-05-28",
+        "titleNoti": "123",
+        "summaryNoti": "1233333"
+    },
+    {
+        "id": 131,
+        "image": null,
+        "watchlist": [
+            {
+                "id": 158,
+                "date_picker": "2023-05-28",
+                "time_show_date": "11:35:00",
+                "price": 1232,
+                "website": "http://localhost:3000/addmovie",
+                "active": true,
+                "create_date": "2023-05-28T04:35:14.078047Z",
+                "platform": 131
+            }
+        ],
+        "title": "Korean movie",
+        "description": "123",
+        "show_date": "2023-05-28",
+        "time_show_date": "11:35:00",
+        "close_date": "2023-05-28",
+        "time_close_date": "11:35:00",
+        "active": true,
+        "create_date": "2023-05-28",
+        "titleNoti": "123",
+        "summaryNoti": "1233333"
+    }
+]

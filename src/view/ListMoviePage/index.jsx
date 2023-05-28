@@ -9,6 +9,7 @@ import { getAllMovie } from '../../services/UserService';
 import MovieCard from './MovieCard';
 import { useNavigate } from 'react-router-dom';
 import MovieTable from './MovieTable';
+import FilterTable from './FilterTable';
 
 const token = localStorage.getItem('mytoken');
 const config = {
@@ -102,6 +103,7 @@ export default function ListMoviePage() {
                             })}
                         />
                     ) : (
+                        // <FilterTable />
                         <Col style={{ backgroundColor: 'white' }}>
                             <Row gutter={[24, 24]} style={{ padding: 16 }}>
                                 {listMovie.map((item) => (

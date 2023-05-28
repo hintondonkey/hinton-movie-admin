@@ -1,22 +1,44 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Image, Input, Space, Table, Tag } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Button, Input, Space, Table } from 'antd';
+import { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-
-export default function MovieTable(props) {
-    let { data } = props;
-
+const data = [
+    {
+        key: '1',
+        name: 'John Brown',
+        age: 32,
+        address: 'New York No. 1 Lake Park',
+    },
+    {
+        key: '2',
+        name: 'Joe Black',
+        age: 42,
+        address: 'London No. 1 Lake Park',
+    },
+    {
+        key: '3',
+        name: 'Jim Green',
+        age: 32,
+        address: 'Sydney No. 1 Lake Park',
+    },
+    {
+        key: '4',
+        name: 'Jim Red',
+        age: 32,
+        address: 'London No. 2 Lake Park',
+    },
+];
+const FilterTable = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: 1,
             pageSize: 10,
-            total: data.length,
         },
     });
-
     const searchInput = useRef(null);
+
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         setSearchText(selectedKeys[0]);
@@ -26,16 +48,6 @@ export default function MovieTable(props) {
         clearFilters();
         setSearchText('');
     };
-
-    console.log(
-        'data',
-        data.map((item) => {
-            let abc = { ...item };
-            abc.key = item.id;
-            return abc;
-        })
-    );
-
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({
             setSelectedKeys,
@@ -135,82 +147,30 @@ export default function MovieTable(props) {
                 text
             ),
     });
-
     const columns = [
         {
-            title: 'Title',
-            dataIndex: 'title',
-            key: 'title',
-            render: (text) => <a>{text}</a>,
-            sorter: (a, b) => a.title.localeCompare(b.title) > 0,
-            ...getColumnSearchProps('title'),
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            width: '30%',
+            ...getColumnSearchProps('name'),
         },
         {
-            title: 'Image',
-            dataIndex: 'image',
-            key: 'image',
-            render: (image) => (
-                <div>
-                    <Image
-                        width={80}
-                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                    />
-                </div>
-            ),
+            title: 'Age',
+            dataIndex: 'age',
+            key: 'age',
+            width: '20%',
+            ...getColumnSearchProps('age'),
         },
         {
-            title: 'Show Date',
-            dataIndex: 'show_date',
-            key: 'show_date',
-            sorter: (a, b) => new Date(a.show_date) - new Date(b.show_date),
-        },
-        {
-            title: 'Close Date',
-            key: 'close_date',
-            dataIndex: 'close_date',
-            sorter: (a, b) => new Date(a.close_date) - new Date(b.close_date),
-        },
-        {
-            title: 'Active',
-            key: 'active',
-            render: (item) => (
-                <span>
-                    <Tag color={item.active ? 'green' : 'red'}>
-                        {item.active ? 'Active' : 'Inactive'}
-                    </Tag>
-                </span>
-            ),
-            sorter: (a, b) => a.active - b.active,
-        },
-        {
-            title: 'Actions',
-            key: 'actions',
-            render: (_, record) => (
-                <Space size="middle">
-                    <Button type="primary"> Edit</Button>
-                    <Button danger type="primary">
-                        Delete
-                    </Button>
-                </Space>
-            ),
+            title: 'Address',
+            dataIndex: 'address',
+            key: 'address',
+            ...getColumnSearchProps('address'),
+            sorter: (a, b) => a.address.length - b.address.length,
+            sortDirections: ['descend', 'ascend'],
         },
     ];
-
-    return (
-        <div
-            style={{
-                padding: 16,
-            }}
-        >
-            <Table
-                style={{
-                    boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                    borderRadius: 20,
-                }}
-                columns={columns}
-                dataSource={data}
-                pagination={tableParams.pagination}
-            />
-        </div>
-    );
-}
+    return <Table columns={columns} dataSource={data} pagination />;
+};
+export default FilterTable;

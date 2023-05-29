@@ -42,8 +42,11 @@ export default function MovieForm(props) {
         setFileList(fileList);
     };
 
-    const handleActionUploadImage = (file) => {
-        uploadImage(file);
+    const handleActionUploadImage = async (file) => {
+        await uploadImage(file, changeMovieURL);
+    };
+    const changeMovieURL = (url) => {
+        setMovie({ ...movie, image: url });
     };
 
     const handleClosePreview = () => {

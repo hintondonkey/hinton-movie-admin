@@ -177,6 +177,8 @@ export default function AddMoviePage() {
         );
         setLoading(true);
 
+        console.log('editMovieRequest', editMovieRequest);
+
         if (state !== null && state !== undefined) {
             // TODO: Call 2 api 1 lúc
             handleUpdateMovie(movie);

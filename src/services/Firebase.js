@@ -16,13 +16,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 
-export const uploadImage = async (imageUpload) => {
+export const uploadImage = async (imageUpload, callBack) => {
     if (imageUpload == null) return;
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
     uploadBytes(imageRef, imageUpload).then((val) => {
         getDownloadURL(imageRef).then((url) => {
             console.log('url', url);
-
+            callBack(url);
             toast.success('Upload image success!!!', {
                 position: toast.POSITION.TOP_RIGHT,
             });

@@ -1,23 +1,8 @@
-import React, { useState } from 'react';
-import {
-    Button,
-    Col,
-    DatePicker,
-    Form,
-    Input,
-    Modal,
-    Row,
-    Switch,
-    Table,
-    Tag,
-    TimePicker,
-    Upload,
-} from 'antd';
-import TextArea from 'antd/es/input/TextArea';
 import { PlusOutlined } from '@ant-design/icons';
-import { EditMovieRequest } from '../../models/edit_movie_request';
-
-import dayjs from 'dayjs';
+import { Col, DatePicker, Form, Input, Modal, Row, Switch, Upload } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import React, { useState } from 'react';
+import { uploadImage } from '../../services/Firebase';
 
 const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -43,6 +28,7 @@ export default function MovieForm(props) {
     const [fileList, setFileList] = useState([]);
 
     const handlePreview = async (file) => {
+        console.log('handlePreview', file);
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
         }
@@ -52,8 +38,13 @@ export default function MovieForm(props) {
             file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
         );
     };
-    const handleChange = ({ fileList: newFileList }) =>
-        setFileList(newFileList);
+    const handleChangeUploadImage = ({ fileList }) => {
+        setFileList(fileList);
+    };
+
+    const handleActionUploadImage = (file) => {
+        uploadImage(file);
+    };
 
     const handleClosePreview = () => {
         setPreviewOpen(false);
@@ -232,48 +223,34 @@ export default function MovieForm(props) {
                     />
                 </Form.Item>
                 <Form.Item
-                    // name="image"
-                    label="Image"
-                    labelCol={{ span: 6 }}
-                    // rules={[
-                    //     {
-                    //         required: true,
-                    //         message: 'Please upload image',
-                    //     },
-                    // ]}
+                    name="fileList"
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
+                    noStyle
                 >
-                    <Form.Item
-                        name="dragger"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
-                        noStyle
+                    <Upload
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChangeUploadImage}
+                        maxCount={1}
+                        action={handleActionUploadImage}
                     >
-                        <Upload
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                            listType="picture-card"
-                            fileList={fileList}
-                            onPreview={handlePreview}
-                            onChange={handleChange}
-                        >
-                            {fileList.length >= 1 ? null : uploadButton}
-                        </Upload>
-                        <Modal
-                            open={previewOpen}
-                            title={previewTitle}
-                            footer={null}
-                            onCancel={handleClosePreview}
-                        >
-                            <img
-                                alt="poster movie"
-                                style={{ width: '100%' }}
-                                src={previewImage}
-                            />
-                        </Modal>
-                    </Form.Item>
+                        {fileList.length >= 1 ? null : uploadButton}
+                    </Upload>
+                    <Modal
+                        open={previewOpen}
+                        title={previewTitle}
+                        footer={null}
+                        onCancel={handleClosePreview}
+                    >
+                        <img
+                            alt="poster movie"
+                            style={{ width: '100%' }}
+                            src={previewImage}
+                        />
+                    </Modal>
                 </Form.Item>
-                {/* <Form.Item hidden={true}>
-                    <Button hidden={true} onClick={} >On Submit</Button>
-                </Form.Item> */}
             </Form>
         </div>
     );

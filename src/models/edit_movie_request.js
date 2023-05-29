@@ -9,7 +9,8 @@ export class EditMovieRequest {
         time_close_date,
         active,
         titleNoti,
-        summaryNoti
+        summaryNoti,
+        image
     ) {
         this.watchlist = watchlist;
         this.title = title;
@@ -21,5 +22,6 @@ export class EditMovieRequest {
         this.active = active;
         this.titleNoti = titleNoti;
         this.summaryNoti = summaryNoti;
+        this.image = image;
     }
 }

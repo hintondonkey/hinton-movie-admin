@@ -35,7 +35,7 @@ export default function MovieCard(props) {
                 >
                     <img
                         style={{ height: '100%', width: '100%' }}
-                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                        src={item.image}
                         alt="Poster of Movie"
                     />
                 </div>

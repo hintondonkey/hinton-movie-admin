@@ -44,6 +44,7 @@ export default function AddMoviePage() {
         active: true,
         titleNoti: '',
         summaryNoti: '',
+        imgae: null,
     });
 
     const location = useLocation();
@@ -171,7 +172,8 @@ export default function AddMoviePage() {
             movie.time_close_date,
             movie.active,
             movie.titleNoti,
-            movie.summaryNoti
+            movie.summaryNoti,
+            movie.image
         );
         setLoading(true);
 

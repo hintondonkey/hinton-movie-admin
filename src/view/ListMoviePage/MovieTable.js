@@ -2,10 +2,17 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Image, Input, Space, Table, Tag, Tooltip } from 'antd';
 import React, { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import { deleteMovie } from '../../services/UserService';
 
 export default function MovieTable(props) {
     let { data, handleOpenDetailMovie } = props;
-
+    const token = localStorage.getItem('mytoken');
+    const config = {
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': `Token ${token}`
+        }
+      }
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [tableParams, setTableParams] = useState({
@@ -23,6 +30,17 @@ export default function MovieTable(props) {
             ...sorter,
         });
     };
+
+    const removeMovie = async (param) => {
+        if (window.confirm(`Delete ${param.title} ?`)) {
+          console.log("Delete : ", param.id);
+          // window.location.href = '/listmovie';
+          await deleteMovie(config, param.id);
+          window.location.reload()
+    
+        }
+    
+      };
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -210,7 +228,7 @@ export default function MovieTable(props) {
                         {' '}
                         Edit
                     </Button>
-                    <Button danger type="primary">
+                    <Button onClick={() => removeMovie(record)} danger type="primary">
                         Delete
                     </Button>
                 </Space>

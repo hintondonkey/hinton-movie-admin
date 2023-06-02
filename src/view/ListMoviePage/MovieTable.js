@@ -1,18 +1,30 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Image, Input, Space, Table, Tag, Tooltip } from 'antd';
+import {
+    Button,
+    Dropdown,
+    Image,
+    Input,
+    Space,
+    Switch,
+    Table,
+    Tag,
+    Tooltip,
+} from 'antd';
 import React, { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { deleteMovie } from '../../services/UserService';
+import jsonData from './jsonData.json';
+import SwitchGreen from '../../common/SwitchGreen';
 
 export default function MovieTable(props) {
     let { data, handleOpenDetailMovie } = props;
     const token = localStorage.getItem('mytoken');
     const config = {
         headers: {
-          'content-type': 'application/json',
-          'Authorization': `Token ${token}`
-        }
-      }
+            'content-type': 'application/json',
+            Authorization: `Token ${token}`,
+        },
+    };
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [tableParams, setTableParams] = useState({
@@ -33,14 +45,12 @@ export default function MovieTable(props) {
 
     const removeMovie = async (param) => {
         if (window.confirm(`Delete ${param.title} ?`)) {
-          console.log("Delete : ", param.id);
-          // window.location.href = '/listmovie';
-          await deleteMovie(config, param.id);
-          window.location.reload()
-    
+            console.log('Delete : ', param.id);
+            // window.location.href = '/listmovie';
+            await deleteMovie(config, param.id);
+            window.location.reload();
         }
-    
-      };
+    };
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -66,7 +76,6 @@ export default function MovieTable(props) {
                 }}
                 onKeyDown={(e) => e.stopPropagation()}
             >
-                {console.log('dataIndex: ', dataIndex)}
                 <Input
                     ref={searchInput}
                     placeholder={`Search ${dataIndex}`}
@@ -187,7 +196,10 @@ export default function MovieTable(props) {
                 >
                     <Image
                         width={80}
-                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                        src={
+                            image ??
+                            'https://www.asa.edu/wp-content/themes/asa/img/holder.png'
+                        }
                     />
                 </div>
             ),
@@ -208,11 +220,20 @@ export default function MovieTable(props) {
             title: 'Active',
             key: 'active',
             render: (item) => (
-                <span>
-                    <Tag color={item.active ? 'green' : 'red'}>
-                        {item.active ? 'Active' : 'Inactive'}
-                    </Tag>
-                </span>
+                // <span>
+                //     <Tag color={item.active ? 'green' : 'red'}>
+                //         {item.active ? 'Active' : 'Inactive'}
+                //     </Tag>
+                // </span>
+
+                <Switch
+                    style={{ backgroundColor: item.active ? 'green' : 'gray' }}
+                    checkedChildren="Active"
+                    unCheckedChildren="Inactive"
+                    onChange={(val) => {
+                        console.log('val switch', val, item);
+                    }}
+                />
             ),
             sorter: (a, b) => a.active - b.active,
         },
@@ -225,10 +246,13 @@ export default function MovieTable(props) {
                         type="primary"
                         onClick={() => handleOpenDetailMovie(record)}
                     >
-                        {' '}
                         Edit
                     </Button>
-                    <Button onClick={() => removeMovie(record)} danger type="primary">
+                    <Button
+                        onClick={() => removeMovie(record)}
+                        danger
+                        type="primary"
+                    >
                         Delete
                     </Button>
                 </Space>

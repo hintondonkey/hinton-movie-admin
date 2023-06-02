@@ -9,7 +9,6 @@ import { getAllMovie } from '../../services/UserService';
 import MovieCard from './MovieCard';
 import { useNavigate } from 'react-router-dom';
 import MovieTable from './MovieTable';
-import FilterTable from './FilterTable';
 
 const token = localStorage.getItem('mytoken');
 const config = {

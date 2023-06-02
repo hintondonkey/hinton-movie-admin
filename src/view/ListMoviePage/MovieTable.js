@@ -15,6 +15,8 @@ import Highlighter from 'react-highlight-words';
 import { deleteMovie } from '../../services/UserService';
 import jsonData from './jsonData.json';
 import SwitchGreen from '../../common/SwitchGreen';
+import './MovieTable.css';
+import { EMPTY_IMAGE } from '../../constants/Constants';
 
 export default function MovieTable(props) {
     let { data, handleOpenDetailMovie } = props;
@@ -196,10 +198,7 @@ export default function MovieTable(props) {
                 >
                     <Image
                         width={80}
-                        src={
-                            image ??
-                            'https://www.asa.edu/wp-content/themes/asa/img/holder.png'
-                        }
+                        src={image && image !== '' ? image : EMPTY_IMAGE}
                     />
                 </div>
             ),
@@ -227,7 +226,7 @@ export default function MovieTable(props) {
                 // </span>
 
                 <Switch
-                    style={{ backgroundColor: item.active ? 'green' : 'gray' }}
+                    className="switch_status"
                     checkedChildren="Active"
                     unCheckedChildren="Inactive"
                     onChange={(val) => {

@@ -3,6 +3,7 @@ import { Col, DatePicker, Form, Input, Modal, Row, Switch, Upload } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import React, { useState } from 'react';
 import { uploadImage } from '../../services/Firebase';
+import moment from 'moment';
 
 const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -51,6 +52,10 @@ export default function MovieForm(props) {
 
     const handleClosePreview = () => {
         setPreviewOpen(false);
+    };
+
+    const disabledDate = (current) => {
+        return current && current < moment().startOf('day');
     };
 
     return (
@@ -133,6 +138,7 @@ export default function MovieForm(props) {
                             <DatePicker
                                 showTime
                                 format="YYYY-MM-DD HH:mm"
+                                disabledDate={disabledDate}
                                 onChange={(val, valString) => {
                                     setMovie({
                                         ...movie,
@@ -159,7 +165,7 @@ export default function MovieForm(props) {
                         >
                             <DatePicker
                                 showTime
-                                format="YYYY-MM-DD HH:mm"
+                                disabledDate={disabledDate}
                                 onChange={(val, valString) => {
                                     setMovie({
                                         ...movie,
@@ -178,55 +184,59 @@ export default function MovieForm(props) {
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 1 }}
                 >
-                    <Switch defaultChecked={ischecked} onChange={()=> setIsChecked(!ischecked)} />
+                    <Switch
+                        defaultChecked={ischecked}
+                        onChange={() => setIsChecked(!ischecked)}
+                    />
                 </Form.Item>{' '}
                 {ischecked && (
                     <div>
-                    <Form.Item
-                        name="notification_title"
-                        label="Notification Title"
-                        labelCol={{ span: 6 }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input notification title',
-                            },
-                        ]}
-                    >
-                        <Input
-                            onChange={(val) =>
-                                setMovie({
-                                    ...movie,
-                                    titleNoti: val.target.value,
-                                })
-                            }
-                            value={movie.titleNoti}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        name="notification_summary"
-                        label="Notification Summary"
-                        labelCol={{ span: 6 }}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input notification summary',
-                            },
-                        ]}
-                    >
-                        <TextArea
-                            rows={4}
-                            placeholder="Max length is 1000"
-                            maxLength={1000}
-                            onChange={(val) =>
-                                setMovie({
-                                    ...movie,
-                                    summaryNoti: val.target.value,
-                                })
-                            }
-                            value={movie.summaryNoti}
-                        />
-                    </Form.Item>
+                        <Form.Item
+                            name="notification_title"
+                            label="Notification Title"
+                            labelCol={{ span: 6 }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input notification title',
+                                },
+                            ]}
+                        >
+                            <Input
+                                onChange={(val) =>
+                                    setMovie({
+                                        ...movie,
+                                        titleNoti: val.target.value,
+                                    })
+                                }
+                                value={movie.titleNoti}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="notification_summary"
+                            label="Notification Summary"
+                            labelCol={{ span: 6 }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Please input notification summary',
+                                },
+                            ]}
+                        >
+                            <TextArea
+                                rows={4}
+                                placeholder="Max length is 1000"
+                                maxLength={1000}
+                                onChange={(val) =>
+                                    setMovie({
+                                        ...movie,
+                                        summaryNoti: val.target.value,
+                                    })
+                                }
+                                value={movie.summaryNoti}
+                            />
+                        </Form.Item>
                     </div>
                 )}
                 <Form.Item

@@ -12,7 +12,7 @@ import {
 } from 'antd';
 import React, { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { deleteMovie } from '../../services/UserService';
+import { putMovie,deleteMovie } from '../../services/UserService';
 import jsonData from './jsonData.json';
 import SwitchGreen from '../../common/SwitchGreen';
 import './MovieTable.css';
@@ -178,6 +178,16 @@ export default function MovieTable(props) {
             ),
     });
 
+    const handleChange = async (item) => {
+        const active = item.active===true ? false :  true;
+        const ischecked = false;
+        const tobody = JSON.stringify({ active, ischecked });
+        const id = item.id;
+        await putMovie(tobody, config, id);
+        window.location.reload();
+      };
+    
+
     const columns = [
         {
             title: 'Title',
@@ -224,14 +234,14 @@ export default function MovieTable(props) {
                 //         {item.active ? 'Active' : 'Inactive'}
                 //     </Tag>
                 // </span>
+                
 
                 <Switch
                     className="switch_status"
+                    defaultChecked={item.active === true ? true : false}
                     checkedChildren="Active"
                     unCheckedChildren="Inactive"
-                    onChange={(val) => {
-                        console.log('val switch', val, item);
-                    }}
+                    onChange={()=>handleChange(item)}
                 />
             ),
             sorter: (a, b) => a.active - b.active,

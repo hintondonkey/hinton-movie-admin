@@ -21,7 +21,7 @@ const getBase64 = (file) =>
 
 export default function MovieForm(props) {
     let { form, handleCreateMovie, movie, setMovie } = props;
-
+    const [ischecked, setIsChecked] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -178,53 +178,57 @@ export default function MovieForm(props) {
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 1 }}
                 >
-                    <Switch defaultChecked={true} disabled={true} />
+                    <Switch defaultChecked={ischecked} onChange={()=> setIsChecked(!ischecked)} />
                 </Form.Item>{' '}
-                <Form.Item
-                    name="notification_title"
-                    label="Notification Title"
-                    labelCol={{ span: 6 }}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input notification title',
-                        },
-                    ]}
-                >
-                    <Input
-                        onChange={(val) =>
-                            setMovie({
-                                ...movie,
-                                titleNoti: val.target.value,
-                            })
-                        }
-                        value={movie.titleNoti}
-                    />
-                </Form.Item>
-                <Form.Item
-                    name="notification_summary"
-                    label="Notification Summary"
-                    labelCol={{ span: 6 }}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input notification summary',
-                        },
-                    ]}
-                >
-                    <TextArea
-                        rows={4}
-                        placeholder="Max length is 1000"
-                        maxLength={1000}
-                        onChange={(val) =>
-                            setMovie({
-                                ...movie,
-                                summaryNoti: val.target.value,
-                            })
-                        }
-                        value={movie.summaryNoti}
-                    />
-                </Form.Item>
+                {ischecked && (
+                    <div>
+                    <Form.Item
+                        name="notification_title"
+                        label="Notification Title"
+                        labelCol={{ span: 6 }}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input notification title',
+                            },
+                        ]}
+                    >
+                        <Input
+                            onChange={(val) =>
+                                setMovie({
+                                    ...movie,
+                                    titleNoti: val.target.value,
+                                })
+                            }
+                            value={movie.titleNoti}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        name="notification_summary"
+                        label="Notification Summary"
+                        labelCol={{ span: 6 }}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input notification summary',
+                            },
+                        ]}
+                    >
+                        <TextArea
+                            rows={4}
+                            placeholder="Max length is 1000"
+                            maxLength={1000}
+                            onChange={(val) =>
+                                setMovie({
+                                    ...movie,
+                                    summaryNoti: val.target.value,
+                                })
+                            }
+                            value={movie.summaryNoti}
+                        />
+                    </Form.Item>
+                    </div>
+                )}
                 <Form.Item
                     name="fileList"
                     valuePropName="fileList"

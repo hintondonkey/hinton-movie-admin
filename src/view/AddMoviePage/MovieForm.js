@@ -150,7 +150,6 @@ export default function MovieForm(props) {
                             label="Show Date"
                             labelCol={{ span: 12 }}
                             wrapperCol={{ span: 11 }}
-                            initialValue={dayjs('2015/01/01', 'YYYY/MM/DD')}
                             rules={[
                                 {
                                     required: true,

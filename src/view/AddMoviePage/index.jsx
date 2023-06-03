@@ -58,7 +58,6 @@ export default function AddMoviePage() {
     useEffect(() => {
         if (state !== null && state !== undefined) {
             let item = state.item;
-            console.log('item edit :', item);
 
             let show_date = dayjs(
                 item.show_date + ' ' + item.time_show_date,
@@ -68,8 +67,6 @@ export default function AddMoviePage() {
                 item.close_date + ' ' + item.time_close_date,
                 'YYYY-MM-DD HH:mm'
             );
-
-            console.log('show_date', show_date);
 
             form.setFieldsValue({
                 movie_title: item.title,

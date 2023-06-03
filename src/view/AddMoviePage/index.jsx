@@ -106,6 +106,9 @@ export default function AddMoviePage() {
             );
         } else {
             form.resetFields();
+            formTicket.resetFields();
+            setListTicket([]);
+            setMovie({ ...movie, image: null });
         }
     }, [state]);
 

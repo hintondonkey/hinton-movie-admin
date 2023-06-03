@@ -38,11 +38,11 @@ export default function MovieForm(props) {
         }
         return result;
     };
-    const disabledDateTime = () => ({
-        disabledHours: () => range(0, 24).splice(4, 20),
-        disabledMinutes: () => range(30, 60),
-        disabledSeconds: () => [55, 56],
-    });
+    // const disabledDateTime = () => ({
+    //     disabledHours: () => range(0, 24).splice(4, 20),
+    //     disabledMinutes: () => range(30, 60),
+    //     disabledSeconds: () => [55, 56],
+    // });
 
     const handlePreview = async (file) => {
         console.log('handlePreview', file);
@@ -150,6 +150,7 @@ export default function MovieForm(props) {
                             label="Show Date"
                             labelCol={{ span: 12 }}
                             wrapperCol={{ span: 11 }}
+                            initialValue={dayjs('2015/01/01', 'YYYY/MM/DD')}
                             rules={[
                                 {
                                     required: true,
@@ -163,8 +164,8 @@ export default function MovieForm(props) {
                                 }}
                                 format="YYYY-MM-DD HH:mm"
                                 disabledDate={disabledDate}
-                                disabledTime={disabledDateTime}
                                 onChange={(val, valString) => {
+                                    console.log('val show_date', val);
                                     setMovie({
                                         ...movie,
                                         show_date: valString.split(' ')[0],
@@ -194,7 +195,6 @@ export default function MovieForm(props) {
                                 }}
                                 format="YYYY-MM-DD HH:mm"
                                 disabledDate={disabledDate}
-                                disabledTime={disabledDateTime}
                                 onChange={(val, valString) => {
                                     setMovie({
                                         ...movie,

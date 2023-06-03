@@ -18,6 +18,7 @@ import { postcreateMovie, putMovie } from '../../services/UserService';
 import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import { SHOW_SUCCESS_MESSAGE } from '../../utility/AlertUtility';
+import dayjs from 'dayjs';
 
 const token = localStorage.getItem('mytoken');
 
@@ -59,14 +60,16 @@ export default function AddMoviePage() {
             let item = state.item;
             console.log('item edit :', item);
 
-            let show_date = moment(
+            let show_date = dayjs(
                 item.show_date + ' ' + item.time_show_date,
                 'YYYY-MM-DD HH:mm'
             );
-            let close_date = moment(
+            let close_date = dayjs(
                 item.close_date + ' ' + item.time_close_date,
                 'YYYY-MM-DD HH:mm'
             );
+
+            console.log('show_date', show_date);
 
             form.setFieldsValue({
                 movie_title: item.title,
@@ -110,7 +113,7 @@ export default function AddMoviePage() {
     }, [state]);
 
     const handleUpdateMovie = async (movie) => {
-        console.log("handleUpdateMovie : ", movie);
+        console.log('handleUpdateMovie : ', movie);
         const data = {
             show_date: moment(movie.show_date).format('YYYY-MM-DD'),
             time_show_date: movie.time_show_date,

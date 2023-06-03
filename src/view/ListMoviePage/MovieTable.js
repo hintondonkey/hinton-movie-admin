@@ -207,6 +207,7 @@ export default function MovieTable(props) {
                 >
                     <Image
                         width={80}
+                        height={80}
                         src={image && image !== '' ? image : EMPTY_IMAGE}
                     />
                 </div>

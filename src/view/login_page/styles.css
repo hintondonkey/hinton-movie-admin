@@ -90,7 +90,7 @@ position: absolute;
 .forget label a:hover{
     text-decoration: underline;
 }
-button{
+/* button{
     width: 100%;
     height: 40px;
     border-radius: 40px;
@@ -100,7 +100,7 @@ button{
     cursor: pointer;
     font-size: 1em;
     font-weight: 600;
-}
+} */
 .register{
     font-size: .9em;
     color: #fff;

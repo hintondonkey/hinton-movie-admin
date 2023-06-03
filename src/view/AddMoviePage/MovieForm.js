@@ -1,10 +1,13 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Col, DatePicker, Form, Input, Modal, Row, Switch, Upload } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { uploadImage } from '../../services/Firebase';
 import moment from 'moment';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+dayjs.extend(customParseFormat);
 const normFile = (e) => {
     if (Array.isArray(e)) {
         return e;
@@ -27,6 +30,20 @@ export default function MovieForm(props) {
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState([]);
+    
+
+    const range = (start, end) => {
+        const result = [];
+        for (let i = start; i < end; i++) {
+          result.push(i);
+        }
+        return result;
+      };
+    const disabledDateTime = () => ({
+        disabledHours: () => range(0, 24).splice(4, 20),
+        disabledMinutes: () => range(30, 60),
+        disabledSeconds: () => [55, 56],
+      });
 
     const handlePreview = async (file) => {
         console.log('handlePreview', file);
@@ -57,7 +74,13 @@ export default function MovieForm(props) {
     const disabledDate = (current) => {
         return current && current < moment().startOf('day');
     };
-
+    console.log(movie)
+    // useEffect(()=>{
+    //     if(movie && movie.image !== null) {
+    //         setFileList([movie?.image]);
+    //     }
+    // },[]);
+    console.log(fileList);
     return (
         <div
             style={{
@@ -136,9 +159,10 @@ export default function MovieForm(props) {
                             ]}
                         >
                             <DatePicker
-                                showTime
+                                showTime={{ defaultValue: dayjs('00:00:00', 'HH:mm') }}
                                 format="YYYY-MM-DD HH:mm"
                                 disabledDate={disabledDate}
+                                disabledTime={disabledDateTime}
                                 onChange={(val, valString) => {
                                     setMovie({
                                         ...movie,
@@ -164,8 +188,10 @@ export default function MovieForm(props) {
                             ]}
                         >
                             <DatePicker
-                                showTime
+                                showTime={{ defaultValue: dayjs('00:00:00', 'HH:mm') }}
+                                format="YYYY-MM-DD HH:mm"
                                 disabledDate={disabledDate}
+                                disabledTime={disabledDateTime}
                                 onChange={(val, valString) => {
                                     setMovie({
                                         ...movie,
@@ -253,7 +279,10 @@ export default function MovieForm(props) {
                         maxCount={1}
                         action={handleActionUploadImage}
                     >
-                        {fileList.length >= 1 ? null : uploadButton}
+                        {
+                            movie.image ? <img src={movie.image} alt="avatar" style={{ width: '100%' }} /> : (fileList.length >= 1 ? null : uploadButton)
+                        }
+                        {/* {fileList.length >= 1 ? (movie.image ? <img src={movie.image} alt="avatar" style={{ width: '100%' }} /> : null) : uploadButton} */}
                     </Upload>
                     <Modal
                         open={previewOpen}

@@ -86,6 +86,7 @@ export default function AddMoviePage() {
                 close_date: item.close_date,
                 time_close_date: item.time_close_date,
                 active: true,
+                image: item.image,
                 titleNoti: item.titleNoti,
                 summaryNoti: item.summaryNoti,
             });
@@ -109,12 +110,14 @@ export default function AddMoviePage() {
     }, [state]);
 
     const handleUpdateMovie = async (movie) => {
+        console.log("handleUpdateMovie : ", movie);
         const data = {
             show_date: moment(movie.show_date).format('YYYY-MM-DD'),
             time_show_date: movie.time_show_date,
             close_date: moment(movie.close_date).format('YYYY-MM-DD'),
             time_close_date: movie.time_close_date,
             title: movie.title,
+            image: movie.image,
             description: movie.description,
             titleNoti: movie.titleNoti,
             summaryNoti: movie.summaryNoti,

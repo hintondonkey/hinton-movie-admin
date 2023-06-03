@@ -95,7 +95,7 @@ export default function ListMoviePage() {
                     {console.log('listMovie', listMovie)}
                     {isCard === false ? (
                         <MovieTable
-                            data={listMovie.map((item) => {
+                            data={listMovie && listMovie.length>0 && listMovie.map((item) => {
                                 let abc = { ...item };
                                 abc.key = item.id;
                                 return abc;
@@ -106,7 +106,7 @@ export default function ListMoviePage() {
                         // <FilterTable />
                         <Col style={{ backgroundColor: 'white' }}>
                             <Row gutter={[24, 24]} style={{ padding: 16 }}>
-                                {listMovie.map((item) => (
+                                {listMovie && listMovie.length>0 && listMovie.map((item) => (
                                     <MovieCard
                                         key={item.id}
                                         item={item}

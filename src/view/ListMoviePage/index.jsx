@@ -10,14 +10,6 @@ import MovieCard from './MovieCard';
 import { useNavigate } from 'react-router-dom';
 import MovieTable from './MovieTable';
 
-const token = localStorage.getItem('mytoken');
-const config = {
-    headers: {
-        'content-type': 'application/json',
-        Authorization: `Token ${token}`,
-    },
-};
-
 export default function ListMoviePage() {
     const [loading, setLoading] = useState(false);
     const [listMovie, setListMovie] = useState([]);
@@ -25,6 +17,14 @@ export default function ListMoviePage() {
     const [isCard, setIsCard] = useState(false);
 
     const navigate = useNavigate();
+
+    const token = localStorage.getItem('mytoken');
+    const config = {
+        headers: {
+            'content-type': 'application/json',
+            Authorization: `Token ${token}`,
+        },
+    };
 
     useEffect(() => {
         apiGetAllMovie();
@@ -92,29 +92,34 @@ export default function ListMoviePage() {
                             }}
                         />
                     </div>
-                    {console.log('listMovie', listMovie)}
                     {isCard === false ? (
                         <MovieTable
-                            data={listMovie && listMovie.length>0 && listMovie.map((item) => {
-                                let abc = { ...item };
-                                abc.key = item.id;
-                                return abc;
-                            })}
+                            data={
+                                listMovie &&
+                                listMovie.length > 0 &&
+                                listMovie.map((item) => {
+                                    let abc = { ...item };
+                                    abc.key = item.id;
+                                    return abc;
+                                })
+                            }
                             handleOpenDetailMovie={handleOpenDetailMovie}
                         />
                     ) : (
                         // <FilterTable />
                         <Col style={{ backgroundColor: 'white' }}>
                             <Row gutter={[24, 24]} style={{ padding: 16 }}>
-                                {listMovie && listMovie.length>0 && listMovie.map((item) => (
-                                    <MovieCard
-                                        key={item.id}
-                                        item={item}
-                                        handleOpenDetailMovie={
-                                            handleOpenDetailMovie
-                                        }
-                                    />
-                                ))}
+                                {listMovie &&
+                                    listMovie.length > 0 &&
+                                    listMovie.map((item) => (
+                                        <MovieCard
+                                            key={item.id}
+                                            item={item}
+                                            handleOpenDetailMovie={
+                                                handleOpenDetailMovie
+                                            }
+                                        />
+                                    ))}
                             </Row>
                         </Col>
                     )}

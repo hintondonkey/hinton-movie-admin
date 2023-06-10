@@ -20,26 +20,24 @@ function getItem(label, key, icon, children, type) {
     };
 }
 
-const handleLogout = () => {
-    window.location.href = '/';
-    localStorage.clear();
-};
-
-const items = [
-    getItem('Home', '/listmovie', <HiOutlineHome size={30} />),
-    getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={30} />),
-    {
-        label: 'Logout',
-        // link: '', // Có thể để trống hoặc gán giá trị null nếu không có link
-        icon: <AiOutlineLogout size={30} />,
-        onClick: () => {
-            handleLogout(); // Gọi hàm handleLogout khi nhấp vào mục 'Logout'
-        },
-    },
-];
-
 export default function MenuNavigator() {
     const navigate = useNavigate();
+    const items = [
+        getItem('Home', '/listmovie', <HiOutlineHome size={30} />),
+        getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={30} />),
+        {
+            label: 'Logout',
+            // link: '', // Có thể để trống hoặc gán giá trị null nếu không có link
+            icon: <AiOutlineLogout size={30} />,
+            onClick: () => {
+                handleLogout(); // Gọi hàm handleLogout khi nhấp vào mục 'Logout'
+            },
+        },
+    ];
+    const handleLogout = () => {
+        window.location.href = '/';
+        localStorage.clear();
+    };
     return (
         <div
             style={{

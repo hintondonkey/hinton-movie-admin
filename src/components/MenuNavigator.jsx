@@ -1,7 +1,11 @@
 import { Button, Image, Menu } from 'antd';
 import React, { useState } from 'react';
 import { HiOutlineHome } from 'react-icons/hi';
-import { AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
+import {
+    AiOutlineLogout,
+    AiOutlineMenuFold,
+    AiOutlineMenuUnfold,
+} from 'react-icons/ai';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom';
 import Title from 'antd/es/skeleton/Title';
@@ -16,9 +20,22 @@ function getItem(label, key, icon, children, type) {
     };
 }
 
+const handleLogout = () => {
+    window.location.href = '/';
+    localStorage.clear();
+};
+
 const items = [
     getItem('Home', '/listmovie', <HiOutlineHome size={30} />),
     getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={30} />),
+    {
+        label: 'Logout',
+        // link: '', // Có thể để trống hoặc gán giá trị null nếu không có link
+        icon: <AiOutlineLogout size={30} />,
+        onClick: () => {
+            handleLogout(); // Gọi hàm handleLogout khi nhấp vào mục 'Logout'
+        },
+    },
 ];
 
 export default function MenuNavigator() {

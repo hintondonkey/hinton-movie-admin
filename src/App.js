@@ -10,6 +10,7 @@ import LoginPage from './view/login_page';
 import AddMoviePage from './view/AddMoviePage';
 import ListMoviePage from './view/ListMoviePage';
 import CreateAccount from './view/Account/CreateAccount';
+import OverviewAccount from './view/Account/ListAccount';
 
 function App() {
     return (
@@ -31,7 +32,10 @@ function App() {
                     </Route>
                     <Route path="/addmovie1" element={<EditMovieTicket />} />
                     <Route path="/createAccount" element={<CreateAccount />} />
-                    <Route path="/overviewAccount" />
+                    <Route
+                        path="/overviewAccount"
+                        element={<OverviewAccount />}
+                    />
                 </Routes>
             </BrowserRouter>
             <ToastContainer

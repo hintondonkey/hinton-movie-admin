@@ -1,14 +1,9 @@
-import { Button, Image, Menu } from 'antd';
-import React, { useState } from 'react';
+import { Image, Menu } from 'antd';
+import React from 'react';
+import { AiOutlineLogout } from 'react-icons/ai';
 import { HiOutlineHome } from 'react-icons/hi';
-import {
-    AiOutlineLogout,
-    AiOutlineMenuFold,
-    AiOutlineMenuUnfold,
-} from 'react-icons/ai';
 import { IoAddCircleOutline } from 'react-icons/io5';
-import { Link, useNavigate } from 'react-router-dom';
-import Title from 'antd/es/skeleton/Title';
+import { useNavigate } from 'react-router-dom';
 
 function getItem(label, key, icon, children, type) {
     return {
@@ -23,12 +18,19 @@ function getItem(label, key, icon, children, type) {
 export default function MenuNavigator() {
     const navigate = useNavigate();
     const items = [
-        getItem('Home', '/listmovie', <HiOutlineHome size={30} />),
-        getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={30} />),
+        getItem('Account', '', <IoAddCircleOutline size={20} />, [
+            getItem('Create', '/createAccount', null),
+            getItem('Overview', '/overviewAccount', null),
+        ]),
+        {
+            type: 'divider',
+        },
+        getItem('Home', '/listmovie', <HiOutlineHome size={20} />),
+        getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={20} />),
         {
             label: 'Logout',
             // link: '', // Có thể để trống hoặc gán giá trị null nếu không có link
-            icon: <AiOutlineLogout size={30} />,
+            icon: <AiOutlineLogout size={20} />,
             onClick: () => {
                 handleLogout(); // Gọi hàm handleLogout khi nhấp vào mục 'Logout'
             },
@@ -73,7 +75,7 @@ export default function MenuNavigator() {
             >
                 <Menu
                     defaultSelectedKeys={[window.location.pathname]}
-                    defaultOpenKeys={['sub1']}
+                    defaultOpenKeys={['/listmovie']}
                     mode="inline"
                     theme="dark"
                     items={items}

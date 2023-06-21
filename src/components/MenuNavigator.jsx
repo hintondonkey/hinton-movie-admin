@@ -20,7 +20,7 @@ export default function MenuNavigator() {
     const items = [
         getItem('Account', '', <IoAddCircleOutline size={20} />, [
             getItem('Create', '/createAccount', null),
-            getItem('Overview', '/overviewAccount', null),
+            getItem('List User', '/listUsers', null),
         ]),
         {
             type: 'divider',

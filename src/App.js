@@ -33,9 +33,10 @@ function App() {
                     <Route path="/addmovie1" element={<EditMovieTicket />} />
                     <Route path="/createAccount" element={<CreateAccount />} />
                     <Route
-                        path="/overviewAccount"
-                        element={<OverviewAccount />}
+                        path="/createAccount/:id"
+                        element={<CreateAccount />}
                     />
+                    <Route path="/listUsers" element={<OverviewAccount />} />
                 </Routes>
             </BrowserRouter>
             <ToastContainer

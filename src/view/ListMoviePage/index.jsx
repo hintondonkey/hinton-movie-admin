@@ -18,11 +18,11 @@ export default function ListMoviePage() {
 
     const navigate = useNavigate();
 
-    const token = localStorage.getItem('mytoken');
+    const token = JSON.parse(localStorage.getItem('user'));
     const config = {
         headers: {
             'content-type': 'application/json',
-            Authorization: `Token ${token}`,
+            Authorization: `Bearer ${token.tokens.access}`,
         },
     };
 
@@ -47,6 +47,7 @@ export default function ListMoviePage() {
     const apiGetAllMovie = async () => {
         setLoading(true);
         let res = await getAllMovie(config);
+        console.log(res);
         setLoading(false);
 
         setTotalItem(res.length);

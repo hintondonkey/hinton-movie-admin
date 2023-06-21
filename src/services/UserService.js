@@ -1,10 +1,11 @@
 import axios from '../axios';
 
-const handleLoginApi = (username, password) => {
-    return axios.post('/account/login/', { username, password });
-};
+// const handleLoginApi = (username, password) => {
+//     return axios.post('/account/login/', { username, password });
+// };
 
 const getAllMovie = (config) => {
+    console.log('apiGetAllMovie', config);
     return axios.get(`/movie/stream`, config);
 };
 
@@ -45,7 +46,7 @@ const addWatchlist = (data, config) => {
 // }
 
 export {
-    handleLoginApi,
+    // handleLoginApi,
     getAllMovie,
     putMovie,
     getMovieById,

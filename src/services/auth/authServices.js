@@ -39,6 +39,11 @@ const handlePatchAccountId = async (data) => {
     return response;
 };
 
+const handleDeleteAccountId = async (id) => {
+    const response = await axios.delete(`/account/subuser/${id}`, config);
+    return response;
+};
+
 const authService = {
     handleLoginApi,
     handleAcountType,
@@ -46,6 +51,7 @@ const authService = {
     handleGetAccount,
     handleGetAccountId,
     handlePatchAccountId,
+    handleDeleteAccountId,
 };
 
 export default authService;

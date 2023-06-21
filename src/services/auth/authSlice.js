@@ -77,6 +77,17 @@ export const PatchAccountId = createAsyncThunk(
     }
 );
 
+export const deleteAccountId = createAsyncThunk(
+    'auth/deleteAcountId',
+    async (id, thunkAPI) => {
+        try {
+            return await authService.handleDeleteAccountId(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 export const resetState = createAction('Reset_all');
 
 export const authSlice = createSlice({
@@ -176,6 +187,22 @@ export const authSlice = createSlice({
                 state.message = 'success';
             })
             .addCase(PatchAccountId.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(deleteAccountId.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteAccountId.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.deleteAccount = action.payload;
+                state.message = 'success';
+            })
+            .addCase(deleteAccountId.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

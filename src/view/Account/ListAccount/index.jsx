@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import LoadingSpin from '../../../common/LoadingSpin';
 import MenuNavigator from '../../../components/MenuNavigator';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAcount } from '../../../services/auth/authSlice';
+import { deleteAccountId, getAcount } from '../../../services/auth/authSlice';
 import Link from 'antd/es/typography/Link';
 import { BiEdit } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
-import { AiFillEdit } from 'react-icons/ai';
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import CustomModal from '../../../components/CustomModal';
 
 const columns = [
     {
@@ -23,6 +24,11 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
+    },
+    {
+        title: 'User Name',
+        dataIndex: 'userName',
+        key: 'userName',
     },
     {
         title: 'ID/Email',
@@ -46,29 +52,22 @@ export default function OverviewAccount() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
+    const [open, setOpen] = useState(false);
+    const [accountId, setAccountId] = useState('');
+    const showModal = (e) => {
+        console.log(e);
+        setOpen(true);
+        setAccountId(e);
+    };
+
+    const hideModal = () => {
+        setOpen(false);
+    };
+
     useEffect(() => {
         dispatch(getAcount());
     }, []);
-    // const datas = [
-    //     {
-    //         firstName: 'Stephen',
-    //         lastName: 'Dinh',
-    //         email: 'Stenphen.dinh01@gmail.com',
-    //         role: 'Supervisor',
-    //     },
-    //     {
-    //         firstName: 'Stephen',
-    //         lastName: 'Dinh',
-    //         email: 'Stenphen.dinh0111@gmail.com',
-    //         role: 'Supervisor',
-    //     },
-    //     {
-    //         firstName: 'Stephen',
-    //         lastName: 'Dinh',
-    //         email: 'Stenphen.dinh0112321@gmail.com',
-    //         role: 'Supervisor',
-    //     },
-    // ];
+
     const handleUpdates = (id) => {
         navigate(`/createAccount/${id}`);
     };
@@ -81,6 +80,7 @@ export default function OverviewAccount() {
             datas.push({
                 firstName: i.user.first_name,
                 lastName: i.user.last_name,
+                userName: i.user.username,
                 email: i.user.email,
                 role: i.account_type.name,
                 Actions: (
@@ -91,6 +91,12 @@ export default function OverviewAccount() {
                         >
                             <AiFillEdit />
                         </button>
+                        <button
+                            className="ms-3 fs-3 text-danger bg-transparent border-0"
+                            onClick={() => showModal(i.id)}
+                        >
+                            <AiFillDelete />
+                        </button>
                     </>
                 ),
             });
@@ -98,6 +104,15 @@ export default function OverviewAccount() {
 
     const _buildHeader = () => {
         <div></div>;
+    };
+
+    const deleteAccount = (e) => {
+        dispatch(deleteAccountId(e));
+
+        setOpen(false);
+        setTimeout(() => {
+            dispatch(getAcount());
+        }, 100);
     };
 
     return (
@@ -137,6 +152,14 @@ export default function OverviewAccount() {
                     </div>
                 </Col>
             </Row>
+            <CustomModal
+                hideModal={hideModal}
+                open={open}
+                performAction={() => {
+                    deleteAccount(accountId);
+                }}
+                title="Are you sure you want to delete this user name?"
+            />
             {loading ? <LoadingSpin /> : <></>}
         </div>
     );

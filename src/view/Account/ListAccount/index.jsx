@@ -76,28 +76,53 @@ export default function OverviewAccount() {
     const datas = [];
     allUsers &&
         allUsers.length > 0 &&
-        allUsers.forEach((i) => {
+        allUsers.forEach((i, j) => {
             datas.push({
+                key: j + 1,
                 firstName: i.user.first_name,
                 lastName: i.user.last_name,
                 userName: i.user.username,
                 email: i.user.email,
                 role: i.account_type.name,
                 Actions: (
-                    <>
-                        <button
-                            className="ms-3 fs-3 text-danger bg-transparent border-0"
+                    // <>
+                    //     <button
+                    //         className="ms-3 fs-3 text-danger bg-transparent border-0"
+                    //         onClick={() => handleUpdates(i.id)}
+                    //     >
+                    //         <AiFillEdit />
+                    //     </button>
+                    //     <button
+                    //         className="ms-3 fs-3 text-danger bg-transparent border-0"
+                    //         onClick={() => showModal(i.id)}
+                    //     >
+                    //         <AiFillDelete />
+                    //     </button>
+                    // </>
+                    <Space direction="horizontal">
+                        <Button
+                            type="primary"
                             onClick={() => handleUpdates(i.id)}
                         >
-                            <AiFillEdit />
-                        </button>
-                        <button
-                            className="ms-3 fs-3 text-danger bg-transparent border-0"
+                            Edit
+                        </Button>
+                        <Button
+                            type="primary"
+                            danger
                             onClick={() => showModal(i.id)}
                         >
-                            <AiFillDelete />
-                        </button>
-                    </>
+                            Delete
+                        </Button>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: '#5200FF',
+                                color: 'white',
+                            }}
+                        >
+                            Inside
+                        </Button>
+                    </Space>
                 ),
             });
         });

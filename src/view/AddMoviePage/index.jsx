@@ -138,7 +138,7 @@ export default function AddMoviePage() {
         form.validateFields()
             .then((val) => {
                 console.log('Submit form');
-                console.log('listTicket', listTicket === []);
+                console.log('listTicket', listTicket);
                 if (listTicket === null || listTicket.length === 0) {
                     Swal.fire({
                         icon: 'warning',

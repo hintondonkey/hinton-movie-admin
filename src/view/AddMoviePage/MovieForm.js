@@ -1,11 +1,23 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Col, DatePicker, Form, Input, Modal, Row, Switch, Upload } from 'antd';
+import {
+    Button,
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    Modal,
+    Row,
+    Switch,
+    Upload,
+} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { uploadImage } from '../../services/Firebase';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import { PRIMARY_COLOR } from '../../constants/colors';
 
 dayjs.extend(customParseFormat);
 const normFile = (e) => {
@@ -30,6 +42,8 @@ export default function MovieForm(props) {
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState([]);
+    const [listImageUrl, setListImageUrl] = useState([]);
+    const [isFramePoster, setIsFramePoster] = useState(true);
 
     const range = (start, end) => {
         const result = [];
@@ -44,6 +58,18 @@ export default function MovieForm(props) {
     //     disabledSeconds: () => [55, 56],
     // });
 
+    const handleFileChange = (file) => {
+        const reader = new FileReader();
+
+        if (file) {
+            reader.onload = (e) => {
+                const url = e.target.result;
+                setListImageUrl((preList) => [...preList, url]);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handlePreview = async (file) => {
         console.log('handlePreview', file);
         if (!file.url && !file.preview) {
@@ -56,7 +82,8 @@ export default function MovieForm(props) {
         );
     };
     const handleChangeUploadImage = ({ fileList }) => {
-        setFileList(fileList);
+        console.log('fileList: ', fileList);
+        handleFileChange(fileList[fileList.length - 1].originFileObj);
     };
 
     const handleActionUploadImage = async (file) => {
@@ -79,7 +106,8 @@ export default function MovieForm(props) {
     //         setFileList([movie?.image]);
     //     }
     // },[]);
-    console.log(fileList);
+    console.log('list image', listImageUrl);
+
     return (
         <div
             style={{
@@ -216,7 +244,7 @@ export default function MovieForm(props) {
                         defaultChecked={ischecked}
                         onChange={() => setIsChecked(!ischecked)}
                     />
-                </Form.Item>{' '}
+                </Form.Item>
                 {ischecked && (
                     <div>
                         <Form.Item
@@ -267,7 +295,7 @@ export default function MovieForm(props) {
                         </Form.Item>
                     </div>
                 )}
-                <Form.Item
+                {/* <Form.Item
                     name="fileList"
                     valuePropName="fileList"
                     getValueFromEvent={normFile}
@@ -292,7 +320,6 @@ export default function MovieForm(props) {
                         ) : fileList.length >= 1 ? null : (
                             uploadButton
                         )}
-                        {/* {fileList.length >= 1 ? (movie.image ? <img src={movie.image} alt="avatar" style={{ width: '100%' }} /> : null) : uploadButton} */}
                     </Upload>
                     <Modal
                         open={previewOpen}
@@ -306,7 +333,63 @@ export default function MovieForm(props) {
                             src={previewImage}
                         />
                     </Modal>
+                </Form.Item> */}
+                <Form.Item label="Images" labelCol={{ span: 3 }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'left',
+                            marginLeft: 16,
+                        }}
+                    >
+                        <Switch
+                            defaultChecked={isFramePoster}
+                            checkedChildren="Poster"
+                            unCheckedChildren="Landscape"
+                            style={{
+                                width: 100,
+                                backgroundColor: PRIMARY_COLOR,
+                            }}
+                            onChange={() => setIsFramePoster(!isFramePoster)}
+                        />
+                    </div>
                 </Form.Item>
+                <Row>
+                    {listImageUrl.map((val, index) => (
+                        <Col>
+                            <PhotoProvider>
+                                <PhotoView key={1} src={val}>
+                                    <img
+                                        width={isFramePoster ? 200 : 400}
+                                        height={200}
+                                        src={val ? val : ''}
+                                        alt=""
+                                        style={{
+                                            marginRight: 10,
+                                            marginBottom: 10,
+                                            borderRadius: 15,
+                                        }}
+                                    />
+                                </PhotoView>
+                            </PhotoProvider>
+                        </Col>
+                    ))}
+
+                    <Col>
+                        <Upload
+                            listType="picture-card"
+                            fileList={fileList}
+                            showUploadList={false}
+                            onChange={handleChangeUploadImage}
+                            style={{
+                                margin: 'auto',
+                                display: 'flex',
+                            }}
+                        >
+                            {listImageUrl.length >= 5 ? null : uploadButton}
+                        </Upload>
+                    </Col>
+                </Row>
             </Form>
         </div>
     );

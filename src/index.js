@@ -1,12 +1,13 @@
+import 'antd/dist/reset.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'antd/dist/reset.css';
+import 'react-photo-view/dist/react-photo-view.css';
 import { Provider } from 'react-redux';
+import App from './App';
 import { store } from './app/store';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

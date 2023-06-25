@@ -65,7 +65,6 @@ export default function MenuNavigator() {
             <div
                 style={{
                     borderRadius: 25,
-
                     width: '50%',
                     overflow: 'hidden',
                     margin: 'auto',

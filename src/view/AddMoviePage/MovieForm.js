@@ -1,11 +1,23 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Col, DatePicker, Form, Input, Modal, Row, Switch, Upload } from 'antd';
+import {
+    Button,
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    Modal,
+    Row,
+    Switch,
+    Upload,
+} from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { uploadImage } from '../../services/Firebase';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import { PRIMARY_COLOR } from '../../constants/colors';
 
 dayjs.extend(customParseFormat);
 const normFile = (e) => {
@@ -30,6 +42,10 @@ export default function MovieForm(props) {
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState([]);
+    const [listImageUrl, setListImageUrl] = useState([]);
+    const [listSubIcon, setListSubIcon] = useState([]);
+
+    const [isFramePoster, setIsFramePoster] = useState(true);
 
     const range = (start, end) => {
         const result = [];
@@ -44,6 +60,18 @@ export default function MovieForm(props) {
     //     disabledSeconds: () => [55, 56],
     // });
 
+    const handleFileChange = (file) => {
+        const reader = new FileReader();
+
+        if (file) {
+            reader.onload = (e) => {
+                const url = e.target.result;
+                setListImageUrl((preList) => [...preList, url]);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handlePreview = async (file) => {
         console.log('handlePreview', file);
         if (!file.url && !file.preview) {
@@ -56,7 +84,11 @@ export default function MovieForm(props) {
         );
     };
     const handleChangeUploadImage = ({ fileList }) => {
-        setFileList(fileList);
+        handleFileChange(fileList[fileList.length - 1].originFileObj);
+    };
+
+    const handleChangeUploadSubIcon = ({ fileList }) => {
+        setListSubIcon(fileList);
     };
 
     const handleActionUploadImage = async (file) => {
@@ -79,11 +111,12 @@ export default function MovieForm(props) {
     //         setFileList([movie?.image]);
     //     }
     // },[]);
-    console.log(fileList);
+    console.log('list image', listImageUrl);
+
     return (
         <div
             style={{
-                width: '80%',
+                width: '85%',
                 padding: '24px 24px 24px 24px',
                 borderRadius: '25px',
                 backgroundColor: '#E8E9EB',
@@ -145,84 +178,185 @@ export default function MovieForm(props) {
                 </Form.Item>
                 <Row>
                     <Col className="gutter-row" span={12}>
-                        <Form.Item
-                            name="show_date"
-                            label="Show Date"
-                            labelCol={{ span: 12 }}
-                            wrapperCol={{ span: 11 }}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please choose show date',
-                                },
-                            ]}
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'left',
+                                marginLeft: 16,
+                            }}
                         >
-                            <DatePicker
-                                showTime={{
-                                    defaultValue: dayjs('00:00:00', 'HH:mm'),
-                                }}
-                                format="YYYY-MM-DD HH:mm"
-                                disabledDate={disabledDate}
-                                onChange={(val, valString) => {
-                                    console.log('val show_date', val);
-                                    setMovie({
-                                        ...movie,
-                                        show_date: valString.split(' ')[0],
-                                        time_show_date: valString.split(' ')[1],
-                                    });
-                                }}
-                            />
-                        </Form.Item>
+                            <Form.Item
+                                name="show_date"
+                                label="Event Date"
+                                labelCol={{ span: 8 }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please choose event date',
+                                    },
+                                ]}
+                            >
+                                <DatePicker
+                                    showTime={{
+                                        defaultValue: dayjs(
+                                            '00:00:00',
+                                            'HH:mm'
+                                        ),
+                                    }}
+                                    format="YYYY-MM-DD HH:mm"
+                                    disabledDate={disabledDate}
+                                    onChange={(val, valString) => {
+                                        console.log('val show_date', val);
+                                        setMovie({
+                                            ...movie,
+                                            show_date: valString.split(' ')[0],
+                                            time_show_date:
+                                                valString.split(' ')[1],
+                                        });
+                                    }}
+                                />
+                            </Form.Item>
+                        </div>
                     </Col>
 
                     <Col className="gutter-row" span={12}>
-                        <Form.Item
-                            name="close_date"
-                            label="Close Date"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 11 }}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please choose close date',
-                                },
-                            ]}
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'left',
+                                marginLeft: 16,
+                            }}
                         >
-                            <DatePicker
-                                showTime={{
-                                    defaultValue: dayjs('00:00:00', 'HH:mm'),
-                                }}
-                                format="YYYY-MM-DD HH:mm"
-                                disabledDate={disabledDate}
-                                onChange={(val, valString) => {
-                                    setMovie({
-                                        ...movie,
-                                        close_date: valString.split(' ')[0],
-                                        time_close_date:
-                                            valString.split(' ')[1],
-                                    });
-                                }}
-                            />
-                        </Form.Item>
+                            <Form.Item
+                                name="close_date"
+                                label="End Event Date"
+                                labelCol={{ span: 9 }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Please choose end event date date',
+                                    },
+                                ]}
+                            >
+                                <DatePicker
+                                    showTime={{
+                                        defaultValue: dayjs(
+                                            '00:00:00',
+                                            'HH:mm'
+                                        ),
+                                    }}
+                                    format="YYYY-MM-DD HH:mm"
+                                    disabledDate={disabledDate}
+                                    onChange={(val, valString) => {
+                                        setMovie({
+                                            ...movie,
+                                            close_date: valString.split(' ')[0],
+                                            time_close_date:
+                                                valString.split(' ')[1],
+                                        });
+                                    }}
+                                />
+                            </Form.Item>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="gutter-row" span={12}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'left',
+                                marginLeft: 16,
+                            }}
+                        >
+                            <Form.Item
+                                name="post_date"
+                                label="Post Date"
+                                labelCol={{ span: 8 }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please choose post date',
+                                    },
+                                ]}
+                            >
+                                <DatePicker
+                                    showTime={{
+                                        defaultValue: dayjs(
+                                            '00:00:00',
+                                            'HH:mm'
+                                        ),
+                                    }}
+                                    format="YYYY-MM-DD HH:mm"
+                                    disabledDate={disabledDate}
+                                    onChange={(val, valString) => {}}
+                                />
+                            </Form.Item>
+                        </div>
+                    </Col>
+
+                    <Col className="gutter-row" span={12}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'left',
+                                marginLeft: 16,
+                            }}
+                        >
+                            <Form.Item
+                                name="end_post_date"
+                                label="End Post Date"
+                                labelCol={{ span: 9 }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please choose end post date',
+                                    },
+                                ]}
+                            >
+                                <DatePicker
+                                    showTime={{
+                                        defaultValue: dayjs(
+                                            '00:00:00',
+                                            'HH:mm'
+                                        ),
+                                    }}
+                                    format="YYYY-MM-DD HH:mm"
+                                    disabledDate={disabledDate}
+                                    onChange={(val, valString) => {}}
+                                />
+                            </Form.Item>
+                        </div>
                     </Col>
                 </Row>
                 <Form.Item
-                    label="Push Notification"
+                    label="Send Notification"
                     valuePropName="checked"
-                    labelCol={{ span: 6 }}
-                    wrapperCol={{ span: 1 }}
+                    labelCol={{ span: 3 }}
                 >
-                    <Switch
-                        defaultChecked={ischecked}
-                        onChange={() => setIsChecked(!ischecked)}
-                    />
-                </Form.Item>{' '}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'left',
+                            marginLeft: 16,
+                        }}
+                    >
+                        <Switch
+                            defaultChecked={ischecked}
+                            checkedChildren="ON"
+                            unCheckedChildren="OFF"
+                            style={{ width: 70 }}
+                            onChange={() => setIsChecked(!ischecked)}
+                        />
+                    </div>
+                </Form.Item>
                 {ischecked && (
                     <div>
                         <Form.Item
                             name="notification_title"
                             label="Notification Title"
-                            labelCol={{ span: 6 }}
+                            labelCol={{ span: 4 }}
                             rules={[
                                 {
                                     required: true,
@@ -243,7 +377,7 @@ export default function MovieForm(props) {
                         <Form.Item
                             name="notification_summary"
                             label="Notification Summary"
-                            labelCol={{ span: 6 }}
+                            labelCol={{ span: 4 }}
                             rules={[
                                 {
                                     required: true,
@@ -267,7 +401,7 @@ export default function MovieForm(props) {
                         </Form.Item>
                     </div>
                 )}
-                <Form.Item
+                {/* <Form.Item
                     name="fileList"
                     valuePropName="fileList"
                     getValueFromEvent={normFile}
@@ -292,7 +426,6 @@ export default function MovieForm(props) {
                         ) : fileList.length >= 1 ? null : (
                             uploadButton
                         )}
-                        {/* {fileList.length >= 1 ? (movie.image ? <img src={movie.image} alt="avatar" style={{ width: '100%' }} /> : null) : uploadButton} */}
                     </Upload>
                     <Modal
                         open={previewOpen}
@@ -306,13 +439,91 @@ export default function MovieForm(props) {
                             src={previewImage}
                         />
                     </Modal>
+                </Form.Item> */}
+                <Form.Item label="Images" labelCol={{ span: 3 }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'left',
+                            marginLeft: 16,
+                        }}
+                    >
+                        <Switch
+                            defaultChecked={isFramePoster}
+                            checkedChildren="Poster"
+                            unCheckedChildren="Landscape"
+                            style={{
+                                width: 100,
+                                backgroundColor: PRIMARY_COLOR,
+                            }}
+                            onChange={() => setIsFramePoster(!isFramePoster)}
+                        />
+                    </div>
                 </Form.Item>
+                <Row>
+                    {listImageUrl.length === 0 ? <Col span={3}></Col> : null}
+                    {listImageUrl.map((val, index) => (
+                        <Col>
+                            <PhotoProvider>
+                                <PhotoView key={1} src={val}>
+                                    <img
+                                        width={isFramePoster ? 200 : 400}
+                                        height={300}
+                                        src={val ? val : ''}
+                                        alt=""
+                                        style={{
+                                            marginRight: 10,
+                                            marginBottom: 10,
+                                            borderRadius: 15,
+                                        }}
+                                    />
+                                </PhotoView>
+                            </PhotoProvider>
+                        </Col>
+                    ))}
+
+                    <Col>
+                        <Upload
+                            listType="picture-card"
+                            fileList={listImageUrl}
+                            showUploadList={false}
+                            onChange={handleChangeUploadImage}
+                        >
+                            {listImageUrl.length >= 5
+                                ? null
+                                : uploadButton('Upload Image')}
+                        </Upload>
+                    </Col>
+                </Row>
+                <Form.Item
+                    label="Sub Icon"
+                    labelCol={{ span: 3 }}
+                    style={{ marginBottom: 0 }}
+                ></Form.Item>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'left',
+                    }}
+                >
+                    <Col>
+                        <Upload
+                            listType="picture-card"
+                            fileList={listSubIcon}
+                            onChange={handleChangeUploadSubIcon}
+                        >
+                            {listSubIcon.length >= 1
+                                ? null
+                                : uploadButton('upload sub icon')}
+                        </Upload>
+                    </Col>
+                </div>
             </Form>
         </div>
     );
 }
 
-const uploadButton = (
+const uploadButton = (name) => (
     <div>
         <PlusOutlined />
         <div
@@ -320,7 +531,7 @@ const uploadButton = (
                 marginTop: 8,
             }}
         >
-            Upload
+            {name}
         </div>
     </div>
 );

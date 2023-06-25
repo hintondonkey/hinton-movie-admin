@@ -18,7 +18,7 @@ function getItem(label, key, icon, children, type) {
 export default function MenuNavigator() {
     const navigate = useNavigate();
     const items = [
-        getItem('Account', '', <IoAddCircleOutline size={20} />, [
+        getItem('Account', 'accp', <IoAddCircleOutline size={20} />, [
             getItem('Create', '/createAccount', null),
             getItem('List User', '/listUsers', null),
         ]),
@@ -35,6 +35,19 @@ export default function MenuNavigator() {
                 handleLogout(); // Gọi hàm handleLogout khi nhấp vào mục 'Logout'
             },
         },
+        getItem('Category', '/categories', <IoAddCircleOutline size={20} />, [
+            getItem('Create', '/createCategory', null),
+            getItem('List', '/listCategory', null),
+        ]),
+        getItem(
+            'Sub Category',
+            '/subCategory',
+            <IoAddCircleOutline size={20} />,
+            [
+                getItem('Create', '/createSubCategory', null),
+                getItem('List', '/listSubCategory', null),
+            ]
+        ),
     ];
     const handleLogout = () => {
         window.location.href = '/';
@@ -52,7 +65,6 @@ export default function MenuNavigator() {
             <div
                 style={{
                     borderRadius: 25,
-
                     width: '50%',
                     overflow: 'hidden',
                     margin: 'auto',

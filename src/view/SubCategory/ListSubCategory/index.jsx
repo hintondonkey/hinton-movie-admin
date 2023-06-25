@@ -1,63 +1,61 @@
-import { Button, Col, Row, Space, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Col, Form, Input, Row, Space, Table } from 'antd';
+
 import LoadingSpin from '../../../common/LoadingSpin';
 import MenuNavigator from '../../../components/MenuNavigator';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteAccountId, getAcount } from '../../../services/auth/authSlice';
-import Link from 'antd/es/typography/Link';
-import { BiEdit } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-import CustomModal from '../../../components/CustomModal';
+import { listCategory } from '../../../services/category/categorySlice';
 
 const columns = [
     {
-        title: 'SNo',
-        dataIndex: 'key',
+        title: 'Other',
+        dataIndex: 'id',
     },
     {
-        title: 'First Name',
-        dataIndex: 'firstName',
-        key: 'firstName',
+        title: 'Category',
+        dataIndex: 'category',
+        key: 'category',
     },
     {
-        title: 'Last Name',
-        dataIndex: 'lastName',
-        key: 'lastName',
+        title: 'Total Event',
+        dataIndex: 'totalEvent',
+        key: 'totalEvent',
     },
     {
-        title: 'User Name',
-        dataIndex: 'userName',
-        key: 'userName',
-    },
-    {
-        title: 'ID/Email',
-        dataIndex: 'email',
-        key: 'email',
-        width: 400,
-    },
-    {
-        title: 'Role',
-        dataIndex: 'role',
-        key: 'role',
-    },
-    {
-        title: 'Actions',
-        dataIndex: 'Actions',
+        title: 'Action',
+        dataIndex: 'Action',
+
+        // render: (item) => (
+        //     <Space direction="horizontal">
+        //         <Button type="primary">Edit</Button>
+        //         <Button type="primary" danger>
+        //             Delete
+        //         </Button>
+        //         <Button
+        //             type="primary"
+        //             style={{
+        //                 backgroundColor: '#5200FF',
+        //                 color: 'white',
+        //             }}
+        //         >
+        //             Create Event
+        //         </Button>
+        //     </Space>
+        // ),
     },
 ];
 
-export default function OverviewAccount() {
+export default function ListCategory() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
     const [open, setOpen] = useState(false);
-    const [accountId, setAccountId] = useState('');
+    const [categoryId, setCategoryId] = useState('');
     const showModal = (e) => {
-        console.log(e);
         setOpen(true);
-        setAccountId(e);
+        setCategoryId(e);
     };
 
     const hideModal = () => {
@@ -65,26 +63,24 @@ export default function OverviewAccount() {
     };
 
     useEffect(() => {
-        dispatch(getAcount());
+        dispatch(listCategory());
     }, []);
 
+    const allCategories = useSelector((state) => state?.category?.category);
     const handleUpdates = (id) => {
-        navigate(`/createAccount/${id}`);
+        navigate(`/createCategory/${id}`);
     };
-    const allUsers = useSelector((state) => state?.auth?.allUsers);
 
     const datas = [];
-    allUsers &&
-        allUsers.length > 0 &&
-        allUsers.forEach((i, j) => {
+
+    allCategories &&
+        allCategories.length > 0 &&
+        allCategories.forEach((i, j) => {
             datas.push({
-                key: j + 1,
-                firstName: i.user.first_name,
-                lastName: i.user.last_name,
-                userName: i.user.username,
-                email: i.user.email,
-                role: i.account_type.name,
-                Actions: (
+                id: j + 1,
+                category: i.name,
+                totalEvent: i.total_event,
+                Action: (
                     <Space direction="horizontal">
                         <Button
                             type="primary"
@@ -113,17 +109,12 @@ export default function OverviewAccount() {
             });
         });
 
-    const _buildHeader = () => {
-        <div></div>;
-    };
-
     const deleteAccount = (e) => {
-        dispatch(deleteAccountId(e));
-
-        setOpen(false);
-        setTimeout(() => {
-            dispatch(getAcount());
-        }, 100);
+        // dispatch(deleteAccountId(e));
+        // setOpen(false);
+        // setTimeout(() => {
+        //     dispatch(getAcount());
+        // }, 100);
     };
 
     return (
@@ -139,7 +130,7 @@ export default function OverviewAccount() {
                             backgroundColor: '#1F6C97',
                         }}
                     >
-                        {_buildHeader()}
+                        <div></div>
                     </div>
                     <div
                         style={{
@@ -163,14 +154,6 @@ export default function OverviewAccount() {
                     </div>
                 </Col>
             </Row>
-            <CustomModal
-                hideModal={hideModal}
-                open={open}
-                performAction={() => {
-                    deleteAccount(accountId);
-                }}
-                title="Are you sure you want to delete this user name?"
-            />
             {loading ? <LoadingSpin /> : <></>}
         </div>
     );

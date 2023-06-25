@@ -2,7 +2,10 @@ import { Button, Col, Form, Input, Row, Space, Table } from 'antd';
 
 import LoadingSpin from '../../../common/LoadingSpin';
 import MenuNavigator from '../../../components/MenuNavigator';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { listCategory } from '../../../services/category/categorySlice';
 
 const columns = [
     {
@@ -21,47 +24,98 @@ const columns = [
     },
     {
         title: 'Action',
+        dataIndex: 'Action',
 
-        render: (item) => (
-            <Space direction="horizontal">
-                <Button type="primary">Edit</Button>
-                <Button type="primary" danger>
-                    Delete
-                </Button>
-                <Button
-                    type="primary"
-                    style={{
-                        backgroundColor: '#5200FF',
-                        color: 'white',
-                    }}
-                >
-                    Create Event
-                </Button>
-            </Space>
-        ),
+        // render: (item) => (
+        //     <Space direction="horizontal">
+        //         <Button type="primary">Edit</Button>
+        //         <Button type="primary" danger>
+        //             Delete
+        //         </Button>
+        //         <Button
+        //             type="primary"
+        //             style={{
+        //                 backgroundColor: '#5200FF',
+        //                 color: 'white',
+        //             }}
+        //         >
+        //             Create Event
+        //         </Button>
+        //     </Space>
+        // ),
     },
 ];
 
 export default function ListCategory() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const datas = [
-        {
-            id: 1,
-            category: 'Dance',
-            totalEvent: 10,
-        },
-        {
-            id: 1,
-            category: 'Dance',
-            totalEvent: 10,
-        },
-        {
-            id: 1,
-            category: 'Dance',
-            totalEvent: 10,
-        },
-    ];
+    const [open, setOpen] = useState(false);
+    const [categoryId, setCategoryId] = useState('');
+    const showModal = (e) => {
+        setOpen(true);
+        setCategoryId(e);
+    };
+
+    const hideModal = () => {
+        setOpen(false);
+    };
+
+    useEffect(() => {
+        dispatch(listCategory());
+    }, []);
+
+    const allCategories = useSelector((state) => state?.category?.category);
+    const handleUpdates = (id) => {
+        navigate(`/createCategory/${id}`);
+    };
+
+    const datas = [];
+
+    allCategories &&
+        allCategories.length > 0 &&
+        allCategories.forEach((i, j) => {
+            datas.push({
+                id: j + 1,
+                category: i.name,
+                totalEvent: i.total_event,
+                Action: (
+                    <Space direction="horizontal">
+                        <Button
+                            type="primary"
+                            onClick={() => handleUpdates(i.id)}
+                        >
+                            Edit
+                        </Button>
+                        <Button
+                            type="primary"
+                            danger
+                            onClick={() => showModal(i.id)}
+                        >
+                            Delete
+                        </Button>
+                        <Button
+                            type="primary"
+                            style={{
+                                backgroundColor: '#5200FF',
+                                color: 'white',
+                            }}
+                        >
+                            Inside
+                        </Button>
+                    </Space>
+                ),
+            });
+        });
+
+    const deleteAccount = (e) => {
+        // dispatch(deleteAccountId(e));
+        // setOpen(false);
+        // setTimeout(() => {
+        //     dispatch(getAcount());
+        // }, 100);
+    };
 
     return (
         <div style={{ height: '100vh' }}>

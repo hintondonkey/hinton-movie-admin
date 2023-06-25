@@ -43,7 +43,10 @@ export default function MenuNavigator() {
             'Sub Category',
             '/subCategory',
             <IoAddCircleOutline size={20} />,
-            [getItem('Create', '/createSubCategory', null)]
+            [
+                getItem('Create', '/createSubCategory', null),
+                getItem('List', '/listSubCategory', null),
+            ]
         ),
     ];
     const handleLogout = () => {

@@ -85,20 +85,6 @@ export default function OverviewAccount() {
                 email: i.user.email,
                 role: i.account_type.name,
                 Actions: (
-                    // <>
-                    //     <button
-                    //         className="ms-3 fs-3 text-danger bg-transparent border-0"
-                    //         onClick={() => handleUpdates(i.id)}
-                    //     >
-                    //         <AiFillEdit />
-                    //     </button>
-                    //     <button
-                    //         className="ms-3 fs-3 text-danger bg-transparent border-0"
-                    //         onClick={() => showModal(i.id)}
-                    //     >
-                    //         <AiFillDelete />
-                    //     </button>
-                    // </>
                     <Space direction="horizontal">
                         <Button
                             type="primary"

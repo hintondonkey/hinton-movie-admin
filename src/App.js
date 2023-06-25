@@ -14,6 +14,7 @@ import OverviewAccount from './view/Account/ListAccount';
 import CreateCategory from './view/Category/CreateCategory';
 import ListCategory from './view/Category/ListCategory';
 import CreateSubCategory from './view/SubCategory/CreateSubCategory';
+import ListSubCategory from './view/SubCategory/ListSubCategory';
 
 function App() {
     return (
@@ -44,10 +45,22 @@ function App() {
                         path="/createCategory"
                         element={<CreateCategory />}
                     />
+                    <Route
+                        path="/createCategory/:id"
+                        element={<CreateCategory />}
+                    />
                     <Route path="/listCategory" element={<ListCategory />} />
                     <Route
                         path="/createSubCategory"
                         element={<CreateSubCategory />}
+                    />
+                    <Route
+                        path="/createSubCategory/:id"
+                        element={<CreateSubCategory />}
+                    />
+                    <Route
+                        path="/listSubCategory"
+                        element={<ListSubCategory />}
                     />
                 </Routes>
             </BrowserRouter>

@@ -16,6 +16,7 @@ import ListCategory from './view/Category/ListCategory';
 import CreateSubCategory from './view/SubCategory/CreateSubCategory';
 import ListSubCategory from './view/SubCategory/ListSubCategory';
 import { OpenRoutes } from './routing/OpenRoutes';
+import ServiceAccount from './view/Account/ServiceAccount';
 
 function App() {
     return (
@@ -48,7 +49,10 @@ function App() {
                         path="/createAccount/:id"
                         element={<CreateAccount />}
                     />
-                    <Route path="/listUsers" element={<OverviewAccount />} />
+                    <Route path="/listUsers">
+                        <Route index element={<OverviewAccount />} />
+                        <Route path=":id" element={<ServiceAccount />} />
+                    </Route>
                     <Route
                         path="/createCategory"
                         element={<CreateCategory />}

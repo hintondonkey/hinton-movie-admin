@@ -27,6 +27,7 @@ const handleUpdateCategory = async (data) => {
 };
 
 const handleDeleteCategory = async (id) => {
+    console.log('delete category : ', id);
     const response = await axios.delete(`/lookup/category/${id}`, config);
     return response;
 };

@@ -15,13 +15,21 @@ import CreateCategory from './view/Category/CreateCategory';
 import ListCategory from './view/Category/ListCategory';
 import CreateSubCategory from './view/SubCategory/CreateSubCategory';
 import ListSubCategory from './view/SubCategory/ListSubCategory';
+import { OpenRoutes } from './routing/OpenRoutes';
 
 function App() {
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<LoginPage />} />
+                    <Route
+                        path="/"
+                        element={
+                            <OpenRoutes>
+                                <LoginPage />
+                            </OpenRoutes>
+                        }
+                    />
                     <Route path="/listmovie">
                         <Route path=":id" element={<EditMovieTicket />} />
                         <Route index element={<ListMoviePage />} />

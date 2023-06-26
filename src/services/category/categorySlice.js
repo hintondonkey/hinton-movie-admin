@@ -192,6 +192,22 @@ export const categorySlice = createSlice({
                 state.message = action.error;
                 state.isLoading = false;
             })
+            .addCase(deleteCategory.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteCategory.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.deleteCategory = 'delete success';
+                state.message = 'success';
+            })
+            .addCase(deleteCategory.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
             .addCase(subCreateCategory.pending, (state) => {
                 state.isLoading = true;
             })

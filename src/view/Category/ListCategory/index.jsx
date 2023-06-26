@@ -5,7 +5,11 @@ import MenuNavigator from '../../../components/MenuNavigator';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { listCategory } from '../../../services/category/categorySlice';
+import {
+    deleteCategory,
+    listCategory,
+} from '../../../services/category/categorySlice';
+import CustomModal from '../../../components/CustomModal';
 
 const columns = [
     {
@@ -109,12 +113,13 @@ export default function ListCategory() {
             });
         });
 
-    const deleteAccount = (e) => {
-        // dispatch(deleteAccountId(e));
-        // setOpen(false);
-        // setTimeout(() => {
-        //     dispatch(getAcount());
-        // }, 100);
+    const deleteCategories = (e) => {
+        console.log('deleteCategory : ', e);
+        dispatch(deleteCategory(e));
+        setOpen(false);
+        setTimeout(() => {
+            dispatch(listCategory());
+        }, 300);
     };
 
     return (
@@ -154,6 +159,14 @@ export default function ListCategory() {
                     </div>
                 </Col>
             </Row>
+            <CustomModal
+                hideModal={hideModal}
+                open={open}
+                performAction={() => {
+                    deleteCategories(categoryId);
+                }}
+                title="Are you sure you want to delete this Category?"
+            />
             {loading ? <LoadingSpin /> : <></>}
         </div>
     );

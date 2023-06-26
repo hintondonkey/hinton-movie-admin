@@ -99,15 +99,17 @@ export default function OverviewAccount() {
                         >
                             Delete
                         </Button>
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: '#5200FF',
-                                color: 'white',
-                            }}
-                        >
-                            Inside
-                        </Button>
+                        {i.account_type.name === 'Business_Admin' && (
+                            <Button
+                                type="primary"
+                                style={{
+                                    backgroundColor: '#5200FF',
+                                    color: 'white',
+                                }}
+                            >
+                                Inside
+                            </Button>
+                        )}
                     </Space>
                 ),
             });

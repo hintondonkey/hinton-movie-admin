@@ -26,8 +26,8 @@ const handleUpdateCategory = async (data) => {
     return response;
 };
 
-const handleDeleteCategory = async (category) => {
-    const response = await axios.post('/lookup/category/', category, config);
+const handleDeleteCategory = async (id) => {
+    const response = await axios.delete(`/lookup/category/${id}`, config);
     return response;
 };
 
@@ -42,6 +42,33 @@ const handleCreateSubCategory = async (category) => {
     return response;
 };
 
+const handleListSubCategory = async () => {
+    const response = await axios.get('/services/get_sub_category/', config);
+    return response;
+};
+
+const handleGetIdSubCategory = async (id) => {
+    const response = await axios.get(`/services/sub_category/${id}/`, config);
+    return response;
+};
+
+const handleUpdateSubCategory = async (data) => {
+    const response = await axios.patch(
+        `/services/sub_category/${data.id}`,
+        data.values,
+        config
+    );
+    return response;
+};
+
+const handleDeleteSubCategory = async (id) => {
+    const response = await axios.delete(
+        `/services/sub_category/${id}/`,
+        config
+    );
+    return response;
+};
+
 const categoryService = {
     handleCreateCategory,
     handleListCategory,
@@ -49,6 +76,10 @@ const categoryService = {
     handleUpdateCategory,
     handleDeleteCategory,
     handleCreateSubCategory,
+    handleListSubCategory,
+    handleGetIdSubCategory,
+    handleUpdateSubCategory,
+    handleDeleteSubCategory,
 };
 
 export default categoryService;

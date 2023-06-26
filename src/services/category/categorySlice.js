@@ -23,7 +23,7 @@ export const createCategory = createAsyncThunk(
 
 export const listCategory = createAsyncThunk(
     'auth/listCategory',
-    async (category, thunkAPI) => {
+    async (thunkAPI) => {
         try {
             return await categoryService.handleListCategory();
         } catch (error) {
@@ -54,11 +54,66 @@ export const updateCategory = createAsyncThunk(
     }
 );
 
+export const deleteCategory = createAsyncThunk(
+    'auth/deleteCategory',
+    async (id, thunkAPI) => {
+        try {
+            return await categoryService.handleDeleteCategory(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 export const subCreateCategory = createAsyncThunk(
     'auth/subCreateCategory',
     async (category, thunkAPI) => {
         try {
             return await categoryService.handleCreateSubCategory(category);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const listSubCategory = createAsyncThunk(
+    'auth/listSubCategory',
+    async (thunkAPI) => {
+        try {
+            return await categoryService.handleListSubCategory();
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const getIdSubCategory = createAsyncThunk(
+    'auth/getIdSubCategory',
+    async (category, thunkAPI) => {
+        try {
+            return await categoryService.handleGetIdSubCategory(category);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const updateSubCategory = createAsyncThunk(
+    'auth/updateSubCategory',
+    async (category, thunkAPI) => {
+        try {
+            return await categoryService.handleUpdateSubCategory(category);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const deleteSubCategory = createAsyncThunk(
+    'auth/deleteSubCategory',
+    async (id, thunkAPI) => {
+        try {
+            return await categoryService.handleDeleteSubCategory(id);
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
         }
@@ -112,7 +167,7 @@ export const categorySlice = createSlice({
                 state.isError = false;
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.getIdcategory = action.payload;
+                state.getIdCategory = action.payload;
                 state.message = 'success';
             })
             .addCase(getIdCategory.rejected, (state, action) => {
@@ -148,6 +203,70 @@ export const categorySlice = createSlice({
                 state.message = 'success';
             })
             .addCase(subCreateCategory.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(listSubCategory.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(listSubCategory.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.subcategory = action.payload;
+                state.message = 'success';
+            })
+            .addCase(listSubCategory.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(getIdSubCategory.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getIdSubCategory.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.getIdSubCategory = action.payload;
+                state.message = 'success';
+            })
+            .addCase(getIdSubCategory.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(updateSubCategory.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateSubCategory.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.updateSubCategory = action.payload;
+                state.message = 'success';
+            })
+            .addCase(updateSubCategory.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(deleteSubCategory.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteSubCategory.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.deleteSubCategory = 'delete success';
+                state.message = 'success';
+            })
+            .addCase(deleteSubCategory.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

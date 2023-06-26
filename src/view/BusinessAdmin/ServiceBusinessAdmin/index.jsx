@@ -43,7 +43,7 @@ const columns = [
     },
 ];
 
-export default function ServiceAccount() {
+export default function ServiceBusinessAdmin() {
     const [loading, setLoading] = useState(false);
 
     const datas = [

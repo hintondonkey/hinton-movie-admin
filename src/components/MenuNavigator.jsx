@@ -22,6 +22,15 @@ export default function MenuNavigator() {
             getItem('Create', '/createAccount', null),
             getItem('List User', '/listUsers', null),
         ]),
+        getItem(
+            'Business Admin',
+            '/businessAdmin',
+            <IoAddCircleOutline size={20} />,
+            [
+                getItem('Create', '/createBusinessAdmin', null),
+                getItem('Overview', '/listBusinessAdmin', null),
+            ]
+        ),
         {
             type: 'divider',
         },

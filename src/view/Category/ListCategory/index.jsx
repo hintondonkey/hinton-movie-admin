@@ -71,6 +71,8 @@ export default function ListCategory() {
     }, []);
 
     const allCategories = useSelector((state) => state?.category?.category);
+    const current_user = useSelector((state) => state?.auth?.user?.roles);
+
     const handleUpdates = (id) => {
         navigate(`/createCategory/${id}`);
     };
@@ -86,19 +88,26 @@ export default function ListCategory() {
                 totalEvent: i.total_event,
                 Action: (
                     <Space direction="horizontal">
-                        <Button
-                            type="primary"
-                            onClick={() => handleUpdates(i.id)}
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            onClick={() => showModal(i.id)}
-                        >
-                            Delete
-                        </Button>
+                        {current_user &&
+                            current_user.account_type === null &&
+                            current_user.is_super_admin && (
+                                <>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => handleUpdates(i.id)}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        type="primary"
+                                        danger
+                                        onClick={() => showModal(i.id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </>
+                            )}
+
                         <Button
                             type="primary"
                             style={{

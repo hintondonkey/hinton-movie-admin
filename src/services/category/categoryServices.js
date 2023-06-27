@@ -78,6 +78,24 @@ const handleGetSubCategoryFllowCategory = async (id) => {
     return response;
 };
 
+const handleGetCategoryFllowBroker = async (id) => {
+    const response = await axios.get(
+        `/services/get_broker_service/${id}/`,
+        config
+    );
+    return response;
+};
+
+const handleUpdateCategoryActive = async (data) => {
+    console.log(data.active);
+    const response = await axios.put(
+        `/services/broker_service/${data.id}/`,
+        data.active,
+        config
+    );
+    return response;
+};
+
 const categoryService = {
     handleCreateCategory,
     handleListCategory,
@@ -89,6 +107,8 @@ const categoryService = {
     handleGetIdSubCategory,
     handleUpdateSubCategory,
     handleDeleteSubCategory,
+    handleGetCategoryFllowBroker,
+    handleUpdateCategoryActive,
 };
 
 export default categoryService;

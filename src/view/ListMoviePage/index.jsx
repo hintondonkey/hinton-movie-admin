@@ -9,6 +9,8 @@ import { getAllMovie } from '../../services/UserService';
 import MovieCard from './MovieCard';
 import { useNavigate } from 'react-router-dom';
 import MovieTable from './MovieTable';
+import axios from '../../axios';
+import { config } from '../../utility/axiosconfig';
 
 export default function ListMoviePage() {
     const [loading, setLoading] = useState(false);
@@ -18,13 +20,13 @@ export default function ListMoviePage() {
 
     const navigate = useNavigate();
 
-    const token = JSON.parse(localStorage.getItem('user'));
-    const config = {
-        headers: {
-            'content-type': 'application/json',
-            Authorization: `Bearer ${token.tokens.access}`,
-        },
-    };
+    // const token = JSON.parse(localStorage.getItem('user'));
+    // const config = {
+    //     headers: {
+    //         'content-type': 'application/json',
+    //         Authorization: `Bearer ${token.tokens.access}`,
+    //     },
+    // };
 
     useEffect(() => {
         apiGetAllMovie();
@@ -45,15 +47,13 @@ export default function ListMoviePage() {
     );
 
     const apiGetAllMovie = async () => {
-        setLoading(true);
-        let res = await getAllMovie(config);
-        console.log(res);
-        setLoading(false);
-
-        setTotalItem(res.length);
-
-        // Đảo ngược list để lấy phim có ngày tạo mới nhất
-        setListMovie(res.reverse());
+        // setLoading(true);
+        // let res = await getAllMovie(config);
+        // console.log(res);
+        // setLoading(false);
+        // setTotalItem(res.length);
+        // // Đảo ngược list để lấy phim có ngày tạo mới nhất
+        // setListMovie(res.reverse());
     };
 
     return (

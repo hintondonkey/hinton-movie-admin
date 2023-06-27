@@ -120,6 +120,28 @@ export const deleteSubCategory = createAsyncThunk(
     }
 );
 
+export const getCategoryFllowBroker = createAsyncThunk(
+    'auth/getCategoryFllowBroker',
+    async (id, thunkAPI) => {
+        try {
+            return await categoryService.handleGetCategoryFllowBroker(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const UpdateCategoryActive = createAsyncThunk(
+    'auth/UpdateCategoryActive',
+    async (data, thunkAPI) => {
+        try {
+            return await categoryService.handleUpdateCategoryActive(data);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 export const resetState = createAction('Reset_all');
 
 export const categorySlice = createSlice({
@@ -283,6 +305,38 @@ export const categorySlice = createSlice({
                 state.message = 'success';
             })
             .addCase(deleteSubCategory.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(getCategoryFllowBroker.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getCategoryFllowBroker.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.CategoryFllowBroker = action.payload;
+                state.message = 'success';
+            })
+            .addCase(getCategoryFllowBroker.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(UpdateCategoryActive.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(UpdateCategoryActive.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.UpdateCategoryActive = action.payload;
+                state.message = 'success';
+            })
+            .addCase(UpdateCategoryActive.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

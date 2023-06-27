@@ -10,6 +10,7 @@ import {
     listSubCategory,
 } from '../../../services/category/categorySlice';
 import CustomModal from '../../../components/CustomModal';
+import { getAcount } from '../../../services/auth/authSlice';
 
 export default function ListBusinessAdmin() {
     const columns = [
@@ -65,43 +66,77 @@ export default function ListBusinessAdmin() {
             width: 200,
         },
         {
-            title: 'Action',
-            render: () => (
-                <Space direction="horizontal">
-                    <Button type="primary">Upgrade</Button>
-                    <Button type="primary" danger>
-                        Delete
-                    </Button>
-                    <Button
-                        type="primary"
-                        style={{
-                            backgroundColor: '#5200FF',
-                            color: 'white',
-                        }}
-                        onClick={() => {
-                            navigate('/listBusinessAdmin/123');
-                        }}
-                    >
-                        Services
-                    </Button>
-                </Space>
-            ),
+            // title: 'Action',
+            // render: () => (
+            //     <Space direction="horizontal">
+            //         <Button type="primary">Upgrade</Button>
+            //         <Button type="primary" danger>
+            //             Delete
+            //         </Button>
+            //         <Button
+            //             type="primary"
+            //             style={{
+            //                 backgroundColor: '#5200FF',
+            //                 color: 'white',
+            //             }}
+            //             onClick={() => {
+            //                 navigate('/listBusinessAdmin/123');
+            //             }}
+            //         >
+            //             Services
+            //         </Button>
+            //     </Space>
+            // ),
+            title: 'Actions',
+            dataIndex: 'Actions',
         },
     ];
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const datas = [
-        {
-            index: 1,
-            businessName: 'The Path',
-            businessType: 'NPO',
-            firstName: 'Stephen',
-            lastName: 'Dinh',
-            email: 'stephen.dinh01@gmail.com',
-        },
-    ];
+    useEffect(() => {
+        dispatch(getAcount());
+    }, []);
+    const allUsers = useSelector((state) => state?.auth?.allUsers);
+    const datas = [];
+
+    allUsers &&
+        allUsers.length > 0 &&
+        allUsers.forEach((i, j) => {
+            {
+                i.account_type.name === 'Business_Admin' &&
+                    datas.push({
+                        index: j + 1,
+                        businessName: i.account_type.name,
+                        businessType: i.broker.business_type.name,
+                        firstName: i.user.first_name,
+                        lastName: i.user.last_name,
+                        userName: i.user.username,
+                        email: i.user.email,
+                        role: i.account_type.name,
+                        Actions: (
+                            <Space direction="horizontal">
+                                <Button
+                                    type="primary"
+                                    style={{
+                                        backgroundColor: '#5200FF',
+                                        color: 'white',
+                                    }}
+                                    onClick={() => {
+                                        navigate(
+                                            `/listBusinessAdmin/${i.broker.id}`
+                                        );
+                                    }}
+                                >
+                                    Services
+                                </Button>
+                            </Space>
+                        ),
+                    });
+            }
+        });
 
     return (
         <div style={{ height: '100vh' }}>

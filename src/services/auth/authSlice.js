@@ -33,7 +33,18 @@ export const acountType = createAsyncThunk(
     }
 );
 
-export const createAccount = createAsyncThunk(
+export const businessType = createAsyncThunk(
+    'auth/businessType',
+    async (thunkAPI) => {
+        try {
+            return await authService.handleBusinessType();
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const create_Account = createAsyncThunk(
     'auth/createAccount',
     async (userAccount, thunkAPI) => {
         try {
@@ -128,17 +139,33 @@ export const authSlice = createSlice({
                 state.message = action.error;
                 state.isLoading = false;
             })
-            .addCase(createAccount.pending, (state) => {
+            .addCase(businessType.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(createAccount.fulfilled, (state, action) => {
+            .addCase(businessType.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.businessType = action.payload;
+                state.message = 'success';
+            })
+            .addCase(businessType.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(create_Account.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(create_Account.fulfilled, (state, action) => {
                 state.isError = false;
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.createAccount = action.payload;
                 state.message = 'success';
             })
-            .addCase(createAccount.rejected, (state, action) => {
+            .addCase(create_Account.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

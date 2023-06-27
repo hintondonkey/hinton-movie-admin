@@ -70,6 +70,14 @@ const handleDeleteSubCategory = async (id) => {
     return response;
 };
 
+const handleGetSubCategoryFllowCategory = async (id) => {
+    const response = await axios.delete(
+        `/services/sub_category/${id}/`,
+        config
+    );
+    return response;
+};
+
 const categoryService = {
     handleCreateCategory,
     handleListCategory,

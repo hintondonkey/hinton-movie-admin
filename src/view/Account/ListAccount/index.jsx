@@ -55,7 +55,6 @@ export default function OverviewAccount() {
     const [open, setOpen] = useState(false);
     const [accountId, setAccountId] = useState('');
     const showModal = (e) => {
-        console.log(e);
         setOpen(true);
         setAccountId(e);
     };

@@ -6,10 +6,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
+    businessAdminListCategory,
     deleteCategory,
     listCategory,
 } from '../../../services/category/categorySlice';
 import CustomModal from '../../../components/CustomModal';
+// import { current_user } from '../../../utility/axiosconfig';
 
 const columns = [
     {
@@ -54,6 +56,7 @@ export default function ListCategory() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    // const currentUser = current_user.current_user.broker_id;
 
     const [open, setOpen] = useState(false);
     const [categoryId, setCategoryId] = useState('');
@@ -68,59 +71,95 @@ export default function ListCategory() {
 
     useEffect(() => {
         dispatch(listCategory());
+        dispatch(businessAdminListCategory(user.broker_id));
     }, []);
 
     const allCategories = useSelector((state) => state?.category?.category);
-    const current_user = useSelector((state) => state?.auth?.user?.roles);
-
+    const user = useSelector((state) => state?.auth?.user?.roles);
+    const business_AdminListCategory = useSelector(
+        (state) => state?.category?.businessAdminListCategory
+    );
     const handleUpdates = (id) => {
         navigate(`/createCategory/${id}`);
     };
 
+    console.log('Category category updated :', user);
+
     const datas = [];
 
-    allCategories &&
-        allCategories.length > 0 &&
-        allCategories.forEach((i, j) => {
-            datas.push({
-                id: j + 1,
-                category: i.name,
-                totalEvent: i.total_event,
-                Action: (
-                    <Space direction="horizontal">
-                        {current_user &&
-                            current_user.account_type === null &&
-                            current_user.is_super_admin && (
-                                <>
-                                    <Button
-                                        type="primary"
-                                        onClick={() => handleUpdates(i.id)}
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        type="primary"
-                                        danger
-                                        onClick={() => showModal(i.id)}
-                                    >
-                                        Delete
-                                    </Button>
-                                </>
-                            )}
+    if (
+        user &&
+        user.current_user_id === 1 &&
+        user.broker_id === 1 &&
+        user.account_type === null
+    ) {
+        allCategories &&
+            allCategories.length > 0 &&
+            allCategories.forEach((i, j) => {
+                datas.push({
+                    id: j + 1,
+                    category: i.name,
+                    totalEvent: i.total_event,
+                    Action: (
+                        <Space direction="horizontal">
+                            {user &&
+                                user.account_type === null &&
+                                user.is_super_admin && (
+                                    <>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => handleUpdates(i.id)}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            type="primary"
+                                            danger
+                                            onClick={() => showModal(i.id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </>
+                                )}
 
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: '#5200FF',
-                                color: 'white',
-                            }}
-                        >
-                            Inside
-                        </Button>
-                    </Space>
-                ),
+                            {/* <Button
+                                type="primary"
+                                style={{
+                                    backgroundColor: '#5200FF',
+                                    color: 'white',
+                                }}
+                            >
+                                Inside
+                            </Button> */}
+                        </Space>
+                    ),
+                });
             });
-        });
+    } else {
+        business_AdminListCategory &&
+            business_AdminListCategory.length > 0 &&
+            business_AdminListCategory.forEach((i, j) => {
+                datas.push({
+                    id: j + 1,
+                    category: i.name,
+                    totalEvent: i.total_event,
+                    Action: (
+                        <Space direction="horizontal">
+                            <Button
+                                type="primary"
+                                style={{
+                                    backgroundColor: '#5200FF',
+                                    color: 'white',
+                                }}
+                                onClick={() => navigate(`/addmovie/${i.id}`)}
+                            >
+                                Inside
+                            </Button>
+                        </Space>
+                    ),
+                });
+            });
+    }
 
     const deleteCategories = (e) => {
         console.log('deleteCategory : ', e);

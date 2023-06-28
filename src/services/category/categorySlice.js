@@ -3,6 +3,7 @@ import categoryService from './categoryServices';
 
 const initialState = {
     category: [],
+    businessAdminListCategory: [],
     subcategory: [],
     isError: false,
     isLoading: false,
@@ -26,6 +27,17 @@ export const listCategory = createAsyncThunk(
     async (thunkAPI) => {
         try {
             return await categoryService.handleListCategory();
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const businessAdminListCategory = createAsyncThunk(
+    'auth/businessAdminListCategory',
+    async (id, thunkAPI) => {
+        try {
+            return await categoryService.handleBusinessAdminListCategory(id);
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
         }
@@ -81,6 +93,17 @@ export const listSubCategory = createAsyncThunk(
     async (thunkAPI) => {
         try {
             return await categoryService.handleListSubCategory();
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const businessAdminListSubCategory = createAsyncThunk(
+    'auth/businessAdminListSubCategory',
+    async (thunkAPI) => {
+        try {
+            return await categoryService.handleBusinessAdminListSubCategory();
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
         }
@@ -177,6 +200,22 @@ export const categorySlice = createSlice({
                 state.message = 'success';
             })
             .addCase(listCategory.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(businessAdminListCategory.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(businessAdminListCategory.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.businessAdminListCategory = action.payload;
+                state.message = 'success';
+            })
+            .addCase(businessAdminListCategory.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

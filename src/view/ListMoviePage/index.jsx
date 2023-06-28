@@ -20,14 +20,6 @@ export default function ListMoviePage() {
 
     const navigate = useNavigate();
 
-    // const token = JSON.parse(localStorage.getItem('user'));
-    // const config = {
-    //     headers: {
-    //         'content-type': 'application/json',
-    //         Authorization: `Bearer ${token.tokens.access}`,
-    //     },
-    // };
-
     useEffect(() => {
         apiGetAllMovie();
     }, []);

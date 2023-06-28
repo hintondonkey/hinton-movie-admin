@@ -5,7 +5,11 @@ import MenuNavigator from '../../../components/MenuNavigator';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { listCategory } from '../../../services/category/categorySlice';
+import {
+    deleteSubCategory,
+    listSubCategory,
+} from '../../../services/category/categorySlice';
+import CustomModal from '../../../components/CustomModal';
 
 const columns = [
     {
@@ -18,6 +22,11 @@ const columns = [
         key: 'category',
     },
     {
+        title: 'SubCategory',
+        dataIndex: 'subcategory',
+        key: 'category',
+    },
+    {
         title: 'Total Event',
         dataIndex: 'totalEvent',
         key: 'totalEvent',
@@ -25,24 +34,6 @@ const columns = [
     {
         title: 'Action',
         dataIndex: 'Action',
-
-        // render: (item) => (
-        //     <Space direction="horizontal">
-        //         <Button type="primary">Edit</Button>
-        //         <Button type="primary" danger>
-        //             Delete
-        //         </Button>
-        //         <Button
-        //             type="primary"
-        //             style={{
-        //                 backgroundColor: '#5200FF',
-        //                 color: 'white',
-        //             }}
-        //         >
-        //             Create Event
-        //         </Button>
-        //     </Space>
-        // ),
     },
 ];
 
@@ -52,10 +43,10 @@ export default function ListCategory() {
     const [loading, setLoading] = useState(false);
 
     const [open, setOpen] = useState(false);
-    const [categoryId, setCategoryId] = useState('');
+    const [subCategoryId, setSubCategoryId] = useState('');
     const showModal = (e) => {
         setOpen(true);
-        setCategoryId(e);
+        setSubCategoryId(e);
     };
 
     const hideModal = () => {
@@ -63,12 +54,13 @@ export default function ListCategory() {
     };
 
     useEffect(() => {
-        dispatch(listCategory());
+        dispatch(listSubCategory());
     }, []);
 
-    const allCategories = useSelector((state) => state?.category?.category);
+    const allCategories = useSelector((state) => state?.category?.subcategory);
+    const current_id_user = useSelector((state) => state?.auth?.user?.id);
     const handleUpdates = (id) => {
-        navigate(`/createCategory/${id}`);
+        navigate(`/createSubCategory/${id}`);
     };
 
     const datas = [];
@@ -78,7 +70,8 @@ export default function ListCategory() {
         allCategories.forEach((i, j) => {
             datas.push({
                 id: j + 1,
-                category: i.name,
+                category: 'category chưa có nè ',
+                subcategory: i.name,
                 totalEvent: i.total_event,
                 Action: (
                     <Space direction="horizontal">
@@ -109,12 +102,12 @@ export default function ListCategory() {
             });
         });
 
-    const deleteAccount = (e) => {
-        // dispatch(deleteAccountId(e));
-        // setOpen(false);
-        // setTimeout(() => {
-        //     dispatch(getAcount());
-        // }, 100);
+    const deleteCategory = (e) => {
+        dispatch(deleteSubCategory(e));
+        setOpen(false);
+        setTimeout(() => {
+            dispatch(listSubCategory());
+        }, 100);
     };
 
     return (
@@ -154,6 +147,14 @@ export default function ListCategory() {
                     </div>
                 </Col>
             </Row>
+            <CustomModal
+                hideModal={hideModal}
+                open={open}
+                performAction={() => {
+                    deleteCategory(subCategoryId);
+                }}
+                title="Are you sure you want to delete this user subCategory?"
+            />
             {loading ? <LoadingSpin /> : <></>}
         </div>
     );

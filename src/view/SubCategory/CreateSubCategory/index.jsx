@@ -6,8 +6,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
+    getIdSubCategory,
     listCategory,
+    listSubCategory,
+    resetState,
     subCreateCategory,
+    updateSubCategory,
 } from '../../../services/category/categorySlice';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
@@ -30,14 +34,36 @@ export default function CreateSubCategory() {
     const navigate = useNavigate();
     const location = useLocation();
     const [loading, setLoading] = useState(false);
-    const IdCategory = location?.pathname?.split('/')[2];
+    const idSubCategory = location?.pathname?.split('/')[2];
+
+    const allCategories = useSelector((state) => state?.category?.category);
+    const user = useSelector((state) => state?.auth?.user);
+    const getSubCategory = useSelector(
+        (state) => state?.category?.getIdSubCategory
+    );
 
     useEffect(() => {
         dispatch(listCategory());
     }, []);
 
-    const allCategories = useSelector((state) => state?.category?.category);
-    const user = useSelector((state) => state?.auth?.user);
+    useEffect(() => {
+        idSubCategory && idSubCategory !== undefined
+            ? dispatch(getIdSubCategory(idSubCategory))
+            : dispatch(resetState());
+    }, [idSubCategory]);
+
+    useEffect(() => {
+        if (getSubCategory) {
+            formik.setValues({
+                ...formik.values,
+                name: getSubCategory?.name || '',
+                description: getSubCategory?.description || '',
+                category: getSubCategory?.category || '',
+            });
+        } else {
+            formik.resetForm();
+        }
+    }, [getSubCategory]);
 
     const formik = useFormik({
         initialValues: {
@@ -45,19 +71,21 @@ export default function CreateSubCategory() {
             description: '',
             image: '',
             category: '',
+            created_user: '',
         },
         validationSchema: createSubCategorySchema,
         onSubmit: (values) => {
             values.image = 'create image';
+            values.created_user = user.id;
             values.category = Number(values.category);
-            if (IdCategory !== undefined) {
-                // const data = { id: IdCategory, values: values };
-                // dispatch(updateCategory(data));
-                // formik.resetForm();
-                // setTimeout(() => {
-                //     dispatch(listCategory());
-                // }, 3000);
-                // navigate('/listCategory');
+            if (idSubCategory !== undefined) {
+                const data = { id: idSubCategory, values: values };
+                dispatch(updateSubCategory(data));
+                formik.resetForm();
+                setTimeout(() => {
+                    dispatch(listSubCategory());
+                }, 3000);
+                navigate('/listSubCategory');
             } else {
                 dispatch(subCreateCategory(values));
                 formik.resetForm();

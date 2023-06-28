@@ -5,7 +5,11 @@ import MenuNavigator from '../../../components/MenuNavigator';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { listCategory } from '../../../services/category/categorySlice';
+import {
+    deleteCategory,
+    listCategory,
+} from '../../../services/category/categorySlice';
+import CustomModal from '../../../components/CustomModal';
 
 const columns = [
     {
@@ -67,6 +71,8 @@ export default function ListCategory() {
     }, []);
 
     const allCategories = useSelector((state) => state?.category?.category);
+    const current_user = useSelector((state) => state?.auth?.user?.roles);
+
     const handleUpdates = (id) => {
         navigate(`/createCategory/${id}`);
     };
@@ -82,19 +88,26 @@ export default function ListCategory() {
                 totalEvent: i.total_event,
                 Action: (
                     <Space direction="horizontal">
-                        <Button
-                            type="primary"
-                            onClick={() => handleUpdates(i.id)}
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            type="primary"
-                            danger
-                            onClick={() => showModal(i.id)}
-                        >
-                            Delete
-                        </Button>
+                        {current_user &&
+                            current_user.account_type === null &&
+                            current_user.is_super_admin && (
+                                <>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => handleUpdates(i.id)}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        type="primary"
+                                        danger
+                                        onClick={() => showModal(i.id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </>
+                            )}
+
                         <Button
                             type="primary"
                             style={{
@@ -109,12 +122,13 @@ export default function ListCategory() {
             });
         });
 
-    const deleteAccount = (e) => {
-        // dispatch(deleteAccountId(e));
-        // setOpen(false);
-        // setTimeout(() => {
-        //     dispatch(getAcount());
-        // }, 100);
+    const deleteCategories = (e) => {
+        console.log('deleteCategory : ', e);
+        dispatch(deleteCategory(e));
+        setOpen(false);
+        setTimeout(() => {
+            dispatch(listCategory());
+        }, 300);
     };
 
     return (
@@ -154,6 +168,14 @@ export default function ListCategory() {
                     </div>
                 </Col>
             </Row>
+            <CustomModal
+                hideModal={hideModal}
+                open={open}
+                performAction={() => {
+                    deleteCategories(categoryId);
+                }}
+                title="Are you sure you want to delete this Category?"
+            />
             {loading ? <LoadingSpin /> : <></>}
         </div>
     );

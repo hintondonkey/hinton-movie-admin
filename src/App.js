@@ -6,22 +6,33 @@ import 'antd/dist/reset.css';
 import { ToastContainer } from 'react-toastify';
 import EditMovieTicket from './components/EditMovieTicket';
 
-import LoginPage from './view/login_page';
-import AddMoviePage from './view/AddMoviePage';
-import ListMoviePage from './view/ListMoviePage';
+import { OpenRoutes } from './routing/OpenRoutes';
 import CreateAccount from './view/Account/CreateAccount';
 import OverviewAccount from './view/Account/ListAccount';
+import ServiceBusinessAdmin from './view/BusinessAdmin/ServiceBusinessAdmin';
+import AddMoviePage from './view/AddMoviePage';
+import ListBusinessAdmin from './view/BusinessAdmin/ListBusinessAdmin';
 import CreateCategory from './view/Category/CreateCategory';
 import ListCategory from './view/Category/ListCategory';
+import ListMoviePage from './view/ListMoviePage';
 import CreateSubCategory from './view/SubCategory/CreateSubCategory';
 import ListSubCategory from './view/SubCategory/ListSubCategory';
+import LoginPage from './view/login_page';
+import CreateBusinessAdmin from './view/BusinessAdmin/CreateBusinessAdmin';
 
 function App() {
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<LoginPage />} />
+                    <Route
+                        path="/"
+                        element={
+                            <OpenRoutes>
+                                <LoginPage />
+                            </OpenRoutes>
+                        }
+                    />
                     <Route path="/listmovie">
                         <Route path=":id" element={<EditMovieTicket />} />
                         <Route index element={<ListMoviePage />} />
@@ -30,7 +41,7 @@ function App() {
                         <Route path=":id" element={<EditMovieTicket />} />
                         <Route index element={<Listmovie />} />
                     </Route>
-                    <Route path="/addmovie">
+                    <Route path="/addmovie/:id">
                         <Route path=":id" element={<AddMoviePage />} />
                         <Route index element={<AddMoviePage />} />
                     </Route>
@@ -40,7 +51,10 @@ function App() {
                         path="/createAccount/:id"
                         element={<CreateAccount />}
                     />
-                    <Route path="/listUsers" element={<OverviewAccount />} />
+                    <Route
+                        path="/listUsers"
+                        element={<OverviewAccount />}
+                    ></Route>
                     <Route
                         path="/createCategory"
                         element={<CreateCategory />}
@@ -62,6 +76,15 @@ function App() {
                         path="/listSubCategory"
                         element={<ListSubCategory />}
                     />
+                    <Route
+                        path="/createBusinessAdmin"
+                        element={<CreateBusinessAdmin />}
+                    />
+
+                    <Route path="/listBusinessAdmin">
+                        <Route index element={<ListBusinessAdmin />} />
+                        <Route path=":id" element={<ServiceBusinessAdmin />} />
+                    </Route>
                 </Routes>
             </BrowserRouter>
             <ToastContainer

@@ -15,6 +15,11 @@ const handleAcountType = async () => {
     return response;
 };
 
+const handleBusinessType = async () => {
+    const response = await axios.get('/account/business_type/', config);
+    return response;
+};
+
 const handleCreateAccount = async (userAccount) => {
     const response = await axios.post('/account/subuser/', userAccount, config);
     return response;
@@ -22,6 +27,7 @@ const handleCreateAccount = async (userAccount) => {
 
 const handleGetAccount = async () => {
     const response = await axios.get('/account/subuser/', config);
+    console.log('handleGetAccount : ', response);
     return response;
 };
 
@@ -47,6 +53,7 @@ const handleDeleteAccountId = async (id) => {
 const authService = {
     handleLoginApi,
     handleAcountType,
+    handleBusinessType,
     handleCreateAccount,
     handleGetAccount,
     handleGetAccountId,

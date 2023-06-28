@@ -55,7 +55,6 @@ export default function OverviewAccount() {
     const [open, setOpen] = useState(false);
     const [accountId, setAccountId] = useState('');
     const showModal = (e) => {
-        console.log(e);
         setOpen(true);
         setAccountId(e);
     };
@@ -99,15 +98,17 @@ export default function OverviewAccount() {
                         >
                             Delete
                         </Button>
-                        <Button
-                            type="primary"
-                            style={{
-                                backgroundColor: '#5200FF',
-                                color: 'white',
-                            }}
-                        >
-                            Inside
-                        </Button>
+                        {i.account_type.name === 'Business_Admin' && (
+                            <Button
+                                type="primary"
+                                style={{
+                                    backgroundColor: '#5200FF',
+                                    color: 'white',
+                                }}
+                            >
+                                Inside
+                            </Button>
+                        )}
                     </Space>
                 ),
             });

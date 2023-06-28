@@ -1,8 +1,9 @@
 import { Image, Menu } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { HiOutlineHome } from 'react-icons/hi';
 import { IoAddCircleOutline } from 'react-icons/io5';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 function getItem(label, key, icon, children, type) {
@@ -17,11 +18,24 @@ function getItem(label, key, icon, children, type) {
 
 export default function MenuNavigator() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    useEffect(() => {
+        // dispatch(getAcount());
+    }, []);
     const items = [
         getItem('Account', 'accp', <IoAddCircleOutline size={20} />, [
             getItem('Create', '/createAccount', null),
             getItem('List User', '/listUsers', null),
         ]),
+        getItem(
+            'Business Admin',
+            '/businessAdmin',
+            <IoAddCircleOutline size={20} />,
+            [
+                getItem('Create', '/createBusinessAdmin', null),
+                getItem('Overview', '/listBusinessAdmin', null),
+            ]
+        ),
         {
             type: 'divider',
         },

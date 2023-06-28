@@ -9,7 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     PatchAccountId,
     acountType,
-    createAccount,
+    businessType,
+    create_Account,
+    getAcount,
     getAcountId,
     resetState,
 } from '../../../services/auth/authSlice';
@@ -46,6 +48,7 @@ let createAccountSchema = yup.object().shape({
         .required('password is Required')
         .oneOf([yup.ref('password'), null], 'Passwords must match'),
     account_type: yup.string().required('account_type is Required.'),
+    business_type: yup.string().required('business_type is Required.'),
 });
 
 export default function CreateAccount() {
@@ -58,6 +61,7 @@ export default function CreateAccount() {
 
     const accountType = useSelector((state) => state?.auth?.acountType);
     const current_user = useSelector((state) => state?.auth?.user?.id);
+    const business_Type = useSelector((state) => state?.auth?.businessType);
     const userId = useSelector((state) => state?.auth?.userId);
     const current_account = useSelector((state) => state?.auth);
 
@@ -79,10 +83,12 @@ export default function CreateAccount() {
                 username: userId?.username || '',
                 email: userId?.email || '',
                 account_type: userId?.account_type || '',
+                business_type: userId?.business_type || '',
             });
         } else {
             formik.resetForm();
             dispatch(acountType());
+            dispatch(businessType());
         }
     }, [userId]);
 
@@ -99,11 +105,17 @@ export default function CreateAccount() {
             password: '',
             password2: '',
             account_type: '',
+            business_type: '',
             current_user_id: '',
         },
         validationSchema: createAccountSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, { setFieldValue }) => {
             values.current_user_id = current_user;
+            if (values.business_type === 'Editor') {
+                setFieldValue('business_type', undefined);
+                values.business_type = '';
+            }
+
             if (getIdUser !== undefined) {
                 const newValues = { ...values };
                 delete newValues.password;
@@ -112,14 +124,21 @@ export default function CreateAccount() {
                 dispatch(PatchAccountId(data));
                 formik.resetForm();
                 navigate('/listUsers');
+                setTimeout(() => {
+                    dispatch(getAcount());
+                }, 300);
                 if (isSuccess && updateAccount) {
                     toast.success('update Account Successfullly!');
                 }
+                dispatch(getAcount());
             } else {
-                dispatch(createAccount(values));
+                dispatch(create_Account(values));
                 formik.resetForm();
                 navigate('/listUsers');
-                if (isSuccess && createAccount) {
+                setTimeout(() => {
+                    dispatch(getAcount());
+                }, 300);
+                if (isSuccess && create_Account) {
                     toast.success('createAccount Added Successfullly!');
                 }
             }
@@ -335,10 +354,76 @@ export default function CreateAccount() {
                                         })}
                                 </select>
                             </div>
+
                             <div className="error mt-2">
                                 {formik.touched.account_type &&
                                     formik.errors.account_type}
                             </div>
+                            {formik.values.account_type === 'Business_Admin' ? (
+                                <div>
+                                    <div name="businessType">
+                                        <select
+                                            name="business_type"
+                                            placeholder="Role"
+                                            onChange={formik.handleChange(
+                                                'business_type'
+                                            )}
+                                            onBlur={formik.handleBlur(
+                                                'business_type'
+                                            )}
+                                            value={formik.values.business_type}
+                                            className="form-control"
+                                        >
+                                            <option value="">
+                                                Select Business Type
+                                            </option>
+                                            {business_Type &&
+                                                business_Type.map(
+                                                    (item, key) => {
+                                                        return (
+                                                            <option
+                                                                key={key}
+                                                                value={
+                                                                    item.name
+                                                                }
+                                                            >
+                                                                {item.name}
+                                                            </option>
+                                                        );
+                                                    }
+                                                )}
+                                        </select>
+                                    </div>
+                                    <div className="error mt-2">
+                                        {formik.touched.business_type &&
+                                            formik.errors.business_type}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <input
+                                        placeholder="Last Name"
+                                        name="business_type"
+                                        className="form-control"
+                                        value={
+                                            (formik.values.business_type =
+                                                'Editor')
+                                        }
+                                        onChange={formik.handleChange(
+                                            'business_type'
+                                        )}
+                                        onBlur={formik.handleBlur(
+                                            'business_type'
+                                        )}
+                                        hidden={true}
+                                    />
+                                    <div className="error mt-2">
+                                        {formik.touched.business_type &&
+                                            formik.errors.business_type}
+                                    </div>
+                                </div>
+                            )}
+
                             <div>
                                 <button
                                     size="large"

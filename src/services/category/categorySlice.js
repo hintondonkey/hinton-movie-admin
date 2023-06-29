@@ -90,9 +90,9 @@ export const subCreateCategory = createAsyncThunk(
 
 export const listSubCategory = createAsyncThunk(
     'auth/listSubCategory',
-    async (thunkAPI) => {
+    async (id, thunkAPI) => {
         try {
-            return await categoryService.handleListSubCategory();
+            return await categoryService.handleListSubCategory(id);
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
         }

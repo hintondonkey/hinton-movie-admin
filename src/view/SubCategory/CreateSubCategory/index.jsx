@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
+    businessAdminListCategory,
     getIdSubCategory,
     listCategory,
     listSubCategory,
@@ -36,14 +37,17 @@ export default function CreateSubCategory() {
     const [loading, setLoading] = useState(false);
     const idSubCategory = location?.pathname?.split('/')[2];
 
-    const allCategories = useSelector((state) => state?.category?.category);
     const user = useSelector((state) => state?.auth?.user);
     const getSubCategory = useSelector(
         (state) => state?.category?.getIdSubCategory
     );
 
+    const allCategories = useSelector(
+        (state) => state?.category?.businessAdminListCategory
+    );
+
     useEffect(() => {
-        dispatch(listCategory());
+        dispatch(businessAdminListCategory(user.roles.broker_id));
     }, []);
 
     useEffect(() => {
@@ -78,6 +82,7 @@ export default function CreateSubCategory() {
             values.image = 'create image';
             values.created_user = user.id;
             values.category = Number(values.category);
+            console.log(values);
             if (idSubCategory !== undefined) {
                 const data = { id: idSubCategory, values: values };
                 dispatch(updateSubCategory(data));

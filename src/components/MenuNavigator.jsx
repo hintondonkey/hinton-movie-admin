@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { HiOutlineHome } from 'react-icons/hi';
 import { IoAddCircleOutline } from 'react-icons/io5';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 function getItem(label, key, icon, children, type) {
@@ -22,6 +22,7 @@ export default function MenuNavigator() {
     useEffect(() => {
         // dispatch(getAcount());
     }, []);
+    const user = useSelector((state) => state?.auth?.user);
     const items = [
         getItem('Account', 'accp', <IoAddCircleOutline size={20} />, [
             getItem('Create', '/createAccount', null),

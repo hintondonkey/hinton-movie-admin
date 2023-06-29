@@ -78,6 +78,9 @@ export default function ServiceBusinessAdmin() {
         const active = { is_active: is_active };
         const data = { id: id, active: active };
         dispatch(UpdateCategoryActive(data));
+        setTimeout(() => {
+            dispatch(getCategoryFllowBroker(getIdBroker));
+        }, 3000);
     };
     if (CategoryFllowBrokers && CategoryFllowBrokers.length > 0) {
         for (let i = 0; i < CategoryFllowBrokers.length; i++) {

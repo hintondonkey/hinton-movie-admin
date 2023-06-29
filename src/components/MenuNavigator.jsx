@@ -137,7 +137,7 @@ export default function MenuNavigator() {
                 />
             </div>
             <div style={{ padding: '16px 0' }}>
-                <h5 style={{ color: '#fff' }}> Angela Grey</h5>
+                <h5 style={{ color: '#fff' }}> {user.username}</h5>
             </div>
 
             <div

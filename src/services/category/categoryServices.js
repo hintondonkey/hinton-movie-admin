@@ -72,8 +72,6 @@ const handleGetIdSubCategory = async (id) => {
 };
 
 const handleUpdateSubCategory = async (data) => {
-    console.log('handleUpdateSubCategory : ', data.id);
-    console.log('handleUpdateSubCategory : ', data.values);
     const response = await axios.patch(
         `/services/sub_category/${data.id}`,
         data.values,
@@ -107,8 +105,7 @@ const handleGetCategoryFllowBroker = async (id) => {
 };
 
 const handleUpdateCategoryActive = async (data) => {
-    console.log('handleUpdateCategoryActive : ', data);
-    const response = await axios.put(
+    const response = await axios.patch(
         `/services/broker_service/${data.id}/`,
         data.active,
         config

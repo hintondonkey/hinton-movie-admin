@@ -23,6 +23,8 @@ export default function MenuNavigator() {
         // dispatch(getAcount());
     }, []);
     const user = useSelector((state) => state?.auth?.user);
+    console.log(user);
+
     const items = [
         getItem('Account', 'accp', <IoAddCircleOutline size={20} />, [
             getItem('Create', '/createAccount', null),
@@ -64,6 +66,49 @@ export default function MenuNavigator() {
             ]
         ),
     ];
+
+    const Business_Admin = [
+        // getItem('Account', 'accp', <IoAddCircleOutline size={20} />, [
+        //     getItem('Create', '/createAccount', null),
+        //     getItem('List User', '/listUsers', null),
+        // ]),
+        // getItem(
+        //     'Business Admin',
+        //     '/businessAdmin',
+        //     <IoAddCircleOutline size={20} />,
+        //     [
+        //         getItem('Create', '/createBusinessAdmin', null),
+        //         getItem('Overview', '/listBusinessAdmin', null),
+        //     ]
+        // ),
+        {
+            type: 'divider',
+        },
+        getItem('Home', '/listmovie', <HiOutlineHome size={20} />),
+        getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={20} />),
+        {
+            label: 'Logout',
+            // link: '', // Có thể để trống hoặc gán giá trị null nếu không có link
+            icon: <AiOutlineLogout size={20} />,
+            onClick: () => {
+                handleLogout(); // Gọi hàm handleLogout khi nhấp vào mục 'Logout'
+            },
+        },
+        getItem('Category', '/categories', <IoAddCircleOutline size={20} />, [
+            getItem('Create', '/createCategory', null),
+            getItem('List', '/listCategory', null),
+        ]),
+        getItem(
+            'Sub Category',
+            '/subCategory',
+            <IoAddCircleOutline size={20} />,
+            [
+                getItem('Create', '/createSubCategory', null),
+                getItem('List', '/listSubCategory', null),
+            ]
+        ),
+    ];
+
     const handleLogout = () => {
         window.location.href = '/';
         localStorage.clear();
@@ -105,7 +150,15 @@ export default function MenuNavigator() {
                     defaultOpenKeys={['/listmovie']}
                     mode="inline"
                     theme="dark"
-                    items={items}
+                    items={
+                        user &&
+                        user.roles &&
+                        (user.roles.account_type === null ||
+                            user.roles.account_type === 'Editor') &&
+                        user.roles.broker_id === 1
+                            ? items
+                            : Business_Admin
+                    }
                     onClick={({ key }) => {
                         navigate(key);
                     }}

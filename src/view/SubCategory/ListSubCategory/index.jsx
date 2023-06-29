@@ -54,11 +54,12 @@ export default function ListCategory() {
     };
 
     useEffect(() => {
-        dispatch(listSubCategory());
+        dispatch(listSubCategory(currentUser.roles.broker_id));
     }, []);
 
     const allCategories = useSelector((state) => state?.category?.subcategory);
-    const current_id_user = useSelector((state) => state?.auth?.user?.id);
+    const currentUser = useSelector((state) => state?.auth?.user);
+
     const handleUpdates = (id) => {
         navigate(`/createSubCategory/${id}`);
     };
@@ -70,7 +71,7 @@ export default function ListCategory() {
         allCategories.forEach((i, j) => {
             datas.push({
                 id: j + 1,
-                category: 'category chưa có nè ',
+                category: i.category_name,
                 subcategory: i.name,
                 totalEvent: i.total_event,
                 Action: (
@@ -106,8 +107,8 @@ export default function ListCategory() {
         dispatch(deleteSubCategory(e));
         setOpen(false);
         setTimeout(() => {
-            dispatch(listSubCategory());
-        }, 100);
+            dispatch(listSubCategory(currentUser.roles.broker_id));
+        }, 300);
     };
 
     return (

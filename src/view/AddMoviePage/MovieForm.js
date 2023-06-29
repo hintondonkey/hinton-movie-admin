@@ -7,6 +7,7 @@ import {
     Input,
     Modal,
     Row,
+    Select,
     Switch,
     Upload,
 } from 'antd';
@@ -134,6 +135,29 @@ export default function MovieForm(props) {
                     handleCreateMovie(movie);
                 }}
             >
+                <Form.Item
+                    name="subcategory"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input Subcategory',
+                        },
+                    ]}
+                    labelCol={{ span: 3 }}
+                    label="Sub Category"
+                >
+                    <Select
+                        placeholder="Sub Category"
+                        // onChange={(val) => {
+                        //     handleEnableButton();
+                        // }}
+                    >
+                        <Select.Option value="editor">Editor</Select.Option>
+                        <Select.Option value="supervisor">
+                            Supervisor
+                        </Select.Option>
+                    </Select>
+                </Form.Item>
                 <Form.Item
                     name="movie_title"
                     label="Movie Title"

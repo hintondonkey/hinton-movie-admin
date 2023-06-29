@@ -120,18 +120,20 @@ export default function AddMoviePage() {
             close_date: moment(movie.close_date).format('YYYY-MM-DD'),
             time_close_date: movie.time_close_date,
             title: movie.title,
-            image: movie.image,
+            stream_flatform_image: { uid: movie.image, uid2: movie.image },
+            sub_icon: { uid: movie.sub_icon },
             description: movie.description,
             titleNoti: movie.titleNoti,
             summaryNoti: movie.summaryNoti,
             ischecked: movie.active,
         };
+        console.log(data);
 
-        await putMovie(data, config_json, movie.id).then((res) => {
-            console.log('res put movie', res);
-            SHOW_SUCCESS_MESSAGE('Update Movie Success !!!');
-            navigate('/listmovie');
-        });
+        // await putMovie(data, config_json, movie.id).then((res) => {
+        //     console.log('res put movie', res);
+        //     SHOW_SUCCESS_MESSAGE('Update Movie Success !!!');
+        //     navigate('/listmovie');
+        // });
     };
 
     const handleClickSaveMovie = () => {

@@ -1,6 +1,5 @@
 import axios from '../../axios';
 import { config } from '../../utility/axiosconfig';
-// import { base_url } from '../../utils/baseUrl';
 
 const handleCreateCategory = async (category) => {
     const response = await axios.post('/lookup/category/', category, config);
@@ -9,6 +8,14 @@ const handleCreateCategory = async (category) => {
 
 const handleListCategory = async () => {
     const response = await axios.get('/lookup/category/', config);
+    return response;
+};
+
+const handleBusinessAdminListCategory = async (id) => {
+    const response = await axios.get(
+        `/services/get_category_list/${id}`,
+        config
+    );
     return response;
 };
 
@@ -43,8 +50,19 @@ const handleCreateSubCategory = async (category) => {
     return response;
 };
 
-const handleListSubCategory = async () => {
-    const response = await axios.get('/services/get_sub_category/', config);
+const handleListSubCategory = async (id) => {
+    const response = await axios.get(
+        `/services/get_sub_category_broker_service/${id}/`,
+        config
+    );
+    return response;
+};
+
+const handleBusinessAdminListSubCategory = async (id) => {
+    const response = await axios.get(
+        `/services/get_sub_category_broker_service/${id}/`,
+        config
+    );
     return response;
 };
 
@@ -54,6 +72,8 @@ const handleGetIdSubCategory = async (id) => {
 };
 
 const handleUpdateSubCategory = async (data) => {
+    console.log('handleUpdateSubCategory : ', data.id);
+    console.log('handleUpdateSubCategory : ', data.values);
     const response = await axios.patch(
         `/services/sub_category/${data.id}`,
         data.values,
@@ -87,7 +107,7 @@ const handleGetCategoryFllowBroker = async (id) => {
 };
 
 const handleUpdateCategoryActive = async (data) => {
-    console.log(data.active);
+    console.log('handleUpdateCategoryActive : ', data);
     const response = await axios.put(
         `/services/broker_service/${data.id}/`,
         data.active,
@@ -109,6 +129,8 @@ const categoryService = {
     handleDeleteSubCategory,
     handleGetCategoryFllowBroker,
     handleUpdateCategoryActive,
+    handleBusinessAdminListCategory,
+    handleBusinessAdminListSubCategory,
 };
 
 export default categoryService;

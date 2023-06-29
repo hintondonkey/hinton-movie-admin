@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     businessAdminListCategory,
     deleteCategory,
+    getSubCategoryToCategoryToBrokerId,
     listCategory,
 } from '../../../services/category/categorySlice';
 import CustomModal from '../../../components/CustomModal';
@@ -139,6 +140,7 @@ export default function ListCategory() {
         business_AdminListCategory &&
             business_AdminListCategory.length > 0 &&
             business_AdminListCategory.forEach((i, j) => {
+                const data = { broker_id: user.broker_id, category_id: i.id };
                 datas.push({
                     id: j + 1,
                     category: i.name,
@@ -147,13 +149,14 @@ export default function ListCategory() {
                         <Space direction="horizontal">
                             <Button
                                 type="primary"
+                                ghost
                                 style={{
-                                    backgroundColor: '#5200FF',
+                                    backgroundColor: '#1677ff',
                                     color: 'white',
                                 }}
                                 onClick={() => navigate(`/addmovie/${i.id}`)}
                             >
-                                Inside
+                                {`Add ${i.name}`}
                             </Button>
                         </Space>
                     ),

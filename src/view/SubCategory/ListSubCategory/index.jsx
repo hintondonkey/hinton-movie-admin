@@ -5,6 +5,7 @@ import MenuNavigator from '../../../components/MenuNavigator';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
     deleteSubCategory,
     listSubCategory,
@@ -59,6 +60,9 @@ export default function ListCategory() {
 
     const allCategories = useSelector((state) => state?.category?.subcategory);
     const currentUser = useSelector((state) => state?.auth?.user);
+    const Category = useSelector((state) => state?.category);
+
+    const { isSuccess, isError, isLoading } = Category;
 
     const handleUpdates = (id) => {
         navigate(`/createSubCategory/${id}`);
@@ -89,7 +93,7 @@ export default function ListCategory() {
                         >
                             Delete
                         </Button>
-                        <Button
+                        {/* <Button
                             type="primary"
                             style={{
                                 backgroundColor: '#5200FF',
@@ -97,7 +101,7 @@ export default function ListCategory() {
                             }}
                         >
                             Inside
-                        </Button>
+                        </Button> */}
                     </Space>
                 ),
             });
@@ -109,6 +113,9 @@ export default function ListCategory() {
         setTimeout(() => {
             dispatch(listSubCategory(currentUser.roles.broker_id));
         }, 300);
+        if (isSuccess && Category.deleteSubCategory === 'delete success') {
+            toast.success('delete Sub Category Successfullly!');
+        }
     };
 
     return (

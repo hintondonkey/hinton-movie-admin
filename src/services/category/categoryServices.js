@@ -72,23 +72,17 @@ const handleGetIdSubCategory = async (id) => {
 };
 
 const handleUpdateSubCategory = async (data) => {
+    console.log('handleUpdateSubCategory : ', data);
     const response = await axios.patch(
         `/services/sub_category/${data.id}`,
         data.values,
         config
     );
+    console.log('handleUpdateSubCategory : ', data);
     return response;
 };
 
 const handleDeleteSubCategory = async (id) => {
-    const response = await axios.delete(
-        `/services/sub_category/${id}/`,
-        config
-    );
-    return response;
-};
-
-const handleGetSubCategoryFllowCategory = async (id) => {
     const response = await axios.delete(
         `/services/sub_category/${id}/`,
         config
@@ -113,6 +107,14 @@ const handleUpdateCategoryActive = async (data) => {
     return response;
 };
 
+const handleGetSubCategoryToCategoryToBrokerId = async (data) => {
+    const response = await axios.patch(
+        `/services/get_sub_category_broker_service/${data.category_id}/${data.broker_id}/`,
+        config
+    );
+    return response;
+};
+
 const categoryService = {
     handleCreateCategory,
     handleListCategory,
@@ -128,6 +130,7 @@ const categoryService = {
     handleUpdateCategoryActive,
     handleBusinessAdminListCategory,
     handleBusinessAdminListSubCategory,
+    handleGetSubCategoryToCategoryToBrokerId,
 };
 
 export default categoryService;

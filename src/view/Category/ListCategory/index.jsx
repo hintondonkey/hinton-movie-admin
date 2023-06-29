@@ -10,6 +10,7 @@ import {
     deleteCategory,
     getSubCategoryToCategoryToBrokerId,
     listCategory,
+    listSubCategory,
 } from '../../../services/category/categorySlice';
 import CustomModal from '../../../components/CustomModal';
 // import { current_user } from '../../../utility/axiosconfig';
@@ -73,9 +74,13 @@ export default function ListCategory() {
     useEffect(() => {
         dispatch(listCategory());
         dispatch(businessAdminListCategory(user.broker_id));
+        dispatch(listSubCategory(user.broker_id));
     }, []);
 
     const allCategories = useSelector((state) => state?.category?.category);
+    const allSubCategories = useSelector(
+        (state) => state?.category?.subcategory
+    );
     const user = useSelector((state) => state?.auth?.user?.roles);
     const business_AdminListCategory = useSelector(
         (state) => state?.category?.businessAdminListCategory
@@ -84,7 +89,7 @@ export default function ListCategory() {
         navigate(`/createCategory/${id}`);
     };
 
-    console.log('Category category updated :', user);
+    console.log('Category category updated :', allSubCategories);
 
     const datas = [];
 
@@ -140,7 +145,6 @@ export default function ListCategory() {
         business_AdminListCategory &&
             business_AdminListCategory.length > 0 &&
             business_AdminListCategory.forEach((i, j) => {
-                const data = { broker_id: user.broker_id, category_id: i.id };
                 datas.push({
                     id: j + 1,
                     category: i.name,

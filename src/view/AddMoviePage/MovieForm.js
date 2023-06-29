@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { PRIMARY_COLOR } from '../../constants/colors';
+import { MdOutlineDeleteOutline } from 'react-icons/md';
 
 dayjs.extend(customParseFormat);
 const normFile = (e) => {
@@ -42,7 +43,7 @@ export default function MovieForm(props) {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState([]);
+    var [listObjectImage, setListObjectImage] = useState([]);
     const [listImageUrl, setListImageUrl] = useState([]);
     const [listSubIcon, setListSubIcon] = useState([]);
 
@@ -84,8 +85,10 @@ export default function MovieForm(props) {
             file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
         );
     };
-    const handleChangeUploadImage = ({ fileList }) => {
-        handleFileChange(fileList[fileList.length - 1].originFileObj);
+    const handleChangeUploadImage = (val) => {
+        listObjectImage.push(val.file);
+
+        handleFileChange(val.fileList[val.fileList.length - 1].originFileObj);
     };
 
     const handleChangeUploadSubIcon = ({ fileList }) => {
@@ -106,6 +109,15 @@ export default function MovieForm(props) {
     const disabledDate = (current) => {
         return current && current < moment().startOf('day');
     };
+
+    const handleDeleteImage = (linkUrl, index) => {
+        listObjectImage.splice(index, 1);
+        setListImageUrl((preList) => {
+            var cloneArray = [...preList];
+            return cloneArray.filter((obj) => obj !== linkUrl);
+        });
+    };
+
     console.log(movie);
     // useEffect(()=>{
     //     if(movie && movie.image !== null) {
@@ -132,7 +144,7 @@ export default function MovieForm(props) {
                 layout="horizontal"
                 name="movieForm"
                 onFinish={() => {
-                    handleCreateMovie(movie);
+                    handleCreateMovie(movie, listObjectImage);
                 }}
             >
                 <Form.Item
@@ -487,7 +499,7 @@ export default function MovieForm(props) {
                 <Row>
                     {listImageUrl.length === 0 ? <Col span={3}></Col> : null}
                     {listImageUrl.map((val, index) => (
-                        <Col>
+                        <Col style={{ marginTop: 12 }}>
                             <PhotoProvider>
                                 <PhotoView key={1} src={val}>
                                     <img
@@ -503,14 +515,25 @@ export default function MovieForm(props) {
                                     />
                                 </PhotoView>
                             </PhotoProvider>
+                            <div>
+                                <Button
+                                    type="primary"
+                                    danger
+                                    onClick={() =>
+                                        handleDeleteImage(val, index)
+                                    }
+                                >
+                                    <MdOutlineDeleteOutline size={20} />
+                                </Button>
+                            </div>
                         </Col>
                     ))}
 
                     <Col>
                         <Upload
                             listType="picture-card"
-                            fileList={listImageUrl}
                             showUploadList={false}
+                            fileList={listImageUrl}
                             onChange={handleChangeUploadImage}
                         >
                             {listImageUrl.length >= 5
@@ -530,6 +553,7 @@ export default function MovieForm(props) {
                         alignItems: 'left',
                     }}
                 >
+                    <Col span={3}></Col>
                     <Col>
                         <Upload
                             listType="picture-card"

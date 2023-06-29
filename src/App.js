@@ -41,7 +41,7 @@ function App() {
                         <Route path=":id" element={<EditMovieTicket />} />
                         <Route index element={<Listmovie />} />
                     </Route>
-                    <Route path="/addmovie/:id">
+                    <Route path="/addmovie">
                         <Route path=":id" element={<AddMoviePage />} />
                         <Route index element={<AddMoviePage />} />
                     </Route>

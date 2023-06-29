@@ -19,6 +19,7 @@ import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import { SHOW_SUCCESS_MESSAGE } from '../../utility/AlertUtility';
 import dayjs from 'dayjs';
+import { getImageUid, uploadImage } from '../../services/Firebase';
 
 const token = localStorage.getItem('mytoken');
 
@@ -167,8 +168,22 @@ export default function AddMoviePage() {
         });
     };
 
-    const handleCreateMovie = async (movie) => {
+    const handleCreateMovie = async (movie, listObjectImage) => {
         console.log('movie: ', movie);
+
+        let requestImageObject = {};
+
+        // Bước upload hình
+        try {
+            listObjectImage.forEach((objectImage) => {
+                console.log('t123  1', objectImage);
+
+                uploadImage(objectImage, (url) => {
+                    let keyName = getImageUid(url);
+                    requestImageObject[keyName] = url;
+                });
+            });
+        } catch (e) {}
 
         var editMovieRequest = new EditMovieRequest(
             mapTicketToRequest(listTicket),

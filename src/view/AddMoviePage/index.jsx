@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import { getImageUid, uploadImage } from '../../services/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubCategoryToCategoryToBrokerId } from '../../services/category/categorySlice';
+import { createMovie } from '../../services/movie/moiveSlice';
 
 const token = localStorage.getItem('mytoken');
 
@@ -40,7 +41,8 @@ export default function AddMoviePage() {
 
     const [movie, setMovie] = useState({
         id: '',
-        subcategory_name: '',
+        subcategory: '',
+        category: '',
         title: '',
         description: '',
         show_date: '',
@@ -54,7 +56,10 @@ export default function AddMoviePage() {
         active: true,
         titleNoti: '',
         summaryNoti: '',
-        imgae: null,
+        stream_flatform_image: '',
+        sub_icon: '',
+        uid_sub_icon: '',
+        is_horizontal: true,
     });
 
     const location = useLocation();
@@ -129,6 +134,7 @@ export default function AddMoviePage() {
 
     useEffect(() => {
         dispatch(getSubCategoryToCategoryToBrokerId(data));
+        setMovie({ ...movie, category: IdCategory });
     }, [IdCategory, user.roles.broker_id]);
 
     const subCategory = useSelector(
@@ -192,36 +198,47 @@ export default function AddMoviePage() {
 
     const handleCreateMovie = async (movie, listObjectImage, objectSubIcon) => {
         // dict chứa hình ảnh
-        let requestImageObject = {};
 
-        // chứa link url subIcon
-        let imageSubIcon = '';
+        let image = [];
 
         setLoading(true);
         // Bước upload hình
         try {
-            console.log('objectSubIcon', objectSubIcon);
+            // console.log('objectSubIcon', objectSubIcon);
+            const updatedMovie = { ...movie };
 
             const promisesImage = listObjectImage.map((objectImage) => {
                 return uploadImage(objectImage, (url) => {
+                    let requestImageObject = {};
                     let keyName = getImageUid(url);
                     requestImageObject[keyName] = url;
+                    image.push(requestImageObject);
+                    console.log('uploadImage : 221', image);
                 });
             });
             await Promise.all(promisesImage);
+            console.log('images : 221', image);
+            setMovie({ ...movie, stream_flatform_image: image });
         } finally {
         }
 
-        // try {
-        //     const promisesIcon = uploadImage(
-        //         objectSubIcon.originFileObj,
-        //         (url) => {
-        //             imageSubIcon = url;
-        //         }
-        //     );
-        //     console.log('promisesIcon', promisesIcon);
-        //     await Promise.all([promisesIcon]);
-        // } catch (error) {}
+        try {
+            const promisesIcon = uploadImage(
+                objectSubIcon.originFileObj,
+                (url) => {
+                    // imageSubIcon = url;
+                    console.log('objectSubIcon', url);
+                    console.log('objectSubIcon : ', getImageUid(url));
+                    setMovie({
+                        ...movie,
+                        sub_icon: url,
+                        uid_sub_icon: getImageUid(url),
+                    });
+                }
+            );
+            // console.log('promisesIcon', promisesIcon);
+            await Promise.all([promisesIcon]);
+        } catch (error) {}
 
         var editMovieRequest = new EditMovieRequest(
             mapTicketToRequest(listTicket),
@@ -238,11 +255,13 @@ export default function AddMoviePage() {
             movie.active,
             movie.titleNoti,
             movie.summaryNoti,
-            requestImageObject,
-            imageSubIcon
+            movie.category,
+            movie.stream_flatform_image,
+            movie.sub_icon,
+            movie.uid_sub_icon
         );
 
-        console.log('editMovieRequest', editMovieRequest);
+        // console.log('editMovieRequest', editMovieRequest);
 
         if (state !== null && state !== undefined) {
             // TODO: Call 2 api 1 lúc
@@ -262,11 +281,15 @@ export default function AddMoviePage() {
             //         }, 1000);
             //     })
             //     .catch((error) => console.log('Error:', error));
-            console.log('create movie : ', editMovieRequest);
+            // console.log('create movie : ', editMovieRequest);
+            setTimeout(() => {
+                setLoading(false);
+                dispatch(createMovie(editMovieRequest));
+            }, 3000);
         }
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
+        // setTimeout(() => {
+        //     setLoading(false);
+        // }, 1000);
     };
 
     const _buildHeader = () => (

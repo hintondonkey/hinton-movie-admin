@@ -40,15 +40,15 @@ const getBase64 = (file) =>
 export default function MovieForm(props) {
     let { form, handleCreateMovie, movie, setMovie, subCategory } = props;
 
-    //Faked data
-    subCategory = [
-        {
-            name: 'Editor',
-        },
-        {
-            name: 'Supervisor',
-        },
-    ];
+    // //Faked data
+    // subCategory = [
+    //     {
+    //         name: 'Editor',
+    //     },
+    //     {
+    //         name: 'Supervisor',
+    //     },
+    // ];
 
     const [ischecked, setIsChecked] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -129,18 +129,19 @@ export default function MovieForm(props) {
         });
     };
 
-    console.log('handleUpdateMovie in MovieForm: ', movie);
-    // useEffect(()=>{
-    //     if(movie && movie.image !== null) {
-    //         setFileList([movie?.image]);
-    //     }
-    // },[]);
+    // console.log('handleUpdateMovie in MovieForm: ', movie);
+    useEffect(() => {
+        setMovie((movie) => ({
+            ...movie,
+            is_horizontal: isFramePoster,
+        }));
+    }, [isFramePoster]);
     // console.log('list image', listImageUrl);
     // console.log(subCategory);
     const handleSelectChange = (value) => {
         setMovie({
             ...movie,
-            subcategory_name: value,
+            subcategory: value,
         });
     };
 
@@ -179,16 +180,13 @@ export default function MovieForm(props) {
                     <Select
                         placeholder="Sub Category"
                         onChange={handleSelectChange}
-                        value={movie.subcategory_name}
+                        value={movie.subcategory}
                     >
                         {subCategory &&
                             subCategory.length > 0 &&
                             subCategory.map((item, index) => {
                                 return (
-                                    <Select.Option
-                                        key={index}
-                                        value={item.name}
-                                    >
+                                    <Select.Option key={index} value={item.id}>
                                         {item.name}
                                     </Select.Option>
                                 );

@@ -38,7 +38,7 @@ const getBase64 = (file) =>
     });
 
 export default function MovieForm(props) {
-    let { form, handleCreateMovie, movie, setMovie } = props;
+    let { form, handleCreateMovie, movie, setMovie, subCategory } = props;
     const [ischecked, setIsChecked] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -118,13 +118,20 @@ export default function MovieForm(props) {
         });
     };
 
-    console.log(movie);
+    console.log('handleUpdateMovie in MovieForm: ', movie);
     // useEffect(()=>{
     //     if(movie && movie.image !== null) {
     //         setFileList([movie?.image]);
     //     }
     // },[]);
-    console.log('list image', listImageUrl);
+    // console.log('list image', listImageUrl);
+    // console.log(subCategory);
+    const handleSelectChange = (value) => {
+        setMovie({
+            ...movie,
+            subcategory_name: value,
+        });
+    };
 
     return (
         <div
@@ -160,14 +167,21 @@ export default function MovieForm(props) {
                 >
                     <Select
                         placeholder="Sub Category"
-                        // onChange={(val) => {
-                        //     handleEnableButton();
-                        // }}
+                        onChange={handleSelectChange}
+                        value={movie.subcategory_name}
                     >
-                        <Select.Option value="editor">Editor</Select.Option>
-                        <Select.Option value="supervisor">
-                            Supervisor
-                        </Select.Option>
+                        {subCategory &&
+                            subCategory.length > 0 &&
+                            subCategory.map((item, index) => {
+                                return (
+                                    <Select.Option
+                                        key={index}
+                                        value={item.name}
+                                    >
+                                        {item.name}
+                                    </Select.Option>
+                                );
+                            })}
                     </Select>
                 </Form.Item>
                 <Form.Item
@@ -242,7 +256,6 @@ export default function MovieForm(props) {
                                     format="YYYY-MM-DD HH:mm"
                                     disabledDate={disabledDate}
                                     onChange={(val, valString) => {
-                                        console.log('val show_date', val);
                                         setMovie({
                                             ...movie,
                                             show_date: valString.split(' ')[0],
@@ -326,7 +339,14 @@ export default function MovieForm(props) {
                                     }}
                                     format="YYYY-MM-DD HH:mm"
                                     disabledDate={disabledDate}
-                                    onChange={(val, valString) => {}}
+                                    onChange={(val, valString) => {
+                                        setMovie({
+                                            ...movie,
+                                            post_date: valString.split(' ')[0],
+                                            time_post_date:
+                                                valString.split(' ')[1],
+                                        });
+                                    }}
                                 />
                             </Form.Item>
                         </div>
@@ -360,7 +380,15 @@ export default function MovieForm(props) {
                                     }}
                                     format="YYYY-MM-DD HH:mm"
                                     disabledDate={disabledDate}
-                                    onChange={(val, valString) => {}}
+                                    onChange={(val, valString) => {
+                                        setMovie({
+                                            ...movie,
+                                            end_post_date:
+                                                valString.split(' ')[0],
+                                            time_end_post_date:
+                                                valString.split(' ')[1],
+                                        });
+                                    }}
                                 />
                             </Form.Item>
                         </div>

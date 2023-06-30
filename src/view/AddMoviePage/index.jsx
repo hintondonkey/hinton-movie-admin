@@ -20,6 +20,8 @@ import TicketForm from './TicketForm';
 import { SHOW_SUCCESS_MESSAGE } from '../../utility/AlertUtility';
 import dayjs from 'dayjs';
 import { getImageUid, uploadImage } from '../../services/Firebase';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSubCategoryToCategoryToBrokerId } from '../../services/category/categorySlice';
 
 const token = localStorage.getItem('mytoken');
 
@@ -35,14 +37,20 @@ export default function AddMoviePage() {
     const [formTicket] = Form.useForm();
     const [listTicket, setListTicket] = useState([]);
     const [loading, setLoading] = useState(false);
+
     const [movie, setMovie] = useState({
         id: '',
+        subcategory_name: '',
         title: '',
         description: '',
         show_date: '',
         time_show_date: '',
         close_date: '',
         time_close_date: '',
+        post_date: '',
+        time_post_date: '',
+        end_post_date: '',
+        time_end_post_date: '',
         active: true,
         titleNoti: '',
         summaryNoti: '',
@@ -50,9 +58,15 @@ export default function AddMoviePage() {
     });
 
     const location = useLocation();
+    const dispatch = useDispatch();
     const { state } = location;
 
-    console.log('state', state);
+    const IdCategory = location?.pathname?.split('/')[2];
+    const user = useSelector((state) => state?.auth?.user);
+    const data = {
+        category_id: Number(IdCategory),
+        broker_id: user.roles.broker_id,
+    };
 
     const navigate = useNavigate();
 
@@ -113,8 +127,16 @@ export default function AddMoviePage() {
         }
     }, [state]);
 
+    useEffect(() => {
+        dispatch(getSubCategoryToCategoryToBrokerId(data));
+    }, [IdCategory, user.roles.broker_id]);
+
+    const subCategory = useSelector(
+        (state) => state?.category?.getSubCategoryToCategoryToBrokerId
+    );
+
     const handleUpdateMovie = async (movie) => {
-        console.log('handleUpdateMovie : ', movie);
+        console.log('handleUpdateMovie in index: ', movie);
         const data = {
             show_date: moment(movie.show_date).format('YYYY-MM-DD'),
             time_show_date: movie.time_show_date,
@@ -140,8 +162,8 @@ export default function AddMoviePage() {
     const handleClickSaveMovie = () => {
         form.validateFields()
             .then((val) => {
-                console.log('Submit form');
-                console.log('listTicket', listTicket);
+                // console.log('Submit form');
+                // console.log('listTicket', listTicket);
                 if (listTicket === null || listTicket.length === 0) {
                     Swal.fire({
                         icon: 'warning',
@@ -169,7 +191,7 @@ export default function AddMoviePage() {
     };
 
     const handleCreateMovie = async (movie, listObjectImage, objectSubIcon) => {
-        console.log('movie: ', movie);
+        // console.log('movie: ', movie);
 
         // dict chứa hình ảnh
         let requestImageObject = {};
@@ -180,7 +202,7 @@ export default function AddMoviePage() {
         setLoading(true);
         // Bước upload hình
         try {
-            console.log('listObjectImage', listObjectImage);
+            // console.log('listObjectImage', listObjectImage);
 
             const promisesImage = listObjectImage.map((objectImage) => {
                 return uploadImage(objectImage, (url) => {
@@ -208,6 +230,10 @@ export default function AddMoviePage() {
             movie.time_show_date,
             movie.close_date,
             movie.time_close_date,
+            movie.post_date,
+            movie.time_post_date,
+            movie.end_post_date,
+            movie.time_end_post_date,
             movie.active,
             movie.titleNoti,
             movie.summaryNoti,
@@ -215,26 +241,27 @@ export default function AddMoviePage() {
             imageSubIcon
         );
 
-        console.log('editMovieRequest', editMovieRequest);
+        // console.log('editMovieRequest', editMovieRequest);
 
         if (state !== null && state !== undefined) {
             // TODO: Call 2 api 1 lúc
             handleUpdateMovie(movie);
         } else {
-            await postcreateMovie(JSON.stringify(editMovieRequest), config_json)
-                .then((res) => {
-                    setTimeout(() => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Create Success !!!',
-                            showConfirmButton: false,
-                            timer: 1500,
-                        }).then((result) => {
-                            navigate('/listmovie');
-                        });
-                    }, 1000);
-                })
-                .catch((error) => console.log('Error:', error));
+            // await postcreateMovie(JSON.stringify(editMovieRequest), config_json)
+            //     .then((res) => {
+            //         setTimeout(() => {
+            //             Swal.fire({
+            //                 icon: 'success',
+            //                 title: 'Create Success !!!',
+            //                 showConfirmButton: false,
+            //                 timer: 1500,
+            //             }).then((result) => {
+            //                 navigate('/listmovie');
+            //             });
+            //         }, 1000);
+            //     })
+            //     .catch((error) => console.log('Error:', error));
+            console.log('create movie : ', editMovieRequest);
         }
         setTimeout(() => {
             setLoading(false);
@@ -289,6 +316,7 @@ export default function AddMoviePage() {
                         handleCreateMovie={handleCreateMovie}
                         movie={movie}
                         setMovie={setMovie}
+                        subCategory={subCategory}
                     />
                     <TicketForm
                         listTicket={listTicket}

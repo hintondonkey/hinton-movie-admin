@@ -108,7 +108,7 @@ const handleUpdateCategoryActive = async (data) => {
 };
 
 const handleGetSubCategoryToCategoryToBrokerId = async (data) => {
-    const response = await axios.patch(
+    const response = await axios.get(
         `/services/get_sub_category_broker_service/${data.category_id}/${data.broker_id}/`,
         config
     );

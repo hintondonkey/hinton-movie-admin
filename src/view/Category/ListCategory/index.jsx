@@ -89,7 +89,7 @@ export default function ListCategory() {
         navigate(`/createCategory/${id}`);
     };
 
-    console.log('Category category updated :', allSubCategories);
+    // console.log('Category category updated :', allSubCategories);
 
     const datas = [];
 

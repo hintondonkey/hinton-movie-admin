@@ -144,7 +144,7 @@ export default function MovieForm(props) {
                 layout="horizontal"
                 name="movieForm"
                 onFinish={() => {
-                    handleCreateMovie(movie, listObjectImage);
+                    handleCreateMovie(movie, listObjectImage, listSubIcon[0]);
                 }}
             >
                 <Form.Item

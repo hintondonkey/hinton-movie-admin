@@ -22,10 +22,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 
-export const uploadImage = async (imageUpload, callBack) => {
+export const uploadImage = (imageUpload, callBack) => {
     if (imageUpload == null) return;
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    uploadBytes(imageRef, imageUpload).then((val) => {
+    return uploadBytes(imageRef, imageUpload).then((val) => {
         getDownloadURL(imageRef).then((url) => {
             console.log('url', url);
             callBack(url);

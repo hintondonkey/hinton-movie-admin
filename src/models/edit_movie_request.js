@@ -10,7 +10,8 @@ export class EditMovieRequest {
         active,
         titleNoti,
         summaryNoti,
-        image
+        image,
+        sub_icon
     ) {
         this.watchlist = watchlist;
         this.title = title;
@@ -23,5 +24,6 @@ export class EditMovieRequest {
         this.titleNoti = titleNoti;
         this.summaryNoti = summaryNoti;
         this.image = image;
+        this.sub_icon = sub_icon;
     }
 }

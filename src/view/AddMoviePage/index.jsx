@@ -168,22 +168,37 @@ export default function AddMoviePage() {
         });
     };
 
-    const handleCreateMovie = async (movie, listObjectImage) => {
+    const handleCreateMovie = async (movie, listObjectImage, objectSubIcon) => {
         console.log('movie: ', movie);
 
+        // dict chứa hình ảnh
         let requestImageObject = {};
 
+        // chứa link url subIcon
+        let imageSubIcon = '';
+
+        setLoading(true);
         // Bước upload hình
         try {
-            listObjectImage.forEach((objectImage) => {
-                console.log('t123  1', objectImage);
+            console.log('listObjectImage', listObjectImage);
 
-                uploadImage(objectImage, (url) => {
+            const promisesImage = listObjectImage.map((objectImage) => {
+                return uploadImage(objectImage, (url) => {
                     let keyName = getImageUid(url);
                     requestImageObject[keyName] = url;
                 });
             });
-        } catch (e) {}
+            await Promise.all(promisesImage);
+
+            const promisesIcon = uploadImage(
+                objectSubIcon.originFileObj,
+                (url) => {
+                    imageSubIcon = url;
+                }
+            );
+            await Promise.all([promisesIcon]);
+        } finally {
+        }
 
         var editMovieRequest = new EditMovieRequest(
             mapTicketToRequest(listTicket),
@@ -196,9 +211,9 @@ export default function AddMoviePage() {
             movie.active,
             movie.titleNoti,
             movie.summaryNoti,
-            movie.image
+            requestImageObject,
+            imageSubIcon
         );
-        setLoading(true);
 
         console.log('editMovieRequest', editMovieRequest);
 
@@ -206,7 +221,7 @@ export default function AddMoviePage() {
             // TODO: Call 2 api 1 lúc
             handleUpdateMovie(movie);
         } else {
-            postcreateMovie(JSON.stringify(editMovieRequest), config_json)
+            await postcreateMovie(JSON.stringify(editMovieRequest), config_json)
                 .then((res) => {
                     setTimeout(() => {
                         Swal.fire({

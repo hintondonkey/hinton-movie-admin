@@ -7,6 +7,10 @@ export class EditMovieRequest {
         time_show_date,
         close_date,
         time_close_date,
+        post_date,
+        time_post_date,
+        end_post_date,
+        time_end_post_date,
         active,
         titleNoti,
         summaryNoti,
@@ -20,6 +24,10 @@ export class EditMovieRequest {
         this.time_show_date = time_show_date;
         this.close_date = close_date;
         this.time_close_date = time_close_date;
+        this.post_date = post_date;
+        this.time_post_date = time_post_date;
+        this.end_post_date = end_post_date;
+        this.time_end_post_date = time_end_post_date;
         this.active = active;
         this.titleNoti = titleNoti;
         this.summaryNoti = summaryNoti;

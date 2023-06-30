@@ -39,6 +39,17 @@ const getBase64 = (file) =>
 
 export default function MovieForm(props) {
     let { form, handleCreateMovie, movie, setMovie, subCategory } = props;
+
+    //Faked data
+    subCategory = [
+        {
+            name: 'Editor',
+        },
+        {
+            name: 'Supervisor',
+        },
+    ];
+
     const [ischecked, setIsChecked] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');

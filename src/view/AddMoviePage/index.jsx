@@ -191,8 +191,6 @@ export default function AddMoviePage() {
     };
 
     const handleCreateMovie = async (movie, listObjectImage, objectSubIcon) => {
-        // console.log('movie: ', movie);
-
         // dict chứa hình ảnh
         let requestImageObject = {};
 
@@ -202,7 +200,7 @@ export default function AddMoviePage() {
         setLoading(true);
         // Bước upload hình
         try {
-            // console.log('listObjectImage', listObjectImage);
+            console.log('objectSubIcon', objectSubIcon);
 
             const promisesImage = listObjectImage.map((objectImage) => {
                 return uploadImage(objectImage, (url) => {
@@ -211,16 +209,19 @@ export default function AddMoviePage() {
                 });
             });
             await Promise.all(promisesImage);
-
-            const promisesIcon = uploadImage(
-                objectSubIcon.originFileObj,
-                (url) => {
-                    imageSubIcon = url;
-                }
-            );
-            await Promise.all([promisesIcon]);
         } finally {
         }
+
+        // try {
+        //     const promisesIcon = uploadImage(
+        //         objectSubIcon.originFileObj,
+        //         (url) => {
+        //             imageSubIcon = url;
+        //         }
+        //     );
+        //     console.log('promisesIcon', promisesIcon);
+        //     await Promise.all([promisesIcon]);
+        // } catch (error) {}
 
         var editMovieRequest = new EditMovieRequest(
             mapTicketToRequest(listTicket),
@@ -241,11 +242,11 @@ export default function AddMoviePage() {
             imageSubIcon
         );
 
-        // console.log('editMovieRequest', editMovieRequest);
+        console.log('editMovieRequest', editMovieRequest);
 
         if (state !== null && state !== undefined) {
             // TODO: Call 2 api 1 lúc
-            handleUpdateMovie(movie);
+            // handleUpdateMovie(movie);
         } else {
             // await postcreateMovie(JSON.stringify(editMovieRequest), config_json)
             //     .then((res) => {

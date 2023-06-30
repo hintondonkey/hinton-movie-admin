@@ -32,6 +32,7 @@ export const uploadImage = (imageUpload, callBack) => {
             toast.success('Upload image success!!!', {
                 position: toast.POSITION.TOP_RIGHT,
             });
+
             return url;
         });
     });

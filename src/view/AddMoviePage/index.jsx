@@ -208,37 +208,39 @@ export default function AddMoviePage() {
             const updatedMovie = { ...movie };
 
             const promisesImage = listObjectImage.map((objectImage) => {
-                return uploadImage(objectImage, (url) => {
-                    let requestImageObject = {};
-                    let keyName = getImageUid(url);
-                    requestImageObject[keyName] = url;
-                    image.push(requestImageObject);
-                    console.log('uploadImage : 221', image);
+                return new Promise((resolve) => {
+                    uploadImage(objectImage, (url) => {
+                        let requestImageObject = {};
+                        let keyName = getImageUid(url);
+                        requestImageObject[keyName] = url;
+                        image.push(requestImageObject);
+                        console.log('uploadImage : 221', image);
+                        resolve();
+                    });
                 });
             });
             await Promise.all(promisesImage);
             console.log('images : 221', image);
             setMovie({ ...movie, stream_flatform_image: image });
-        } finally {
-        }
+        } catch {}
 
-        try {
-            const promisesIcon = uploadImage(
-                objectSubIcon.originFileObj,
-                (url) => {
-                    // imageSubIcon = url;
-                    console.log('objectSubIcon', url);
-                    console.log('objectSubIcon : ', getImageUid(url));
-                    setMovie({
-                        ...movie,
-                        sub_icon: url,
-                        uid_sub_icon: getImageUid(url),
-                    });
-                }
-            );
-            // console.log('promisesIcon', promisesIcon);
-            await Promise.all([promisesIcon]);
-        } catch (error) {}
+        // try {
+        //     const promisesIcon = uploadImage(
+        //         objectSubIcon.originFileObj,
+        //         (url) => {
+        //             // imageSubIcon = url;
+        //             console.log('objectSubIcon', url);
+        //             console.log('objectSubIcon : ', getImageUid(url));
+        //             setMovie({
+        //                 ...movie,
+        //                 sub_icon: url,
+        //                 uid_sub_icon: getImageUid(url),
+        //             });
+        //         }
+        //     );
+        //     // console.log('promisesIcon', promisesIcon);
+        //     await Promise.all([promisesIcon]);
+        // } catch (error) {}
 
         var editMovieRequest = new EditMovieRequest(
             mapTicketToRequest(listTicket),

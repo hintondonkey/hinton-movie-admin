@@ -43,6 +43,7 @@ export default function MenuNavigator() {
         },
         getItem('Home', '/listmovie', <HiOutlineHome size={20} />),
         getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={20} />),
+
         {
             label: 'Logout',
             // link: '', // Có thể để trống hoặc gán giá trị null nếu không có link

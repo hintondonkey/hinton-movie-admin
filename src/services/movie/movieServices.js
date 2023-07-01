@@ -13,3 +13,57 @@ const movieService = {
 };
 
 export default movieService;
+
+export let listMovies = [
+    {
+        id: 0,
+        watchlist: [
+            {
+                id: 0,
+                date_picker: '2023-07-01',
+                time_show_date: 'string',
+                price: 2147483647,
+                website: 'string',
+                active: true,
+                create_date: '2023-07-01T11:12:35.568Z',
+                platform: 0,
+            },
+        ],
+        stream_flatform_image: [
+            {
+                id: 0,
+                uid: 'string',
+                name: 'string',
+                description: 'string',
+                file: 'string',
+                event: 0,
+            },
+        ],
+        category_name: 'string',
+        subcategory_name: 'string',
+        title: 'string',
+        description: 'string',
+        sub_icon: 'string',
+        uid_sub_icon: 'string',
+        show_date: '2023-07-01',
+        time_show_date: 'string',
+        close_date: '2023-07-01',
+        time_close_date: 'string',
+        post_date: '2023-07-01',
+        post_time: 'string',
+        close_post_date: '2023-07-01',
+        close_post_time: 'string',
+        active: true,
+        create_date: '2023-07-01',
+        titleNoti: 'string',
+        summaryNoti: 'string',
+        number_of_connection: 2147483647,
+        approval: 'string',
+        status: true,
+        is_horizontal: true,
+        category: 0,
+        subcategory: 0,
+        broker: 0,
+        created_user: 0,
+    },
+];

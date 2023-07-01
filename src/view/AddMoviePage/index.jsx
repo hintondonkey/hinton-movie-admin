@@ -200,6 +200,8 @@ export default function AddMoviePage() {
         // dict chứa hình ảnh
 
         let image = [];
+        let sub_icon = '';
+        let uid_sub_icon = '';
 
         setLoading(true);
         // Bước upload hình
@@ -213,7 +215,6 @@ export default function AddMoviePage() {
                         let keyName = getImageUid(url);
                         requestImageObject[keyName] = url;
                         image.push(requestImageObject);
-                        console.log('uploadImage : 221', image);
                         resolve();
                     });
                 });
@@ -222,23 +223,22 @@ export default function AddMoviePage() {
             // setMovie({ ...movie, stream_flatform_image: image });
         } catch {}
 
-        // try {
-        //     const promisesIcon = uploadImage(
-        //         objectSubIcon.originFileObj,
-        //         (url) => {
-        //             // imageSubIcon = url;
-        //             console.log('objectSubIcon', url);
-        //             console.log('objectSubIcon : ', getImageUid(url));
-        //             setMovie({
-        //                 ...movie,
-        //                 sub_icon: url,
-        //                 uid_sub_icon: getImageUid(url),
-        //             });
-        //         }
-        //     );
-        //     // console.log('promisesIcon', promisesIcon);
-        //     await Promise.all([promisesIcon]);
-        // } catch (error) {}
+        try {
+            const promisesIcon = () => {
+                return new Promise((resolve) => {
+                    uploadImage(objectSubIcon.originFileObj, (url) => {
+                        // imageSubIcon = url;
+                        console.log('objectSubIcon', url);
+                        console.log('objectSubIcon : ', getImageUid(url));
+                        sub_icon = url;
+                        uid_sub_icon = getImageUid(url);
+                        resolve();
+                    });
+                });
+            };
+            // console.log('promisesIcon', promisesIcon);
+            await Promise.all([promisesIcon()]);
+        } catch (error) {}
 
         var editMovieRequest = new EditMovieRequest(
             mapTicketToRequest(listTicket),
@@ -257,12 +257,12 @@ export default function AddMoviePage() {
             movie.summaryNoti,
             movie.category,
             (movie.stream_flatform_image = image),
-            (movie.sub_icon = '123456789'),
-            (movie.uid_sub_icon = 'qwertyuiop'),
+            (movie.sub_icon = sub_icon),
+            (movie.uid_sub_icon = uid_sub_icon),
             movie.is_horizontal
         );
 
-        // console.log('editMovieRequest', editMovieRequest);
+        console.log('editMovieRequest', editMovieRequest);
         setTimeout(() => {
             setLoading(false);
             dispatch(createMovie(editMovieRequest));

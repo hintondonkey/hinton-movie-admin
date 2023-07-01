@@ -19,6 +19,7 @@ import CreateSubCategory from './view/SubCategory/CreateSubCategory';
 import ListSubCategory from './view/SubCategory/ListSubCategory';
 import LoginPage from './view/login_page';
 import CreateBusinessAdmin from './view/BusinessAdmin/CreateBusinessAdmin';
+import UpdateMoviePage from './view/UpdateMoviePage';
 
 function App() {
     return (
@@ -84,6 +85,9 @@ function App() {
                     <Route path="/listBusinessAdmin">
                         <Route index element={<ListBusinessAdmin />} />
                         <Route path=":id" element={<ServiceBusinessAdmin />} />
+                    </Route>
+                    <Route path="/updateMovie">
+                        <Route path=":id" element={<UpdateMoviePage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

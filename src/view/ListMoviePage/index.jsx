@@ -11,10 +11,11 @@ import { useNavigate } from 'react-router-dom';
 import MovieTable from './MovieTable';
 import axios from '../../axios';
 import { config } from '../../utility/axiosconfig';
+import { listMovies } from '../../services/movie/movieServices';
 
 export default function ListMoviePage() {
     const [loading, setLoading] = useState(false);
-    const [listMovie, setListMovie] = useState([]);
+    const [listMovie, setListMovie] = useState(listMovies);
     const [totalItem, setTotalItem] = useState(0);
     const [isCard, setIsCard] = useState(false);
 
@@ -25,7 +26,8 @@ export default function ListMoviePage() {
     }, []);
 
     const handleOpenDetailMovie = (item) => {
-        navigate(`/addmovie/${item.id}`, { state: { item } });
+        //  navigate(`/addmovie/${item.id}`, { state: { item } });
+        navigate(`/updateMovie/${item.id}`);
     };
 
     const _buildHeader = () => (

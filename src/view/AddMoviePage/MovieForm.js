@@ -129,7 +129,7 @@ export default function MovieForm(props) {
         });
     };
 
-    console.log('handleUpdateMovie in MovieForm: ', movie);
+    // console.log('handleUpdateMovie in MovieForm: ', movie);
     useEffect(() => {
         setMovie((movie) => ({
             ...movie,

@@ -263,11 +263,12 @@ export default function AddMoviePage() {
             movie.subcategory
         );
 
-        console.log('editMovieRequest', editMovieRequest);
+        // console.log('editMovieRequest', editMovieRequest);
         setTimeout(() => {
             setLoading(false);
             dispatch(createMovie(editMovieRequest));
         }, 3000);
+        navigate('/listmovie');
         // if (state !== null && state !== undefined) {
         // TODO: Call 2 api 1 lúc
         // handleUpdateMovie(movie);

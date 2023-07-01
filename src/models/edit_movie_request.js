@@ -14,8 +14,11 @@ export class EditMovieRequest {
         active,
         titleNoti,
         summaryNoti,
-        image,
-        sub_icon
+        category,
+        stream_flatform_image,
+        sub_icon,
+        uid_sub_icon,
+        is_horizontal
     ) {
         this.watchlist = watchlist;
         this.title = title;
@@ -31,7 +34,10 @@ export class EditMovieRequest {
         this.active = active;
         this.titleNoti = titleNoti;
         this.summaryNoti = summaryNoti;
-        this.image = image;
+        this.category = category;
+        this.stream_flatform_image = stream_flatform_image;
         this.sub_icon = sub_icon;
+        this.uid_sub_icon = uid_sub_icon;
+        this.is_horizontal = is_horizontal;
     }
 }

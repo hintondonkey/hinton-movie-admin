@@ -56,7 +56,7 @@ export default function AddMoviePage() {
         active: true,
         titleNoti: '',
         summaryNoti: '',
-        stream_flatform_image: '',
+        stream_flatform_image: [],
         sub_icon: '',
         uid_sub_icon: '',
         is_horizontal: true,
@@ -75,66 +75,66 @@ export default function AddMoviePage() {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (state !== null && state !== undefined) {
-            let item = state.item;
+    // useEffect(() => {
+    //     if (state !== null && state !== undefined) {
+    //         let item = state.item;
 
-            let show_date = dayjs(
-                item.show_date + ' ' + item.time_show_date,
-                'YYYY-MM-DD HH:mm'
-            );
-            let close_date = dayjs(
-                item.close_date + ' ' + item.time_close_date,
-                'YYYY-MM-DD HH:mm'
-            );
+    //         let show_date = dayjs(
+    //             item.show_date + ' ' + item.time_show_date,
+    //             'YYYY-MM-DD HH:mm'
+    //         );
+    //         let close_date = dayjs(
+    //             item.close_date + ' ' + item.time_close_date,
+    //             'YYYY-MM-DD HH:mm'
+    //         );
 
-            form.setFieldsValue({
-                movie_title: item.title,
-                summary: item.description,
-                show_date: show_date,
-                close_date,
-                notification_title: item.titleNoti,
-                notification_summary: item.summaryNoti,
-            });
+    //         form.setFieldsValue({
+    //             movie_title: item.title,
+    //             summary: item.description,
+    //             show_date: show_date,
+    //             close_date,
+    //             notification_title: item.titleNoti,
+    //             notification_summary: item.summaryNoti,
+    //         });
 
-            setMovie({
-                id: item.id,
-                title: item.title,
-                description: item.description,
-                show_date: item.show_date,
-                time_show_date: item.time_show_date,
-                close_date: item.close_date,
-                time_close_date: item.time_close_date,
-                active: true,
-                image: item.image,
-                titleNoti: item.titleNoti,
-                summaryNoti: item.summaryNoti,
-            });
+    //         setMovie({
+    //             id: item.id,
+    //             title: item.title,
+    //             description: item.description,
+    //             show_date: item.show_date,
+    //             time_show_date: item.time_show_date,
+    //             close_date: item.close_date,
+    //             time_close_date: item.time_close_date,
+    //             active: true,
+    //             image: item.image,
+    //             titleNoti: item.titleNoti,
+    //             summaryNoti: item.summaryNoti,
+    //         });
 
-            setListTicket(
-                item.watchlist.map((i) => {
-                    return {
-                        id: i.id,
-                        datePicker: moment(i.date_picker, 'YYYY-MM-DD'),
-                        datePickerStr: i.date_picker,
-                        timeShowDate: moment(i.time_show_date, 'HH:mm'),
-                        timeShowDateStr: i.time_show_date,
-                        price: i.price,
-                        website: i.website,
-                    };
-                })
-            );
-        } else {
-            form.resetFields();
-            formTicket.resetFields();
-            setListTicket([]);
-            setMovie({ ...movie, image: null });
-        }
-    }, [state]);
+    //         setListTicket(
+    //             item.watchlist.map((i) => {
+    //                 return {
+    //                     id: i.id,
+    //                     datePicker: moment(i.date_picker, 'YYYY-MM-DD'),
+    //                     datePickerStr: i.date_picker,
+    //                     timeShowDate: moment(i.time_show_date, 'HH:mm'),
+    //                     timeShowDateStr: i.time_show_date,
+    //                     price: i.price,
+    //                     website: i.website,
+    //                 };
+    //             })
+    //         );
+    //     } else {
+    //         form.resetFields();
+    //         formTicket.resetFields();
+    //         setListTicket([]);
+    //         setMovie({ ...movie, image: null });
+    //     }
+    // }, [state]);
 
     useEffect(() => {
         dispatch(getSubCategoryToCategoryToBrokerId(data));
-        setMovie({ ...movie, category: IdCategory });
+        setMovie({ ...movie, category: Number(IdCategory) });
     }, [IdCategory, user.roles.broker_id]);
 
     const subCategory = useSelector(
@@ -205,7 +205,6 @@ export default function AddMoviePage() {
         // Bước upload hình
         try {
             // console.log('objectSubIcon', objectSubIcon);
-            const updatedMovie = { ...movie };
 
             const promisesImage = listObjectImage.map((objectImage) => {
                 return new Promise((resolve) => {
@@ -220,8 +219,7 @@ export default function AddMoviePage() {
                 });
             });
             await Promise.all(promisesImage);
-            console.log('images : 221', image);
-            setMovie({ ...movie, stream_flatform_image: image });
+            // setMovie({ ...movie, stream_flatform_image: image });
         } catch {}
 
         // try {
@@ -258,37 +256,38 @@ export default function AddMoviePage() {
             movie.titleNoti,
             movie.summaryNoti,
             movie.category,
-            movie.stream_flatform_image,
-            movie.sub_icon,
-            movie.uid_sub_icon
+            (movie.stream_flatform_image = image),
+            (movie.sub_icon = '123456789'),
+            (movie.uid_sub_icon = 'qwertyuiop'),
+            movie.is_horizontal
         );
 
         // console.log('editMovieRequest', editMovieRequest);
+        setTimeout(() => {
+            setLoading(false);
+            dispatch(createMovie(editMovieRequest));
+        }, 3000);
+        // if (state !== null && state !== undefined) {
+        // TODO: Call 2 api 1 lúc
+        // handleUpdateMovie(movie);
+        // } else {
+        // await postcreateMovie(JSON.stringify(editMovieRequest), config_json)
+        //     .then((res) => {
+        //         setTimeout(() => {
+        //             Swal.fire({
+        //                 icon: 'success',
+        //                 title: 'Create Success !!!',
+        //                 showConfirmButton: false,
+        //                 timer: 1500,
+        //             }).then((result) => {
+        //                 navigate('/listmovie');
+        //             });
+        //         }, 1000);
+        //     })
+        //     .catch((error) => console.log('Error:', error));
+        // console.log('create movie : ', editMovieRequest);
 
-        if (state !== null && state !== undefined) {
-            // TODO: Call 2 api 1 lúc
-            // handleUpdateMovie(movie);
-        } else {
-            // await postcreateMovie(JSON.stringify(editMovieRequest), config_json)
-            //     .then((res) => {
-            //         setTimeout(() => {
-            //             Swal.fire({
-            //                 icon: 'success',
-            //                 title: 'Create Success !!!',
-            //                 showConfirmButton: false,
-            //                 timer: 1500,
-            //             }).then((result) => {
-            //                 navigate('/listmovie');
-            //             });
-            //         }, 1000);
-            //     })
-            //     .catch((error) => console.log('Error:', error));
-            // console.log('create movie : ', editMovieRequest);
-            setTimeout(() => {
-                setLoading(false);
-                dispatch(createMovie(editMovieRequest));
-            }, 3000);
-        }
+        // }
         // setTimeout(() => {
         //     setLoading(false);
         // }, 1000);

@@ -40,7 +40,6 @@ export default function AddMoviePage() {
     const [loading, setLoading] = useState(false);
 
     const [movie, setMovie] = useState({
-        id: '',
         subcategory: '',
         category: '',
         title: '',
@@ -50,9 +49,9 @@ export default function AddMoviePage() {
         close_date: '',
         time_close_date: '',
         post_date: '',
-        time_post_date: '',
-        end_post_date: '',
-        time_end_post_date: '',
+        post_time: '',
+        close_post_date: '',
+        close_post_time: '',
         active: true,
         titleNoti: '',
         summaryNoti: '',
@@ -210,8 +209,9 @@ export default function AddMoviePage() {
                 return new Promise((resolve) => {
                     uploadImage(objectImage, (url) => {
                         let requestImageObject = {};
-                        let keyName = getImageUid(url);
-                        requestImageObject[keyName] = url;
+                        requestImageObject['uid'] = getImageUid(url);
+                        requestImageObject['name'] = url;
+
                         image.push(requestImageObject);
                         console.log('uploadImage : 221', image);
                         resolve();
@@ -246,12 +246,16 @@ export default function AddMoviePage() {
             movie.description,
             movie.show_date,
             movie.time_show_date,
+
             movie.close_date,
             movie.time_close_date,
+
             movie.post_date,
-            movie.time_post_date,
-            movie.end_post_date,
-            movie.time_end_post_date,
+            movie.post_time,
+
+            movie.close_post_date,
+            movie.close_post_time,
+
             movie.active,
             movie.titleNoti,
             movie.summaryNoti,
@@ -259,7 +263,8 @@ export default function AddMoviePage() {
             (movie.stream_flatform_image = image),
             (movie.sub_icon = '123456789'),
             (movie.uid_sub_icon = 'qwertyuiop'),
-            movie.is_horizontal
+            movie.is_horizontal,
+            movie.subcategory
         );
 
         // console.log('editMovieRequest', editMovieRequest);

@@ -129,7 +129,7 @@ export default function MovieForm(props) {
         });
     };
 
-    // console.log('handleUpdateMovie in MovieForm: ', movie);
+    console.log('handleUpdateMovie in MovieForm: ', movie);
     useEffect(() => {
         setMovie((movie) => ({
             ...movie,
@@ -352,8 +352,7 @@ export default function MovieForm(props) {
                                         setMovie({
                                             ...movie,
                                             post_date: valString.split(' ')[0],
-                                            time_post_date:
-                                                valString.split(' ')[1],
+                                            post_time: valString.split(' ')[1],
                                         });
                                     }}
                                 />
@@ -370,7 +369,7 @@ export default function MovieForm(props) {
                             }}
                         >
                             <Form.Item
-                                name="end_post_date"
+                                name="close_post_date"
                                 label="End Post Date"
                                 labelCol={{ span: 9 }}
                                 rules={[
@@ -392,9 +391,9 @@ export default function MovieForm(props) {
                                     onChange={(val, valString) => {
                                         setMovie({
                                             ...movie,
-                                            end_post_date:
+                                            close_post_date:
                                                 valString.split(' ')[0],
-                                            time_end_post_date:
+                                            close_post_time:
                                                 valString.split(' ')[1],
                                         });
                                     }}

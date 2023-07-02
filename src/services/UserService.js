@@ -13,9 +13,9 @@ const getMovieById = (config, id) => {
     return axios.get(`/movie/stream/${id}`, config);
 };
 
-const createMovie = (data, config) => {
-    return axios.post(`/movie/stream/`, data, config);
-};
+// const createMovie = (data, config) => {
+//     return axios.post(`/movie/stream/`, data, config);
+// };
 
 const postcreateMovie = (data, config) => {
     return axios.post(`/movie/poststream/`, data, config);
@@ -52,7 +52,7 @@ export {
     getMovieById,
     editWatchlist,
     deleteWathlist,
-    createMovie,
+    // createMovie,
     postcreateMovie,
     addWatchlist,
     deleteMovie,

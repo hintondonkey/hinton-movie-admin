@@ -165,6 +165,19 @@ export const UpdateCategoryActive = createAsyncThunk(
     }
 );
 
+export const getSubCategoryToCategoryToBrokerId = createAsyncThunk(
+    'auth/getSubCategoryToCategoryToBrokerId',
+    async (data, thunkAPI) => {
+        try {
+            return await categoryService.handleGetSubCategoryToCategoryToBrokerId(
+                data
+            );
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 export const resetState = createAction('Reset_all');
 
 export const categorySlice = createSlice({
@@ -276,7 +289,7 @@ export const categorySlice = createSlice({
                 state.isError = false;
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.subCreateCategory = action.payload;
+                state.create_Sub_Category = action.payload;
                 state.message = 'success';
             })
             .addCase(subCreateCategory.rejected, (state, action) => {
@@ -381,6 +394,28 @@ export const categorySlice = createSlice({
                 state.message = action.error;
                 state.isLoading = false;
             })
+            .addCase(getSubCategoryToCategoryToBrokerId.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(
+                getSubCategoryToCategoryToBrokerId.fulfilled,
+                (state, action) => {
+                    state.isError = false;
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.getSubCategoryToCategoryToBrokerId = action.payload;
+                    state.message = 'success';
+                }
+            )
+            .addCase(
+                getSubCategoryToCategoryToBrokerId.rejected,
+                (state, action) => {
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+                    state.isLoading = false;
+                }
+            )
             .addCase(resetState, () => initialState);
     },
 });

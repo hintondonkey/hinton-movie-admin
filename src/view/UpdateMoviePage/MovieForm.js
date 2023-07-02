@@ -38,17 +38,8 @@ const getBase64 = (file) =>
     });
 
 export default function MovieForm(props) {
-    let { form, handleCreateMovie, movie, setMovie, subCategory } = props;
-
-    // //Faked data
-    // subCategory = [
-    //     {
-    //         name: 'Editor',
-    //     },
-    //     {
-    //         name: 'Supervisor',
-    //     },
-    // ];
+    let { form, movie, setMovie, subCategory } = props;
+    console.log(`Movie `, movie);
 
     const [ischecked, setIsChecked] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -59,6 +50,45 @@ export default function MovieForm(props) {
     const [listSubIcon, setListSubIcon] = useState([]);
 
     const [isFramePoster, setIsFramePoster] = useState(true);
+
+    useEffect(() => {
+        console.log('movie update', movie);
+
+        let show_date = dayjs(
+            movie.show_date + ' ' + movie.time_show_date,
+            'YYYY-MM-DD HH:mm'
+        );
+
+        let close_date = dayjs(
+            movie.close_date + ' ' + movie.time_close_date,
+            'YYYY-MM-DD HH:mm'
+        );
+
+        let post_date = dayjs(
+            movie.post_date + ' ' + movie.post_time,
+            'YYYY-MM-DD HH:mm'
+        );
+
+        let close_post_date = dayjs(
+            movie.close_post_date + ' ' + movie.close_post_date,
+            'YYYY-MM-DD HH:mm'
+        );
+
+        form.setFieldsValue({
+            movie_title: movie.title,
+            summary: movie.description,
+            show_date: show_date,
+            close_date: close_date,
+            post_date: post_date,
+            end_post_date: close_post_date,
+            notification_title: movie.titleNoti,
+            notification_summary: movie.summaryNoti,
+            subcategory: movie.subcategory,
+        });
+        setListImageUrl(movie.stream_platform_image.map((e) => e.name));
+        setListSubIcon([movie.sub_icon]);
+        // console.log('listImageUrl', listImageUrl);
+    }, [movie]);
 
     const range = (start, end) => {
         const result = [];
@@ -136,13 +166,6 @@ export default function MovieForm(props) {
             is_horizontal: isFramePoster,
         }));
     }, [isFramePoster]);
-
-    // useEffect(() => {
-    //     setMovie((movie) => ({
-    //         ...movie,
-    //         active: ischecked,
-    //     }));
-    // }, [ischecked]);
     // console.log('list image', listImageUrl);
     // console.log(subCategory);
     const handleSelectChange = (value) => {
@@ -169,9 +192,7 @@ export default function MovieForm(props) {
                 size={'large'}
                 layout="horizontal"
                 name="movieForm"
-                onFinish={() => {
-                    handleCreateMovie(movie, listObjectImage, listSubIcon[0]);
-                }}
+                onFinish={() => {}}
             >
                 <Form.Item
                     name="subcategory"
@@ -359,7 +380,8 @@ export default function MovieForm(props) {
                                         setMovie({
                                             ...movie,
                                             post_date: valString.split(' ')[0],
-                                            post_time: valString.split(' ')[1],
+                                            time_post_date:
+                                                valString.split(' ')[1],
                                         });
                                     }}
                                 />
@@ -376,7 +398,7 @@ export default function MovieForm(props) {
                             }}
                         >
                             <Form.Item
-                                name="close_post_date"
+                                name="end_post_date"
                                 label="End Post Date"
                                 labelCol={{ span: 9 }}
                                 rules={[
@@ -398,9 +420,9 @@ export default function MovieForm(props) {
                                     onChange={(val, valString) => {
                                         setMovie({
                                             ...movie,
-                                            close_post_date:
+                                            end_post_date:
                                                 valString.split(' ')[0],
-                                            close_post_time:
+                                            time_end_post_date:
                                                 valString.split(' ')[1],
                                         });
                                     }}

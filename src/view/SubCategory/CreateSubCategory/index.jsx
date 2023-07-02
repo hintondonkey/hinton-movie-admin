@@ -42,6 +42,8 @@ export default function CreateSubCategory() {
         (state) => state?.category?.getIdSubCategory
     );
 
+    const SubCategory = useSelector((state) => state?.category);
+
     const allCategories = useSelector(
         (state) => state?.category?.businessAdminListCategory
     );
@@ -69,6 +71,8 @@ export default function CreateSubCategory() {
         }
     }, [getSubCategory]);
 
+    const { isSuccess, isError, isLoading } = SubCategory;
+
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -88,12 +92,19 @@ export default function CreateSubCategory() {
                 dispatch(updateSubCategory(data));
                 formik.resetForm();
                 setTimeout(() => {
-                    dispatch(listSubCategory());
+                    dispatch(listSubCategory(user.roles.broker_id));
                 }, 3000);
+                if (isSuccess && SubCategory.updateSubCategory) {
+                    toast.success('update Sub Category Successfullly!');
+                }
                 navigate('/listSubCategory');
             } else {
                 dispatch(subCreateCategory(values));
                 formik.resetForm();
+                console.log(SubCategory.create_Sub_Category);
+                if (isSuccess && SubCategory.create_Sub_Category) {
+                    toast.success('create Sub Category Successfullly!');
+                }
                 navigate('/listSubCategory');
             }
         },
@@ -196,7 +207,9 @@ export default function CreateSubCategory() {
                                 size="large"
                                 className="btn btn-success border-0 rounded-3 my-5"
                             >
-                                Create
+                                {idSubCategory !== undefined
+                                    ? `Update`
+                                    : `Create`}
                             </button>
                         </form>
                     </div>

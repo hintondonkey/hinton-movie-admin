@@ -8,7 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import {
     businessAdminListCategory,
     deleteCategory,
+    getSubCategoryToCategoryToBrokerId,
     listCategory,
+    listSubCategory,
 } from '../../../services/category/categorySlice';
 import CustomModal from '../../../components/CustomModal';
 // import { current_user } from '../../../utility/axiosconfig';
@@ -72,9 +74,13 @@ export default function ListCategory() {
     useEffect(() => {
         dispatch(listCategory());
         dispatch(businessAdminListCategory(user.broker_id));
+        dispatch(listSubCategory(user.broker_id));
     }, []);
 
     const allCategories = useSelector((state) => state?.category?.category);
+    const allSubCategories = useSelector(
+        (state) => state?.category?.subcategory
+    );
     const user = useSelector((state) => state?.auth?.user?.roles);
     const business_AdminListCategory = useSelector(
         (state) => state?.category?.businessAdminListCategory
@@ -83,7 +89,7 @@ export default function ListCategory() {
         navigate(`/createCategory/${id}`);
     };
 
-    console.log('Category category updated :', user);
+    // console.log('Category category updated :', allSubCategories);
 
     const datas = [];
 
@@ -147,13 +153,14 @@ export default function ListCategory() {
                         <Space direction="horizontal">
                             <Button
                                 type="primary"
+                                ghost
                                 style={{
-                                    backgroundColor: '#5200FF',
+                                    backgroundColor: '#1677ff',
                                     color: 'white',
                                 }}
                                 onClick={() => navigate(`/addmovie/${i.id}`)}
                             >
-                                Inside
+                                {`Add ${i.name}`}
                             </Button>
                         </Space>
                     ),

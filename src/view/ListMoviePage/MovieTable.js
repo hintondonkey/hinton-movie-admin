@@ -36,7 +36,7 @@ export default function MovieTable(props) {
         },
     });
     const searchInput = useRef(null);
-
+    console.log('stream_platform_image : ', data);
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
             pagination,
@@ -199,8 +199,8 @@ export default function MovieTable(props) {
         },
         {
             title: 'Image',
-            dataIndex: 'image',
-            key: 'image',
+            dataIndex: 'stream_platform_image',
+            key: 'stream_platform_image',
             render: (image) => (
                 <div
                     style={{ width: 80, borderRadius: 15, overflow: 'hidden' }}
@@ -208,7 +208,9 @@ export default function MovieTable(props) {
                     <Image
                         width={80}
                         height={80}
-                        src={image && image !== '' ? image : EMPTY_IMAGE}
+                        src={
+                            image && image !== '' ? image[0].name : EMPTY_IMAGE
+                        }
                     />
                 </div>
             ),

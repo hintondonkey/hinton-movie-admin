@@ -23,7 +23,6 @@ export default function MenuNavigator() {
         // dispatch(getAcount());
     }, []);
     const user = useSelector((state) => state?.auth?.user);
-    console.log(user);
 
     const items = [
         getItem('Account', 'accp', <IoAddCircleOutline size={20} />, [
@@ -44,6 +43,7 @@ export default function MenuNavigator() {
         },
         getItem('Home', '/listmovie', <HiOutlineHome size={20} />),
         getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={20} />),
+
         {
             label: 'Logout',
             // link: '', // Có thể để trống hoặc gán giá trị null nếu không có link
@@ -85,7 +85,7 @@ export default function MenuNavigator() {
             type: 'divider',
         },
         getItem('Home', '/listmovie', <HiOutlineHome size={20} />),
-        getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={20} />),
+        // getItem('Add Movie', '/addmovie', <IoAddCircleOutline size={20} />),
         {
             label: 'Logout',
             // link: '', // Có thể để trống hoặc gán giá trị null nếu không có link
@@ -94,9 +94,9 @@ export default function MenuNavigator() {
                 handleLogout(); // Gọi hàm handleLogout khi nhấp vào mục 'Logout'
             },
         },
-        getItem('Category', '/categories', <IoAddCircleOutline size={20} />, [
-            getItem('Create', '/createCategory', null),
-            getItem('List', '/listCategory', null),
+        getItem('Add Movie', '/categories', <IoAddCircleOutline size={20} />, [
+            // getItem('Create', '/createCategory', null),
+            getItem('Create Movie', '/listCategory', null),
         ]),
         getItem(
             'Sub Category',

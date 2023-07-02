@@ -19,101 +19,67 @@ import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import { SHOW_SUCCESS_MESSAGE } from '../../utility/AlertUtility';
 import dayjs from 'dayjs';
-
-const token = localStorage.getItem('mytoken');
-
-const config_json = {
-    headers: {
-        'content-type': 'application/json',
-        Authorization: `Token ${token}`,
-    },
-};
+import { getImageUid, uploadImage } from '../../services/Firebase';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSubCategoryToCategoryToBrokerId } from '../../services/category/categorySlice';
+import { createMovie } from '../../services/movie/moiveSlice';
+import { toast } from 'react-toastify';
 
 export default function AddMoviePage() {
     const [form] = Form.useForm();
     const [formTicket] = Form.useForm();
     const [listTicket, setListTicket] = useState([]);
     const [loading, setLoading] = useState(false);
+
     const [movie, setMovie] = useState({
-        id: '',
+        subcategory: '',
+        category: '',
         title: '',
         description: '',
         show_date: '',
         time_show_date: '',
         close_date: '',
         time_close_date: '',
+        post_date: '',
+        post_time: '',
+        close_post_date: '',
+        close_post_time: '',
         active: true,
         titleNoti: '',
         summaryNoti: '',
-        imgae: null,
+        stream_platform_image: [],
+        sub_icon: '',
+        uid_sub_icon: '',
+        is_horizontal: true,
     });
 
     const location = useLocation();
+    const dispatch = useDispatch();
     const { state } = location;
 
-    console.log('state', state);
+    const IdCategory = location?.pathname?.split('/')[2];
+    const user = useSelector((state) => state?.auth?.user);
+    const data = {
+        category_id: Number(IdCategory),
+        broker_id: user.roles.broker_id,
+    };
 
     const navigate = useNavigate();
 
+    const current_moive = useSelector((state) => state?.movie);
+
+    const { isSuccess, isError, isLoading } = current_moive;
     useEffect(() => {
-        if (state !== null && state !== undefined) {
-            let item = state.item;
+        dispatch(getSubCategoryToCategoryToBrokerId(data));
+        setMovie({ ...movie, category: Number(IdCategory) });
+    }, [IdCategory, user.roles.broker_id]);
 
-            let show_date = dayjs(
-                item.show_date + ' ' + item.time_show_date,
-                'YYYY-MM-DD HH:mm'
-            );
-            let close_date = dayjs(
-                item.close_date + ' ' + item.time_close_date,
-                'YYYY-MM-DD HH:mm'
-            );
-
-            form.setFieldsValue({
-                movie_title: item.title,
-                summary: item.description,
-                show_date: show_date,
-                close_date,
-                notification_title: item.titleNoti,
-                notification_summary: item.summaryNoti,
-            });
-
-            setMovie({
-                id: item.id,
-                title: item.title,
-                description: item.description,
-                show_date: item.show_date,
-                time_show_date: item.time_show_date,
-                close_date: item.close_date,
-                time_close_date: item.time_close_date,
-                active: true,
-                image: item.image,
-                titleNoti: item.titleNoti,
-                summaryNoti: item.summaryNoti,
-            });
-
-            setListTicket(
-                item.watchlist.map((i) => {
-                    return {
-                        id: i.id,
-                        datePicker: moment(i.date_picker, 'YYYY-MM-DD'),
-                        datePickerStr: i.date_picker,
-                        timeShowDate: moment(i.time_show_date, 'HH:mm'),
-                        timeShowDateStr: i.time_show_date,
-                        price: i.price,
-                        website: i.website,
-                    };
-                })
-            );
-        } else {
-            form.resetFields();
-            formTicket.resetFields();
-            setListTicket([]);
-            setMovie({ ...movie, image: null });
-        }
-    }, [state]);
+    const subCategory = useSelector(
+        (state) => state?.category?.getSubCategoryToCategoryToBrokerId
+    );
 
     const handleUpdateMovie = async (movie) => {
-        console.log('handleUpdateMovie : ', movie);
+        console.log('handleUpdateMovie in index: ', movie);
         const data = {
             show_date: moment(movie.show_date).format('YYYY-MM-DD'),
             time_show_date: movie.time_show_date,
@@ -139,8 +105,8 @@ export default function AddMoviePage() {
     const handleClickSaveMovie = () => {
         form.validateFields()
             .then((val) => {
-                console.log('Submit form');
-                console.log('listTicket', listTicket);
+                // console.log('Submit form');
+                // console.log('listTicket', listTicket);
                 if (listTicket === null || listTicket.length === 0) {
                     Swal.fire({
                         icon: 'warning',
@@ -167,8 +133,46 @@ export default function AddMoviePage() {
         });
     };
 
-    const handleCreateMovie = async (movie) => {
-        console.log('movie: ', movie);
+    const handleCreateMovie = async (movie, listObjectImage, objectSubIcon) => {
+        // dict chứa hình ảnh
+
+        let image = [];
+        let sub_icon = '';
+        let uid_sub_icon = '';
+
+        setLoading(true);
+        // Bước upload hình
+        try {
+            // console.log('objectSubIcon', objectSubIcon);
+
+            const promisesImage = listObjectImage.map((objectImage) => {
+                return new Promise((resolve) => {
+                    uploadImage(objectImage, (url) => {
+                        let requestImageObject = {};
+                        requestImageObject['uid'] = getImageUid(url);
+                        requestImageObject['name'] = url;
+
+                        image.push(requestImageObject);
+                        resolve();
+                    });
+                });
+            });
+            await Promise.all(promisesImage);
+        } catch {}
+
+        try {
+            const promisesIcon = () => {
+                return new Promise((resolve) => {
+                    uploadImage(objectSubIcon.originFileObj, (url) => {
+                        // imageSubIcon = url;
+                        sub_icon = url;
+                        uid_sub_icon = getImageUid(url);
+                        resolve();
+                    });
+                });
+            };
+            await Promise.all([promisesIcon()]);
+        } catch (error) {}
 
         var editMovieRequest = new EditMovieRequest(
             mapTicketToRequest(listTicket),
@@ -178,37 +182,57 @@ export default function AddMoviePage() {
             movie.time_show_date,
             movie.close_date,
             movie.time_close_date,
+            movie.post_date,
+            movie.post_time,
+            movie.close_post_date,
+            movie.close_post_time,
             movie.active,
             movie.titleNoti,
             movie.summaryNoti,
-            movie.image
+            movie.category,
+            (movie.stream_platform_image = image),
+            (movie.sub_icon = sub_icon),
+            (movie.uid_sub_icon = uid_sub_icon),
+            movie.is_horizontal,
+            movie.subcategory
         );
-        setLoading(true);
 
-        console.log('editMovieRequest', editMovieRequest);
-
-        if (state !== null && state !== undefined) {
-            // TODO: Call 2 api 1 lúc
-            handleUpdateMovie(movie);
-        } else {
-            postcreateMovie(JSON.stringify(editMovieRequest), config_json)
-                .then((res) => {
-                    setTimeout(() => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Create Success !!!',
-                            showConfirmButton: false,
-                            timer: 1500,
-                        }).then((result) => {
-                            navigate('/listmovie');
-                        });
-                    }, 1000);
-                })
-                .catch((error) => console.log('Error:', error));
-        }
+        // console.log('editMovieRequest', editMovieRequest);
         setTimeout(() => {
             setLoading(false);
-        }, 1000);
+            const res = dispatch(createMovie(editMovieRequest));
+            console.log(res.arg['EditMovieRequest']);
+            console.log(res.arg);
+            if (isSuccess && res.arg) {
+                toast.success(`create ${movie.title} Successfullly!`);
+            }
+        }, 3000);
+        navigate('/listmovie');
+
+        // if (state !== null && state !== undefined) {
+        // TODO: Call 2 api 1 lúc
+        // handleUpdateMovie(movie);
+        // } else {
+        // await postcreateMovie(JSON.stringify(editMovieRequest), config_json)
+        //     .then((res) => {
+        //         setTimeout(() => {
+        //             Swal.fire({
+        //                 icon: 'success',
+        //                 title: 'Create Success !!!',
+        //                 showConfirmButton: false,
+        //                 timer: 1500,
+        //             }).then((result) => {
+        //                 navigate('/listmovie');
+        //             });
+        //         }, 1000);
+        //     })
+        //     .catch((error) => console.log('Error:', error));
+        // console.log('create movie : ', editMovieRequest);
+
+        // }
+        // setTimeout(() => {
+        //     setLoading(false);
+        // }, 1000);
     };
 
     const _buildHeader = () => (
@@ -259,6 +283,7 @@ export default function AddMoviePage() {
                         handleCreateMovie={handleCreateMovie}
                         movie={movie}
                         setMovie={setMovie}
+                        subCategory={subCategory}
                     />
                     <TicketForm
                         listTicket={listTicket}

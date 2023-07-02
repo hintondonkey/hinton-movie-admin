@@ -85,7 +85,7 @@ export default function MovieForm(props) {
             notification_summary: movie.summaryNoti,
             subcategory: movie.subcategory,
         });
-        setListImageUrl(movie.stream_platform_image.map((e) => e.name));
+        setListImageUrl(movie.stream_platform_image);
         setListSubIcon([movie.sub_icon]);
         // console.log('listImageUrl', listImageUrl);
     }, [movie]);
@@ -566,11 +566,11 @@ export default function MovieForm(props) {
                     {listImageUrl.map((val, index) => (
                         <Col style={{ marginTop: 12 }}>
                             <PhotoProvider>
-                                <PhotoView key={1} src={val}>
+                                <PhotoView key={1} src={val.name}>
                                     <img
                                         width={isFramePoster ? 200 : 400}
                                         height={300}
-                                        src={val ? val : ''}
+                                        src={val && val.name ? val.name : ''}
                                         alt=""
                                         style={{
                                             marginRight: 10,
@@ -623,11 +623,17 @@ export default function MovieForm(props) {
                         <Upload
                             listType="picture-card"
                             fileList={listSubIcon}
+                            showUploadList={false}
                             onChange={handleChangeUploadSubIcon}
                         >
-                            {listSubIcon.length >= 1
-                                ? null
-                                : uploadButton('upload sub icon')}
+                            {listSubIcon.length >= 1 ? (
+                                <img
+                                    src={movie.sub_icon}
+                                    style={{ width: '100%' }}
+                                />
+                            ) : (
+                                uploadButton('upload sub icon')
+                            )}
                         </Upload>
                     </Col>
                 </div>

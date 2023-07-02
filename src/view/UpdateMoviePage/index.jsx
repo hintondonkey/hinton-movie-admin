@@ -32,9 +32,8 @@ const config_json = {
 export default function UpdateMoviePage() {
     const [form] = Form.useForm();
     const [formTicket] = Form.useForm();
-    const [listTicket, setListTicket] = useState(itemDetailData.watchlist);
+    const [listTicket, setListTicket] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [itemDetail, setItemDetail] = useState(itemDetailData);
 
     const [movie, setMovie] = useState({
         id: '',
@@ -69,8 +68,6 @@ export default function UpdateMoviePage() {
     const subCategory = useSelector(
         (state) => state?.category?.getSubCategoryToCategoryToBrokerId
     );
-
-    console.log('detailMovie 123456789 : ', detailMovie);
 
     const navigate = useNavigate();
 
@@ -181,86 +178,24 @@ export default function UpdateMoviePage() {
                     >
                         {_buildHeader()}
                     </div>
-
-                    <MovieForm
-                        form={form}
-                        movie={itemDetail}
-                        setMovie={setMovie}
-                        subCategory={subCategory}
-                    />
-                    <TicketForm
-                        listTicket={listTicket}
-                        setListTicket={setListTicket}
-                        formTicket={formTicket}
-                    />
+                    {detailMovie !== null && detailMovie !== undefined ? (
+                        <>
+                            <MovieForm
+                                form={form}
+                                movie={detailMovie}
+                                setMovie={setMovie}
+                                subCategory={subCategory}
+                            />
+                            <TicketForm
+                                listTicket={detailMovie.watchlist}
+                                setListTicket={setListTicket}
+                                formTicket={formTicket}
+                            />
+                        </>
+                    ) : null}
                 </Col>
             </Row>
             {loading ? <LoadingSpin /> : <></>}
         </div>
     );
 }
-
-let itemDetailData = {
-    id: 6,
-    watchlist: [
-        {
-            id: 1,
-            date_picker: '2023-07-01',
-            time_show_date: '21:22:00',
-            price: 20,
-            website:
-                'https://motphimtv.me/phim/than-lan-ky-vuc-vo-song-chau-10469.html',
-            active: true,
-            create_date: '2023-07-01T14:23:34.450245Z',
-            platform: 6,
-        },
-    ],
-    stream_platform_image: [
-        {
-            id: 1,
-            uid: '100423-eternals-16811150170881958369065.jpgc05d7cf8-e19c-4ec9-974c-7190db8e8571',
-            name: 'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F100423-eternals-16811150170881958369065.jpgc05d7cf8-e19c-4ec9-974c-7190db8e8571?alt=media&token=ee664f8c-0cac-45e9-baf2-e90719830676',
-            file_name: null,
-            file_size: null,
-            description: null,
-            stream_platform: 6,
-        },
-        {
-            id: 2,
-            uid: '100423-marvel-2-1681114948845267268576.jpgf27ad5d9-bbbc-4405-ae83-100eb89e50e7',
-            name: 'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F100423-marvel-2-1681114948845267268576.jpgf27ad5d9-bbbc-4405-ae83-100eb89e50e7?alt=media&token=6a344352-9c65-4309-9530-23a66350450f',
-            file_name: null,
-            file_size: null,
-            description: null,
-            stream_platform: 6,
-        },
-    ],
-    category_name: 'Event',
-    subcategory_name: 'sub business_admin',
-    title: 'phim ma đang sợ quá',
-    description: 'hello cô ba',
-    sub_icon:
-        'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F100423-ant-man-16811148589681138415771.jpg5bb42187-d98e-4f0d-b791-4a1b3b08b2c2?alt=media&token=a50bea25-3658-49bd-802b-3ea7b3edaf20',
-    uid_sub_icon:
-        '100423-ant-man-16811148589681138415771.jpg5bb42187-d98e-4f0d-b791-4a1b3b08b2c2',
-    show_date: '2023-07-01',
-    time_show_date: '21:22:00',
-    close_date: '2023-07-01',
-    time_close_date: '21:22:00',
-    post_date: '2023-07-01',
-    post_time: '21:22:00',
-    close_post_date: '2023-07-01',
-    close_post_time: '21:22:00',
-    active: true,
-    create_date: '2023-07-01',
-    titleNoti: '',
-    summaryNoti: '',
-    number_of_connection: 0,
-    approval: null,
-    status: true,
-    is_horizontal: true,
-    category: 1,
-    subcategory: 11,
-    broker: 6,
-    created_user: 14,
-};

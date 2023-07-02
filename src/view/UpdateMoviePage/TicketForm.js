@@ -11,21 +11,6 @@ export default function TicketForm(props) {
     const [openModal, setOpenModal] = useState(false);
     const [ticketForEdit, setTicketForEdit] = useState(null);
 
-    useState(() => {
-        if (
-            listTicket !== null &&
-            listTicket !== undefined &&
-            listTicket.length > 0
-        ) {
-            listTicket = listTicket.map((e) => {
-                e.datePickerStr = e.date_picker;
-                e.timeShowDateStr = e.time_show_date;
-
-                return e;
-            });
-        }
-    }, [listTicket]);
-
     const showModal = () => {
         setOpenModal(true);
     };
@@ -37,6 +22,7 @@ export default function TicketForm(props) {
     const handleCreateTicket = (item) => {
         const newList = [...listTicket];
         newList.push(item);
+        console.log('test newList', newList);
 
         setListTicket(newList);
         setOpenModal(false);
@@ -50,9 +36,7 @@ export default function TicketForm(props) {
         let newList = listTicket.map((item) => {
             if (item.key === ticket.key) {
                 item.datePicker = ticket.datePicker;
-                item.datePickerStr = ticket.datePickerStr;
                 item.timeShowDate = ticket.timeShowDate;
-                item.timeShowDateStr = ticket.timeShowDateStr;
                 item.price = ticket.price;
                 item.website = ticket.website;
             }
@@ -76,13 +60,13 @@ export default function TicketForm(props) {
     const columns = [
         {
             title: 'Date Picker',
-            dataIndex: 'datePickerStr',
-            key: 'datePickerStr',
+            dataIndex: 'date_picker',
+            key: 'date_picker',
         },
         {
             title: 'Time',
-            dataIndex: 'timeShowDateStr',
-            key: 'timeShowDateStr',
+            dataIndex: 'time_show_date',
+            key: 'time_show_date',
         },
         {
             title: 'Price',
@@ -138,6 +122,10 @@ export default function TicketForm(props) {
             ),
         },
     ];
+
+    {
+        console.log('test listTicket', listTicket);
+    }
 
     return (
         <div

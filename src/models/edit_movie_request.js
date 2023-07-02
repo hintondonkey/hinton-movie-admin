@@ -15,7 +15,7 @@ export class EditMovieRequest {
         titleNoti,
         summaryNoti,
         category,
-        stream_flatform_image,
+        stream_platform_image,
         sub_icon,
         uid_sub_icon,
         is_horizontal,
@@ -36,7 +36,7 @@ export class EditMovieRequest {
         this.titleNoti = titleNoti;
         this.summaryNoti = summaryNoti;
         this.category = category;
-        this.stream_flatform_image = stream_flatform_image;
+        this.stream_platform_image = stream_platform_image;
         this.sub_icon = sub_icon;
         this.uid_sub_icon = uid_sub_icon;
         this.is_horizontal = is_horizontal;

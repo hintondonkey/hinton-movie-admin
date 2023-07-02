@@ -18,6 +18,7 @@ import { getSubCategoryToCategoryToBrokerId } from '../../services/category/cate
 import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import dayjs from 'dayjs';
+import { getDetailMovies } from '../../services/movie/moiveSlice';
 
 const token = localStorage.getItem('mytoken');
 
@@ -62,23 +63,30 @@ export default function UpdateMoviePage() {
     const dispatch = useDispatch();
     const { state } = location;
 
-    const IdCategory = location?.pathname?.split('/')[2];
+    const IdMovie = location?.pathname?.split('/')[2];
     const user = useSelector((state) => state?.auth?.user);
-    const data = {
-        category_id: Number(IdCategory),
-        broker_id: user.roles.broker_id,
-    };
+    const detailMovie = useSelector((state) => state?.movie?.getDetailMovies);
+    const subCategory = useSelector(
+        (state) => state?.category?.getSubCategoryToCategoryToBrokerId
+    );
+
+    console.log('data : ', detailMovie);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(getSubCategoryToCategoryToBrokerId(data));
-        setMovie({ ...movie, category: Number(IdCategory) });
-    }, [IdCategory, user.roles.broker_id]);
-
-    const subCategory = useSelector(
-        (state) => state?.category?.getSubCategoryToCategoryToBrokerId
-    );
+        setLoading(true);
+        dispatch(getDetailMovies(IdMovie));
+        setTimeout(() => {
+            setLoading(false);
+            dispatch(
+                getSubCategoryToCategoryToBrokerId({
+                    broker_id: user?.roles?.broker_id,
+                    category_id: detailMovie && detailMovie?.category,
+                })
+            );
+        }, 3000);
+    }, [IdMovie, detailMovie?.category]);
 
     const handleUpdateMovie = async (movie) => {
         console.log('handleUpdateMovie in index: ', movie);

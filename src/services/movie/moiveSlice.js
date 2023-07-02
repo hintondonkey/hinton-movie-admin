@@ -20,6 +20,28 @@ export const createMovie = createAsyncThunk(
     }
 );
 
+export const getAllMovies = createAsyncThunk(
+    'auth/getAllMovies',
+    async (id, thunkAPI) => {
+        try {
+            return await movieService.handleGetAllMovies(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const getDetailMovies = createAsyncThunk(
+    'auth/getDetailMovies',
+    async (id, thunkAPI) => {
+        try {
+            return await movieService.handleGetDetailMovies(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 export const resetState = createAction('Reset_all');
 
 export const movieSlice = createSlice({
@@ -39,6 +61,38 @@ export const movieSlice = createSlice({
                 state.message = 'success';
             })
             .addCase(createMovie.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(getAllMovies.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getAllMovies.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.movie = action.payload;
+                state.message = 'success';
+            })
+            .addCase(getAllMovies.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(getDetailMovies.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getDetailMovies.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.getDetailMovies = action.payload;
+                state.message = 'success';
+            })
+            .addCase(getDetailMovies.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

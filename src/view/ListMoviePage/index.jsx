@@ -12,18 +12,24 @@ import MovieTable from './MovieTable';
 import axios from '../../axios';
 import { config } from '../../utility/axiosconfig';
 import { listMovies } from '../../services/movie/movieServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllMovies } from '../../services/movie/moiveSlice';
 
 export default function ListMoviePage() {
     const [loading, setLoading] = useState(false);
-    const [listMovie, setListMovie] = useState(listMovies);
+    // const [listMovie, setListMovie] = useState(listMovies);
     const [totalItem, setTotalItem] = useState(0);
     const [isCard, setIsCard] = useState(false);
+    const user = useSelector((state) => state?.auth?.user?.roles);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        apiGetAllMovie();
+        dispatch(getAllMovies(user.broker_id));
     }, []);
+
+    const listMovie = useSelector((state) => state?.movie?.movie);
 
     const handleOpenDetailMovie = (item) => {
         //  navigate(`/addmovie/${item.id}`, { state: { item } });
@@ -39,16 +45,6 @@ export default function ListMoviePage() {
             </Col>
         </Row>
     );
-
-    const apiGetAllMovie = async () => {
-        // setLoading(true);
-        // let res = await getAllMovie(config);
-        // console.log(res);
-        // setLoading(false);
-        // setTotalItem(res.length);
-        // // Đảo ngược list để lấy phim có ngày tạo mới nhất
-        // setListMovie(res.reverse());
-    };
 
     return (
         <div style={{ height: '100vh' }}>

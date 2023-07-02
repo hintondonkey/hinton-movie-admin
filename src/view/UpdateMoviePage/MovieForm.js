@@ -39,8 +39,9 @@ const getBase64 = (file) =>
 
 export default function MovieForm(props) {
     let { form, movie, setMovie, subCategory } = props;
+    console.log(`Movie `, movie);
 
-    const [ischecked, setIsChecked] = useState(movie.active);
+    const [ischecked, setIsChecked] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -82,10 +83,11 @@ export default function MovieForm(props) {
             end_post_date: close_post_date,
             notification_title: movie.titleNoti,
             notification_summary: movie.summaryNoti,
+            // subcategory: movie.subcategory,
         });
         setListImageUrl(movie.stream_flatform_image.map((e) => e.file));
         setListSubIcon([movie.sub_icon]);
-        console.log('listImageUrl', listImageUrl);
+        // console.log('listImageUrl', listImageUrl);
     }, [movie]);
 
     const range = (start, end) => {

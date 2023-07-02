@@ -27,7 +27,7 @@ export const uploadImage = (imageUpload, callBack) => {
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
     return uploadBytes(imageRef, imageUpload).then((val) => {
         getDownloadURL(imageRef).then((url) => {
-            console.log('url', url);
+            // console.log('url', url);
             callBack(url);
             toast.success('Upload image success!!!', {
                 position: toast.POSITION.TOP_RIGHT,

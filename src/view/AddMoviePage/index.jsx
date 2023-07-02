@@ -23,15 +23,7 @@ import { getImageUid, uploadImage } from '../../services/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubCategoryToCategoryToBrokerId } from '../../services/category/categorySlice';
 import { createMovie } from '../../services/movie/moiveSlice';
-
-const token = localStorage.getItem('mytoken');
-
-const config_json = {
-    headers: {
-        'content-type': 'application/json',
-        Authorization: `Token ${token}`,
-    },
-};
+import { toast } from 'react-toastify';
 
 export default function AddMoviePage() {
     const [form] = Form.useForm();
@@ -55,7 +47,7 @@ export default function AddMoviePage() {
         active: true,
         titleNoti: '',
         summaryNoti: '',
-        stream_flatform_image: [],
+        stream_platform_image: [],
         sub_icon: '',
         uid_sub_icon: '',
         is_horizontal: true,
@@ -74,63 +66,9 @@ export default function AddMoviePage() {
 
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (state !== null && state !== undefined) {
-    //         let item = state.item;
+    const current_moive = useSelector((state) => state?.movie);
 
-    //         let show_date = dayjs(
-    //             item.show_date + ' ' + item.time_show_date,
-    //             'YYYY-MM-DD HH:mm'
-    //         );
-    //         let close_date = dayjs(
-    //             item.close_date + ' ' + item.time_close_date,
-    //             'YYYY-MM-DD HH:mm'
-    //         );
-
-    //         form.setFieldsValue({
-    //             movie_title: item.title,
-    //             summary: item.description,
-    //             show_date: show_date,
-    //             close_date,
-    //             notification_title: item.titleNoti,
-    //             notification_summary: item.summaryNoti,
-    //         });
-
-    //         setMovie({
-    //             id: item.id,
-    //             title: item.title,
-    //             description: item.description,
-    //             show_date: item.show_date,
-    //             time_show_date: item.time_show_date,
-    //             close_date: item.close_date,
-    //             time_close_date: item.time_close_date,
-    //             active: true,
-    //             image: item.image,
-    //             titleNoti: item.titleNoti,
-    //             summaryNoti: item.summaryNoti,
-    //         });
-
-    //         setListTicket(
-    //             item.watchlist.map((i) => {
-    //                 return {
-    //                     id: i.id,
-    //                     datePicker: moment(i.date_picker, 'YYYY-MM-DD'),
-    //                     datePickerStr: i.date_picker,
-    //                     timeShowDate: moment(i.time_show_date, 'HH:mm'),
-    //                     timeShowDateStr: i.time_show_date,
-    //                     price: i.price,
-    //                     website: i.website,
-    //                 };
-    //             })
-    //         );
-    //     } else {
-    //         form.resetFields();
-    //         formTicket.resetFields();
-    //         setListTicket([]);
-    //         setMovie({ ...movie, image: null });
-    //     }
-    // }, [state]);
-
+    const { isSuccess, isError, isLoading } = current_moive;
     useEffect(() => {
         dispatch(getSubCategoryToCategoryToBrokerId(data));
         setMovie({ ...movie, category: Number(IdCategory) });
@@ -220,7 +158,6 @@ export default function AddMoviePage() {
                 });
             });
             await Promise.all(promisesImage);
-            // setMovie({ ...movie, stream_flatform_image: image });
         } catch {}
 
         try {
@@ -228,15 +165,12 @@ export default function AddMoviePage() {
                 return new Promise((resolve) => {
                     uploadImage(objectSubIcon.originFileObj, (url) => {
                         // imageSubIcon = url;
-                        console.log('objectSubIcon', url);
-                        console.log('objectSubIcon : ', getImageUid(url));
                         sub_icon = url;
                         uid_sub_icon = getImageUid(url);
                         resolve();
                     });
                 });
             };
-            // console.log('promisesIcon', promisesIcon);
             await Promise.all([promisesIcon()]);
         } catch (error) {}
 
@@ -256,7 +190,7 @@ export default function AddMoviePage() {
             movie.titleNoti,
             movie.summaryNoti,
             movie.category,
-            (movie.stream_flatform_image = image),
+            (movie.stream_platform_image = image),
             (movie.sub_icon = sub_icon),
             (movie.uid_sub_icon = uid_sub_icon),
             movie.is_horizontal,
@@ -266,9 +200,15 @@ export default function AddMoviePage() {
         // console.log('editMovieRequest', editMovieRequest);
         setTimeout(() => {
             setLoading(false);
-            dispatch(createMovie(editMovieRequest));
+            const res = dispatch(createMovie(editMovieRequest));
+            console.log(res.arg['EditMovieRequest']);
+            console.log(res.arg);
+            if (isSuccess && res.arg) {
+                toast.success(`create ${movie.title} Successfullly!`);
+            }
         }, 3000);
         navigate('/listmovie');
+
         // if (state !== null && state !== undefined) {
         // TODO: Call 2 api 1 lúc
         // handleUpdateMovie(movie);

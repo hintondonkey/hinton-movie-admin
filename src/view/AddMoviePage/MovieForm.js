@@ -136,6 +136,13 @@ export default function MovieForm(props) {
             is_horizontal: isFramePoster,
         }));
     }, [isFramePoster]);
+
+    // useEffect(() => {
+    //     setMovie((movie) => ({
+    //         ...movie,
+    //         active: ischecked,
+    //     }));
+    // }, [ischecked]);
     // console.log('list image', listImageUrl);
     // console.log(subCategory);
     const handleSelectChange = (value) => {

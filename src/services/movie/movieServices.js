@@ -17,10 +17,16 @@ const handleGetDetailMovies = async (id) => {
     return response;
 };
 
+const handleDeleteMovies = async (id) => {
+    const response = await axios.delete(`/movie/stream_platform/${id}`, config);
+    return response;
+};
+
 const movieService = {
     handleCreateMovie,
     handleGetAllMovies,
     handleGetDetailMovies,
+    handleDeleteMovies,
 };
 
 export default movieService;

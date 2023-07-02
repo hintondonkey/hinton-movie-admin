@@ -70,7 +70,7 @@ export default function UpdateMoviePage() {
         (state) => state?.category?.getSubCategoryToCategoryToBrokerId
     );
 
-    console.log('data : ', detailMovie);
+    console.log('detailMovie 123456789 : ', detailMovie);
 
     const navigate = useNavigate();
 
@@ -201,62 +201,66 @@ export default function UpdateMoviePage() {
 }
 
 let itemDetailData = {
-    id: 0,
+    id: 6,
     watchlist: [
         {
-            id: 0,
+            id: 1,
             date_picker: '2023-07-01',
-            time_show_date: '09:30',
-            price: 2147483647,
-            website: 'http://localhost:3000/updateMovie/0',
+            time_show_date: '21:22:00',
+            price: 20,
+            website:
+                'https://motphimtv.me/phim/than-lan-ky-vuc-vo-song-chau-10469.html',
             active: true,
-            create_date: '2023-07-01T11:12:35.568Z',
-            platform: 0,
+            create_date: '2023-07-01T14:23:34.450245Z',
+            platform: 6,
         },
     ],
-    stream_flatform_image: [
-        {
-            id: 0,
-            uid: '4.jpg52f73650-d314-4497-973f-0434e561fbf6',
-            name: 'string',
-            description: 'string',
-            file: 'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F2.jpg356829be-7824-411f-bbbd-71de14ec7a4f?alt=media&token=5b85ba1d-ad93-424a-8afa-9bfec298ab0a',
-            event: 0,
-        },
+    stream_platform_image: [
         {
             id: 1,
-            uid: '4.jpg52f73650-d314-4497-973f-0434e561fbf6',
-            name: 'string',
-            description: 'string',
-            file: 'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F2.jpg356829be-7824-411f-bbbd-71de14ec7a4f?alt=media&token=5b85ba1d-ad93-424a-8afa-9bfec298ab0a',
-            event: 0,
+            uid: '100423-eternals-16811150170881958369065.jpgc05d7cf8-e19c-4ec9-974c-7190db8e8571',
+            name: 'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F100423-eternals-16811150170881958369065.jpgc05d7cf8-e19c-4ec9-974c-7190db8e8571?alt=media&token=ee664f8c-0cac-45e9-baf2-e90719830676',
+            file_name: null,
+            file_size: null,
+            description: null,
+            stream_platform: 6,
+        },
+        {
+            id: 2,
+            uid: '100423-marvel-2-1681114948845267268576.jpgf27ad5d9-bbbc-4405-ae83-100eb89e50e7',
+            name: 'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F100423-marvel-2-1681114948845267268576.jpgf27ad5d9-bbbc-4405-ae83-100eb89e50e7?alt=media&token=6a344352-9c65-4309-9530-23a66350450f',
+            file_name: null,
+            file_size: null,
+            description: null,
+            stream_platform: 6,
         },
     ],
-    category_name: 'string',
-    subcategory_name: 'string',
-    title: 'string',
-    description: 'string',
+    category_name: 'Event',
+    subcategory_name: 'sub business_admin',
+    title: 'phim ma đang sợ quá',
+    description: 'hello cô ba',
     sub_icon:
-        'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F2.jpg356829be-7824-411f-bbbd-71de14ec7a4f?alt=media&token=5b85ba1d-ad93-424a-8afa-9bfec298ab0a',
-    uid_sub_icon: 'string',
+        'https://firebasestorage.googleapis.com/v0/b/moviewebadmin.appspot.com/o/images%2F100423-ant-man-16811148589681138415771.jpg5bb42187-d98e-4f0d-b791-4a1b3b08b2c2?alt=media&token=a50bea25-3658-49bd-802b-3ea7b3edaf20',
+    uid_sub_icon:
+        '100423-ant-man-16811148589681138415771.jpg5bb42187-d98e-4f0d-b791-4a1b3b08b2c2',
     show_date: '2023-07-01',
-    time_show_date: '09:30',
+    time_show_date: '21:22:00',
     close_date: '2023-07-01',
-    time_close_date: '10:30',
+    time_close_date: '21:22:00',
     post_date: '2023-07-01',
-    post_time: '14:30',
+    post_time: '21:22:00',
     close_post_date: '2023-07-01',
-    close_post_time: '15:30',
+    close_post_time: '21:22:00',
     active: true,
     create_date: '2023-07-01',
-    titleNoti: 'string',
-    summaryNoti: 'string',
-    number_of_connection: 2147483647,
-    approval: 'string',
+    titleNoti: '',
+    summaryNoti: '',
+    number_of_connection: 0,
+    approval: null,
     status: true,
     is_horizontal: true,
-    category: 0,
-    subcategory: 0,
-    broker: 0,
-    created_user: 0,
+    category: 1,
+    subcategory: 11,
+    broker: 6,
+    created_user: 14,
 };

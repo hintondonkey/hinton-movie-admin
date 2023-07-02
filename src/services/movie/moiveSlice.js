@@ -42,6 +42,17 @@ export const getDetailMovies = createAsyncThunk(
     }
 );
 
+export const deleteMovies = createAsyncThunk(
+    'auth/deleteMovies',
+    async (id, thunkAPI) => {
+        try {
+            return await movieService.handleDeleteMovies(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 export const resetState = createAction('Reset_all');
 
 export const movieSlice = createSlice({
@@ -93,6 +104,22 @@ export const movieSlice = createSlice({
                 state.message = 'success';
             })
             .addCase(getDetailMovies.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(deleteMovies.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteMovies.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.deleteMovies = 'Delete Success';
+                state.message = 'success';
+            })
+            .addCase(deleteMovies.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

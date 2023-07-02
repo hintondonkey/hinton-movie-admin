@@ -19,7 +19,7 @@ import './MovieTable.css';
 import { EMPTY_IMAGE } from '../../constants/Constants';
 
 export default function MovieTable(props) {
-    let { data, handleOpenDetailMovie } = props;
+    let { data, handleOpenDetailMovie, handledeleteMovie } = props;
     const token = localStorage.getItem('mytoken');
     const config = {
         headers: {
@@ -49,8 +49,9 @@ export default function MovieTable(props) {
         if (window.confirm(`Delete ${param.title} ?`)) {
             console.log('Delete : ', param.id);
             // window.location.href = '/listmovie';
-            await deleteMovie(config, param.id);
-            window.location.reload();
+            // await deleteMovie(config, param.id);
+            // window.location.reload();
+            handledeleteMovie(param.id);
         }
     };
 

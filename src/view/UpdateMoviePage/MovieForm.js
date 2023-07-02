@@ -83,9 +83,9 @@ export default function MovieForm(props) {
             end_post_date: close_post_date,
             notification_title: movie.titleNoti,
             notification_summary: movie.summaryNoti,
-            // subcategory: movie.subcategory,
+            subcategory: movie.subcategory,
         });
-        setListImageUrl(movie.stream_flatform_image.map((e) => e.file));
+        setListImageUrl(movie.stream_platform_image.map((e) => e.name));
         setListSubIcon([movie.sub_icon]);
         // console.log('listImageUrl', listImageUrl);
     }, [movie]);

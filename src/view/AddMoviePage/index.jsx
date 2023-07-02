@@ -22,7 +22,7 @@ import dayjs from 'dayjs';
 import { getImageUid, uploadImage } from '../../services/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubCategoryToCategoryToBrokerId } from '../../services/category/categorySlice';
-import { createMovie } from '../../services/movie/moiveSlice';
+import { createMovie, getAllMovies } from '../../services/movie/moiveSlice';
 import { toast } from 'react-toastify';
 
 export default function AddMoviePage() {
@@ -77,30 +77,6 @@ export default function AddMoviePage() {
     const subCategory = useSelector(
         (state) => state?.category?.getSubCategoryToCategoryToBrokerId
     );
-
-    const handleUpdateMovie = async (movie) => {
-        console.log('handleUpdateMovie in index: ', movie);
-        const data = {
-            show_date: moment(movie.show_date).format('YYYY-MM-DD'),
-            time_show_date: movie.time_show_date,
-            close_date: moment(movie.close_date).format('YYYY-MM-DD'),
-            time_close_date: movie.time_close_date,
-            title: movie.title,
-            stream_flatform_image: { uid: movie.image, uid2: movie.image },
-            sub_icon: { uid: movie.sub_icon },
-            description: movie.description,
-            titleNoti: movie.titleNoti,
-            summaryNoti: movie.summaryNoti,
-            ischecked: movie.active,
-        };
-        console.log(data);
-
-        // await putMovie(data, config_json, movie.id).then((res) => {
-        //     console.log('res put movie', res);
-        //     SHOW_SUCCESS_MESSAGE('Update Movie Success !!!');
-        //     navigate('/listmovie');
-        // });
-    };
 
     const handleClickSaveMovie = () => {
         form.validateFields()
@@ -201,38 +177,12 @@ export default function AddMoviePage() {
         setTimeout(() => {
             setLoading(false);
             const res = dispatch(createMovie(editMovieRequest));
-            console.log(res.arg['EditMovieRequest']);
-            console.log(res.arg);
             if (isSuccess && res.arg) {
+                dispatch(getAllMovies(user.broker_id));
                 toast.success(`create ${movie.title} Successfullly!`);
             }
         }, 3000);
         navigate('/listmovie');
-
-        // if (state !== null && state !== undefined) {
-        // TODO: Call 2 api 1 lúc
-        // handleUpdateMovie(movie);
-        // } else {
-        // await postcreateMovie(JSON.stringify(editMovieRequest), config_json)
-        //     .then((res) => {
-        //         setTimeout(() => {
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: 'Create Success !!!',
-        //                 showConfirmButton: false,
-        //                 timer: 1500,
-        //             }).then((result) => {
-        //                 navigate('/listmovie');
-        //             });
-        //         }, 1000);
-        //     })
-        //     .catch((error) => console.log('Error:', error));
-        // console.log('create movie : ', editMovieRequest);
-
-        // }
-        // setTimeout(() => {
-        //     setLoading(false);
-        // }, 1000);
     };
 
     const _buildHeader = () => (

@@ -13,7 +13,8 @@ import axios from '../../axios';
 import { config } from '../../utility/axiosconfig';
 import { listMovies } from '../../services/movie/movieServices';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllMovies } from '../../services/movie/moiveSlice';
+import { deleteMovies, getAllMovies } from '../../services/movie/moiveSlice';
+import { toast } from 'react-toastify';
 
 export default function ListMoviePage() {
     const [loading, setLoading] = useState(false);
@@ -21,6 +22,8 @@ export default function ListMoviePage() {
     const [totalItem, setTotalItem] = useState(0);
     const [isCard, setIsCard] = useState(false);
     const user = useSelector((state) => state?.auth?.user?.roles);
+    const del = useSelector((state) => state?.movie.deleteMovies);
+    console.log(`ListMoviePage ${del}`);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -34,6 +37,16 @@ export default function ListMoviePage() {
     const handleOpenDetailMovie = (item) => {
         //  navigate(`/addmovie/${item.id}`, { state: { item } });
         navigate(`/updateMovie/${item.id}`);
+        dispatch(getAllMovies(user.broker_id));
+    };
+
+    const handledeleteMovie = (item) => {
+        dispatch(deleteMovies(item));
+        // window.location.reload();
+        setTimeout(() => {
+            toast.success(`Movie deleted successfully`);
+            dispatch(getAllMovies(user.broker_id));
+        }, 1000);
     };
 
     const _buildHeader = () => (
@@ -95,6 +108,7 @@ export default function ListMoviePage() {
                                 })
                             }
                             handleOpenDetailMovie={handleOpenDetailMovie}
+                            handledeleteMovie={handledeleteMovie}
                         />
                     ) : (
                         // <FilterTable />

@@ -129,8 +129,11 @@ export default function AddMoviePage() {
                         let requestImageObject = {};
                         requestImageObject['uid'] = getImageUid(url);
                         requestImageObject['name'] = url;
+                        setTimeout(() => {
+                            setLoading(false);
+                            image.push(requestImageObject);
+                        }, 1000);
 
-                        image.push(requestImageObject);
                         resolve();
                     });
                 });
@@ -178,13 +181,15 @@ export default function AddMoviePage() {
         console.log('editMovieRequest', editMovieRequest);
         setTimeout(() => {
             setLoading(false);
-            const res = dispatch(createMovie(editMovieRequest));
-            if (isSuccess && res.arg) {
-                dispatch(getAllMovies(user.broker_id));
+            dispatch(createMovie(editMovieRequest));
+            if (isSuccess) {
                 toast.success(`create ${movie.title} Successfullly!`);
             }
-        }, 3000);
+        }, 1000);
         navigate('/listmovie');
+        setTimeout(() => {
+            dispatch(getAllMovies(user.roles.broker_id));
+        }, 3000);
     };
 
     const _buildHeader = () => (

@@ -103,23 +103,25 @@ export default function AddMoviePage() {
     };
 
     const handleClickSaveMovie = () => {
-        form.validateFields()
-            .then((val) => {
-                // console.log('Submit form');
-                // console.log('listTicket', listTicket);
-                if (listTicket === null || listTicket.length === 0) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Please input ticket !!!',
-                        showConfirmButton: true,
-                    }).then((result) => {});
-                } else {
-                    form.submit();
-                }
-            })
-            .catch((erorr) => {
-                console.log('error', erorr);
-            });
+        // form.validateFields()
+        //     .then((val) => {
+        //         // console.log('Submit form');
+        //         // console.log('listTicket', listTicket);
+        //         if (listTicket === null || listTicket.length === 0) {
+        //             Swal.fire({
+        //                 icon: 'warning',
+        //                 title: 'Please input ticket !!!',
+        //                 showConfirmButton: true,
+        //             }).then((result) => {});
+        //         } else {
+        //             form.submit();
+        //         }
+        //     })
+        //     .catch((erorr) => {
+        //         console.log('error', erorr);
+        //     });
+
+        form.submit();
     };
 
     const mapTicketToRequest = (listTicket) => {
@@ -134,6 +136,8 @@ export default function AddMoviePage() {
     };
 
     const handleCreateMovie = async (movie, listObjectImage, objectSubIcon) => {
+        console.log('test listObjectImage', listObjectImage);
+
         // dict chứa hình ảnh
 
         let image = [];
@@ -197,7 +201,7 @@ export default function AddMoviePage() {
             movie.subcategory
         );
 
-        // console.log('editMovieRequest', editMovieRequest);
+        console.log('editMovieRequest', editMovieRequest);
         setTimeout(() => {
             setLoading(false);
             const res = dispatch(createMovie(editMovieRequest));

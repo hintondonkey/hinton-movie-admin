@@ -74,6 +74,7 @@ export default function MovieForm(props) {
     // });
 
     const handleFileChange = (file) => {
+        console.log('test file', file);
         const reader = new FileReader();
 
         if (file) {
@@ -97,7 +98,8 @@ export default function MovieForm(props) {
         );
     };
     const handleChangeUploadImage = (val) => {
-        listObjectImage.push(val.file);
+        console.log('test val', val);
+        listObjectImage.push(val.file.originFileObj);
 
         handleFileChange(val.fileList[val.fileList.length - 1].originFileObj);
     };
@@ -175,12 +177,12 @@ export default function MovieForm(props) {
             >
                 <Form.Item
                     name="subcategory"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input Subcategory',
-                        },
-                    ]}
+                    // rules={[
+                    //     {
+                    //         required: true,
+                    //         message: 'Please input Subcategory',
+                    //     },
+                    // ]}
                     labelCol={{ span: 3 }}
                     label="Sub Category"
                 >

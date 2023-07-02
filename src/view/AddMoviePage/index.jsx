@@ -134,6 +134,8 @@ export default function AddMoviePage() {
     };
 
     const handleCreateMovie = async (movie, listObjectImage, objectSubIcon) => {
+        console.log('test listObjectImage', listObjectImage);
+
         // dict chứa hình ảnh
 
         let image = [];
@@ -197,7 +199,7 @@ export default function AddMoviePage() {
             movie.subcategory
         );
 
-        // console.log('editMovieRequest', editMovieRequest);
+        console.log('editMovieRequest', editMovieRequest);
         setTimeout(() => {
             setLoading(false);
             const res = dispatch(createMovie(editMovieRequest));

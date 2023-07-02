@@ -103,25 +103,23 @@ export default function AddMoviePage() {
     };
 
     const handleClickSaveMovie = () => {
-        // form.validateFields()
-        //     .then((val) => {
-        //         // console.log('Submit form');
-        //         // console.log('listTicket', listTicket);
-        //         if (listTicket === null || listTicket.length === 0) {
-        //             Swal.fire({
-        //                 icon: 'warning',
-        //                 title: 'Please input ticket !!!',
-        //                 showConfirmButton: true,
-        //             }).then((result) => {});
-        //         } else {
-        //             form.submit();
-        //         }
-        //     })
-        //     .catch((erorr) => {
-        //         console.log('error', erorr);
-        //     });
-
-        form.submit();
+        form.validateFields()
+            .then((val) => {
+                // console.log('Submit form');
+                // console.log('listTicket', listTicket);
+                if (listTicket === null || listTicket.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Please input ticket !!!',
+                        showConfirmButton: true,
+                    }).then((result) => {});
+                } else {
+                    form.submit();
+                }
+            })
+            .catch((erorr) => {
+                console.log('error', erorr);
+            });
     };
 
     const mapTicketToRequest = (listTicket) => {

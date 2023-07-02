@@ -23,6 +23,7 @@ const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 
 export const uploadImage = (imageUpload, callBack) => {
+    console.log('test imageUpload', imageUpload);
     if (imageUpload == null) return;
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
     return uploadBytes(imageRef, imageUpload).then((val) => {

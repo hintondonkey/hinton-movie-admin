@@ -74,7 +74,6 @@ export default function MovieForm(props) {
     // });
 
     const handleFileChange = (file) => {
-        console.log('test file', file);
         const reader = new FileReader();
 
         if (file) {
@@ -98,7 +97,6 @@ export default function MovieForm(props) {
         );
     };
     const handleChangeUploadImage = (val) => {
-        console.log('test val', val);
         listObjectImage.push(val.file.originFileObj);
 
         handleFileChange(val.fileList[val.fileList.length - 1].originFileObj);

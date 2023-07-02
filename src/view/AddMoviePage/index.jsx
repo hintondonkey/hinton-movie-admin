@@ -110,8 +110,6 @@ export default function AddMoviePage() {
     };
 
     const handleCreateMovie = async (movie, listObjectImage, objectSubIcon) => {
-        console.log('test listObjectImage', listObjectImage);
-
         // dict chứa hình ảnh
 
         let image = [];

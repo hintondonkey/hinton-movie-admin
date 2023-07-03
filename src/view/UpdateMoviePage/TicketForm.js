@@ -20,12 +20,18 @@ export default function TicketForm(props) {
     };
 
     const handleCreateTicket = (item) => {
+        let data = {};
+        data['datePicker'] = item.datePickerStr;
+        data['timeShowDate'] = item.timeShowDateStr;
+        data['price'] = item.price;
+        data['website'] = item.website;
+        console.log('handleCreateTicket 23', data);
         const newList = [...listTicket];
         newList.push(item);
-        console.log('test newList', newList);
+        console.log('handleCreateTicket : 26', newList);
 
-        setListTicket(newList);
-        setOpenModal(false);
+        // setListTicket(newList);
+        // setOpenModal(false);
     };
 
     const handleChangeTicketForEdit = (ticket) => {

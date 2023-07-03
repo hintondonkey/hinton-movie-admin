@@ -88,7 +88,8 @@ export default function TicketModal(props) {
                     </Col>
 
                     <Col span={6} offset={2}>
-                        {ticketForEdit === null || ticketForEdit === {} ? (
+                        {ticketForEdit === null ||
+                        ticketForEdit.length === 0 ? (
                             <Button
                                 key="submit"
                                 type="primary"

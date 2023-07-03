@@ -97,6 +97,10 @@ export default function UpdateMoviePage() {
         console.log('Movie :  ', movie);
         const newMovie = { ...movie };
         delete newMovie.watchlist;
+        if (!('is_notification' in newMovie)) {
+            // Nếu chưa tồn tại, thêm trường is_notification với giá trị là false
+            newMovie.is_notification = false;
+        }
         const data = { id: IdMovie, data: newMovie };
         dispatch(updateMovie(data));
     };

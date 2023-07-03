@@ -39,7 +39,7 @@ const getBase64 = (file) =>
 
 export default function MovieForm(props) {
     let { form, movie, setMovie, subCategory } = props;
-    console.log(`Movie `, movie);
+    // console.log(`Movie `, movie);
 
     const [ischecked, setIsChecked] = useState(false);
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -52,7 +52,7 @@ export default function MovieForm(props) {
     const [isFramePoster, setIsFramePoster] = useState(true);
 
     useEffect(() => {
-        console.log('movie update', movie);
+        // console.log('movie update', movie);
 
         let show_date = dayjs(
             movie.show_date + ' ' + movie.time_show_date,

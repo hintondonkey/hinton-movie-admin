@@ -31,6 +31,11 @@ const handleUpdateMovie = async (movie) => {
     return response;
 };
 
+const handleCreateWatchList = async (movie) => {
+    const response = await axios.post(`/movie/watch-list/`, movie, config);
+    return response;
+};
+
 const handleUpdateWatchList = async (movie) => {
     const response = await axios.put(
         `/movie/watch-list/${movie.id}`,
@@ -46,6 +51,7 @@ const movieService = {
     handleGetDetailMovies,
     handleDeleteMovies,
     handleUpdateMovie,
+    handleCreateWatchList,
     handleUpdateWatchList,
 };
 

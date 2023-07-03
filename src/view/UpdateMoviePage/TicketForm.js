@@ -4,12 +4,21 @@ import { BiEdit } from 'react-icons/bi';
 import { IoIosAdd } from 'react-icons/io';
 import { MdDeleteOutline } from 'react-icons/md';
 import TicketModal from './TicketModal';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    createWatchList,
+    getDetailMovies,
+} from '../../services/movie/moiveSlice';
 
 export default function TicketForm(props) {
-    let { listTicket, setListTicket } = props;
+    let { listTicket, setListTicket, IdMovie } = props;
 
     const [openModal, setOpenModal] = useState(false);
     const [ticketForEdit, setTicketForEdit] = useState(null);
+    const dispatch = useDispatch();
+    const detailWatchlist = useSelector((state) => state?.movie);
+
+    const { isError, isSuccess, create_Watch_List } = detailWatchlist;
 
     const showModal = () => {
         setOpenModal(true);
@@ -20,18 +29,26 @@ export default function TicketForm(props) {
     };
 
     const handleCreateTicket = (item) => {
+        console.log('listTicket: ', listTicket);
         let data = {};
-        data['datePicker'] = item.datePickerStr;
-        data['timeShowDate'] = item.timeShowDateStr;
+        data['date_picker'] = item.datePickerStr;
+        data['time_show_date'] = item.timeShowDateStr;
         data['price'] = item.price;
         data['website'] = item.website;
-        console.log('handleCreateTicket 23', data);
-        const newList = [...listTicket];
-        newList.push(item);
-        console.log('handleCreateTicket : 26', newList);
+        data['platform'] = IdMovie;
+        data['active'] = true;
+        // console.log('handleCreateTicket 23', JSON.stringify(data));
+        dispatch(createWatchList(data));
+        if (isSuccess && create_Watch_List) {
+            // Update listTicket state with create_Watch_List
+            dispatch(getDetailMovies(IdMovie));
+        }
+        // const newList = [...listTicket];
+        // newList.push(item);
+        // // console.log('handleCreateTicket : 26', newList);
 
         // setListTicket(newList);
-        // setOpenModal(false);
+        setOpenModal(false);
     };
 
     const handleChangeTicketForEdit = (ticket) => {
@@ -130,7 +147,7 @@ export default function TicketForm(props) {
     ];
 
     {
-        console.log('test listTicket', listTicket);
+        // console.log('test listTicket', listTicket);
     }
 
     return (

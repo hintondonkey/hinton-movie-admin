@@ -190,6 +190,7 @@ export default function UpdateMoviePage() {
                                 listTicket={detailMovie.watchlist}
                                 setListTicket={setListTicket}
                                 formTicket={formTicket}
+                                IdMovie={IdMovie}
                             />
                         </>
                     ) : null}

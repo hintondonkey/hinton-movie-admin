@@ -29,25 +29,47 @@ export default function TicketForm(props) {
     };
 
     const handleCreateTicket = (item) => {
-        console.log('listTicket: ', listTicket);
-        let data = {};
-        data['date_picker'] = item.datePickerStr;
-        data['time_show_date'] = item.timeShowDateStr;
-        data['price'] = item.price;
-        data['website'] = item.website;
-        data['platform'] = IdMovie;
-        data['active'] = true;
-        // console.log('handleCreateTicket 23', JSON.stringify(data));
-        dispatch(createWatchList(data));
-        if (isSuccess && create_Watch_List) {
-            // Update listTicket state with create_Watch_List
-            dispatch(getDetailMovies(IdMovie));
-        }
-        // const newList = [...listTicket];
-        // newList.push(item);
-        // // console.log('handleCreateTicket : 26', newList);
+        // let data = {};
+        // data['date_picker'] = item.datePickerStr;
+        // data['time_show_date'] = item.timeShowDateStr;
+        // data['price'] = item.price;
+        // data['website'] = item.website;
+        // data['platform'] = IdMovie;
+        // data['active'] = true;
 
-        // setListTicket(newList);
+        // dispatch(createWatchList(data));
+        // if (isSuccess && create_Watch_List) {
+        //     // Update listTicket state with create_Watch_List
+        //     dispatch(getDetailMovies(IdMovie));
+        // }
+
+        // let price = 0.0;
+        // try {
+        //     price = parseFloat(item.price);
+        // } catch (error) {
+        //     console.log('Parse String to float', error);
+        //     price = 0.0;
+        // }
+
+        let newTicket = {
+            // id: item.id,
+            date_picker: item.datePickerStr,
+            time_show_date: item.timeShowDateStr,
+            price: item.price,
+            website: item.website,
+            platform: IdMovie,
+            acitve: true,
+        };
+        dispatch(createWatchList(newTicket));
+
+        setTimeout(() => {
+            if (isSuccess) {
+                const newList = [...listTicket];
+                newList.push(newTicket);
+                setListTicket(newList);
+            }
+        }, 3000);
+
         setOpenModal(false);
     };
 
@@ -57,14 +79,23 @@ export default function TicketForm(props) {
 
     const handleEditTicket = (ticket) => {
         let newList = listTicket.map((item) => {
-            if (item.key === ticket.key) {
-                item.datePicker = ticket.datePicker;
-                item.timeShowDate = ticket.timeShowDate;
-                item.price = ticket.price;
+            if (item.id === ticket.id) {
+                let price = 0.0;
+                try {
+                    price = parseFloat(ticket.price);
+                } catch (error) {
+                    console.log('Parse String to float', error);
+                    price = 0.0;
+                }
+
+                item.date_picker = ticket.datePickerStr;
+                item.time_show_date = ticket.timeShowDateStr;
+                item.price = price;
                 item.website = ticket.website;
             }
             return item;
         });
+        console.log(newList);
 
         setListTicket(newList);
     };
@@ -149,7 +180,6 @@ export default function TicketForm(props) {
     {
         // console.log('test listTicket', listTicket);
     }
-
     return (
         <div
             style={{
@@ -180,7 +210,7 @@ export default function TicketForm(props) {
                 </Col>
             </Row>
 
-            <Table columns={columns} dataSource={listTicket} rowKey="id" />
+            <Table columns={columns} dataSource={listTicket} />
 
             <TicketModal
                 isOpenModal={openModal}

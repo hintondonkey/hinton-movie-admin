@@ -20,13 +20,7 @@ import { EMPTY_IMAGE } from '../../constants/Constants';
 
 export default function MovieTable(props) {
     let { data, handleOpenDetailMovie, handledeleteMovie } = props;
-    const token = localStorage.getItem('mytoken');
-    const config = {
-        headers: {
-            'content-type': 'application/json',
-            Authorization: `Token ${token}`,
-        },
-    };
+
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [tableParams, setTableParams] = useState({
@@ -179,13 +173,13 @@ export default function MovieTable(props) {
             ),
     });
 
-    const handleChange = async (item) => {
-        const active = item.active === true ? false : true;
-        const ischecked = false;
-        const tobody = JSON.stringify({ active, ischecked });
-        const id = item.id;
-        await putMovie(tobody, config, id);
-        window.location.reload();
+    const handleChangeActive = async (item) => {
+        // const active = item.active === true ? false : true;
+        // const ischecked = false;
+        // const tobody = JSON.stringify({ active, ischecked });
+        // const id = item.id;
+        // await putMovie(tobody, config, id);
+        // window.location.reload();
     };
 
     const columns = [
@@ -244,7 +238,7 @@ export default function MovieTable(props) {
                     checkedChildren="Active"
                     unCheckedChildren="Inactive"
                     style={{ width: 100 }}
-                    onChange={() => handleChange(item)}
+                    onChange={() => handleChangeActive(item)}
                 />
             ),
             sorter: (a, b) => a.active - b.active,

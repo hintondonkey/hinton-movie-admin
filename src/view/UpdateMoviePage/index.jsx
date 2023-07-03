@@ -72,6 +72,12 @@ export default function UpdateMoviePage() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (detailMovie !== null && detailMovie !== undefined) {
+            setListTicket(detailMovie.watchlist);
+        }
+    }, [detailMovie]);
+
+    useEffect(() => {
         setLoading(true);
         dispatch(getDetailMovies(IdMovie));
         setTimeout(() => {
@@ -83,30 +89,25 @@ export default function UpdateMoviePage() {
                 })
             );
         }, 3000);
+        setMovie(detailMovie);
     }, [IdMovie, detailMovie?.category]);
 
     const handleUpdateMovie = async (movie) => {
         console.log('handleUpdateMovie in index: ', movie);
-        const data = {
-            show_date: moment(movie.show_date).format('YYYY-MM-DD'),
-            time_show_date: movie.time_show_date,
-            close_date: moment(movie.close_date).format('YYYY-MM-DD'),
-            time_close_date: movie.time_close_date,
-            title: movie.title,
-            stream_flatform_image: { uid: movie.image, uid2: movie.image },
-            sub_icon: { uid: movie.sub_icon },
-            description: movie.description,
-            titleNoti: movie.titleNoti,
-            summaryNoti: movie.summaryNoti,
-            ischecked: movie.active,
-        };
-        console.log(data);
-
-        // await putMovie(data, config_json, movie.id).then((res) => {
-        //     console.log('res put movie', res);
-        //     SHOW_SUCCESS_MESSAGE('Update Movie Success !!!');
-        //     navigate('/listmovie');
-        // });
+        // const data = {
+        //     show_date: moment(movie.show_date).format('YYYY-MM-DD'),
+        //     time_show_date: movie.time_show_date,
+        //     close_date: moment(movie.close_date).format('YYYY-MM-DD'),
+        //     time_close_date: movie.time_close_date,
+        //     title: movie.title,
+        //     stream_flatform_image: { uid: movie.image, uid2: movie.image },
+        //     sub_icon: { uid: movie.sub_icon },
+        //     description: movie.description,
+        //     titleNoti: movie.titleNoti,
+        //     summaryNoti: movie.summaryNoti,
+        //     ischecked: movie.active,
+        // };
+        // // console.log(data);
     };
 
     const handleClickSaveMovie = () => {
@@ -153,7 +154,7 @@ export default function UpdateMoviePage() {
                         width: 200,
                         backgroundColor: SUCCESS_COLOR,
                     }}
-                    onClick={handleClickSaveMovie}
+                    onClick={() => handleUpdateMovie(movie)}
                 >
                     <FiSave size={25} style={{ marginRight: 8 }} />
                     Save Movie
@@ -187,8 +188,10 @@ export default function UpdateMoviePage() {
                                 subCategory={subCategory}
                             />
                             <TicketForm
-                                listTicket={detailMovie.watchlist}
-                                setListTicket={setListTicket}
+                                listTicket={listTicket}
+                                setListTicket={(newList) => {
+                                    setListTicket(newList);
+                                }}
                                 formTicket={formTicket}
                                 IdMovie={IdMovie}
                             />

@@ -72,6 +72,12 @@ export default function UpdateMoviePage() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (detailMovie !== null && detailMovie !== undefined) {
+            setListTicket(detailMovie.watchlist);
+        }
+    }, [detailMovie]);
+
+    useEffect(() => {
         setLoading(true);
         dispatch(getDetailMovies(IdMovie));
         setTimeout(() => {
@@ -187,8 +193,10 @@ export default function UpdateMoviePage() {
                                 subCategory={subCategory}
                             />
                             <TicketForm
-                                listTicket={detailMovie.watchlist}
-                                setListTicket={setListTicket}
+                                listTicket={listTicket}
+                                setListTicket={(newList) => {
+                                    setListTicket(newList);
+                                }}
                                 formTicket={formTicket}
                             />
                         </>

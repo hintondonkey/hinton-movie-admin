@@ -18,7 +18,7 @@ import { getSubCategoryToCategoryToBrokerId } from '../../services/category/cate
 import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import dayjs from 'dayjs';
-import { getDetailMovies } from '../../services/movie/moiveSlice';
+import { getDetailMovies, updateMovie } from '../../services/movie/moiveSlice';
 
 const token = localStorage.getItem('mytoken');
 
@@ -56,6 +56,7 @@ export default function UpdateMoviePage() {
         sub_icon: '',
         uid_sub_icon: '',
         is_horizontal: true,
+        is_notification: false,
     });
 
     const location = useLocation();
@@ -93,50 +94,11 @@ export default function UpdateMoviePage() {
     }, [IdMovie, detailMovie?.category]);
 
     const handleUpdateMovie = async (movie) => {
-        console.log('handleUpdateMovie in index: ', movie);
-        // const data = {
-        //     show_date: moment(movie.show_date).format('YYYY-MM-DD'),
-        //     time_show_date: movie.time_show_date,
-        //     close_date: moment(movie.close_date).format('YYYY-MM-DD'),
-        //     time_close_date: movie.time_close_date,
-        //     title: movie.title,
-        //     stream_flatform_image: { uid: movie.image, uid2: movie.image },
-        //     sub_icon: { uid: movie.sub_icon },
-        //     description: movie.description,
-        //     titleNoti: movie.titleNoti,
-        //     summaryNoti: movie.summaryNoti,
-        //     ischecked: movie.active,
-        // };
-        // // console.log(data);
-    };
-
-    const handleClickSaveMovie = () => {
-        form.validateFields()
-            .then((val) => {
-                if (listTicket === null || listTicket.length === 0) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Please input ticket !!!',
-                        showConfirmButton: true,
-                    }).then((result) => {});
-                } else {
-                    form.submit();
-                }
-            })
-            .catch((erorr) => {
-                console.log('error', erorr);
-            });
-    };
-
-    const mapTicketToRequest = (listTicket) => {
-        return listTicket.map((item) => {
-            return {
-                date_picker: item.datePickerStr,
-                time_show_date: item.timeShowDateStr,
-                price: item.price,
-                website: item.website,
-            };
-        });
+        console.log('Movie :  ', movie);
+        const newMovie = { ...movie };
+        delete newMovie.watchlist;
+        const data = { id: IdMovie, data: newMovie };
+        dispatch(updateMovie(data));
     };
 
     const _buildHeader = () => (
@@ -183,8 +145,9 @@ export default function UpdateMoviePage() {
                         <>
                             <MovieForm
                                 form={form}
-                                movie={detailMovie}
+                                detailMovie={detailMovie}
                                 setMovie={setMovie}
+                                movie={movie}
                                 subCategory={subCategory}
                             />
                             <TicketForm

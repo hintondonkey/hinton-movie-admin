@@ -38,7 +38,7 @@ const getBase64 = (file) =>
     });
 
 export default function MovieForm(props) {
-    let { form, movie, setMovie, subCategory } = props;
+    let { form, detailMovie, movie, setMovie, subCategory } = props;
     // console.log(`Movie `, movie);
 
     const [ischecked, setIsChecked] = useState(false);
@@ -55,40 +55,40 @@ export default function MovieForm(props) {
         // console.log('movie update', movie);
 
         let show_date = dayjs(
-            movie.show_date + ' ' + movie.time_show_date,
+            detailMovie.show_date + ' ' + detailMovie.time_show_date,
             'YYYY-MM-DD HH:mm'
         );
 
         let close_date = dayjs(
-            movie.close_date + ' ' + movie.time_close_date,
+            detailMovie.close_date + ' ' + detailMovie.time_close_date,
             'YYYY-MM-DD HH:mm'
         );
 
         let post_date = dayjs(
-            movie.post_date + ' ' + movie.post_time,
+            detailMovie.post_date + ' ' + detailMovie.post_time,
             'YYYY-MM-DD HH:mm'
         );
 
         let close_post_date = dayjs(
-            movie.close_post_date + ' ' + movie.close_post_date,
+            detailMovie.close_post_date + ' ' + detailMovie.close_post_date,
             'YYYY-MM-DD HH:mm'
         );
 
         form.setFieldsValue({
-            movie_title: movie.title,
-            summary: movie.description,
+            movie_title: detailMovie.title,
+            summary: detailMovie.description,
             show_date: show_date,
             close_date: close_date,
             post_date: post_date,
             end_post_date: close_post_date,
-            notification_title: movie.titleNoti,
-            notification_summary: movie.summaryNoti,
-            subcategory: movie.subcategory,
+            notification_title: detailMovie.titleNoti,
+            notification_summary: detailMovie.summaryNoti,
+            subcategory: detailMovie.subcategory,
         });
-        setListImageUrl(movie.stream_platform_image);
-        setListSubIcon([movie.sub_icon]);
+        setListImageUrl(detailMovie.stream_platform_image);
+        setListSubIcon([detailMovie.sub_icon]);
         // console.log('listImageUrl', listImageUrl);
-    }, [movie]);
+    }, [detailMovie]);
 
     const range = (start, end) => {
         const result = [];
@@ -159,15 +159,21 @@ export default function MovieForm(props) {
         });
     };
 
-    // console.log('handleUpdateMovie in MovieForm: ', movie);
+    console.log('handleUpdateMovie in MovieForm: ', movie);
     useEffect(() => {
         setMovie((movie) => ({
             ...movie,
             is_horizontal: isFramePoster,
         }));
     }, [isFramePoster]);
-    // console.log('list image', listImageUrl);
-    // console.log(subCategory);
+
+    useEffect(() => {
+        setMovie((movie) => ({
+            ...movie,
+            is_notification: ischecked,
+        }));
+    }, [ischecked]);
+
     const handleSelectChange = (value) => {
         setMovie({
             ...movie,
@@ -208,7 +214,7 @@ export default function MovieForm(props) {
                     <Select
                         placeholder="Sub Category"
                         onChange={handleSelectChange}
-                        value={movie.subcategory}
+                        value={detailMovie.subcategory}
                     >
                         {subCategory &&
                             subCategory.length > 0 &&
@@ -236,7 +242,7 @@ export default function MovieForm(props) {
                         onChange={(val) =>
                             setMovie({ ...movie, title: val.target.value })
                         }
-                        value={movie.title}
+                        value={detailMovie.title}
                     />
                 </Form.Item>
                 <Form.Item
@@ -260,7 +266,7 @@ export default function MovieForm(props) {
                                 description: val.target.value,
                             })
                         }
-                        value={movie.description}
+                        value={detailMovie.description}
                     />
                 </Form.Item>
                 <Row>
@@ -448,7 +454,7 @@ export default function MovieForm(props) {
                             checkedChildren="ON"
                             unCheckedChildren="OFF"
                             style={{ width: 70 }}
-                            onChange={() => setIsChecked(!ischecked)}
+                            onChange={(val) => setIsChecked(val)}
                         />
                     </div>
                 </Form.Item>
@@ -502,45 +508,6 @@ export default function MovieForm(props) {
                         </Form.Item>
                     </div>
                 )}
-                {/* <Form.Item
-                    name="fileList"
-                    valuePropName="fileList"
-                    getValueFromEvent={normFile}
-                    noStyle
-                >
-                    <Upload
-                        listType="picture-card"
-                        fileList={fileList}
-                        onPreview={handlePreview}
-                        onChange={handleChangeUploadImage}
-                        maxCount={1}
-                        action={handleActionUploadImage}
-                    >
-                        {movie.image ? (
-                            fileList.length >= 1 ? null : (
-                                <img
-                                    src={movie.image}
-                                    alt="avatar"
-                                    style={{ width: '100%' }}
-                                />
-                            )
-                        ) : fileList.length >= 1 ? null : (
-                            uploadButton
-                        )}
-                    </Upload>
-                    <Modal
-                        open={previewOpen}
-                        title={previewTitle}
-                        footer={null}
-                        onCancel={handleClosePreview}
-                    >
-                        <img
-                            alt="poster movie"
-                            style={{ width: '100%' }}
-                            src={previewImage}
-                        />
-                    </Modal>
-                </Form.Item> */}
                 <Form.Item label="Images" labelCol={{ span: 3 }}>
                     <div
                         style={{

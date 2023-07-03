@@ -23,9 +23,10 @@ const handleDeleteMovies = async (id) => {
 };
 
 const handleUpdateMovie = async (movie) => {
+    console.log('Updating movie : ', movie);
     const response = await axios.put(
         `/movie/stream_platform/${movie.id}`,
-        movie,
+        movie.data,
         config
     );
     return response;

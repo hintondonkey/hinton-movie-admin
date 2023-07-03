@@ -100,7 +100,7 @@ export default function TicketModal(props) {
                                         .validateFields()
                                         .then((val) => {
                                             onSave({
-                                                key: uuidv4(),
+                                                id: uuidv4(),
                                                 datePicker,
                                                 datePickerStr,
                                                 timeShowDate,
@@ -128,7 +128,7 @@ export default function TicketModal(props) {
                                         .validateFields()
                                         .then((val) => {
                                             handleEditTicket({
-                                                key: ticketForEdit.key,
+                                                id: ticketForEdit.id,
                                                 datePicker,
                                                 datePickerStr,
                                                 timeShowDate,

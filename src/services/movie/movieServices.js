@@ -22,11 +22,31 @@ const handleDeleteMovies = async (id) => {
     return response;
 };
 
+const handleUpdateMovie = async (movie) => {
+    const response = await axios.put(
+        `/movie/stream_platform/${movie.id}`,
+        movie,
+        config
+    );
+    return response;
+};
+
+const handleUpdateWatchList = async (movie) => {
+    const response = await axios.put(
+        `/movie/watch-list/${movie.id}`,
+        movie,
+        config
+    );
+    return response;
+};
+
 const movieService = {
     handleCreateMovie,
     handleGetAllMovies,
     handleGetDetailMovies,
     handleDeleteMovies,
+    handleUpdateMovie,
+    handleUpdateWatchList,
 };
 
 export default movieService;

@@ -184,8 +184,9 @@ export default function AddMoviePage() {
                 toast.success(`create ${movie.title} Successfullly!`);
             }
         }, 1000);
-        navigate('/listmovie');
+
         setTimeout(() => {
+            navigate('/listmovie');
             dispatch(getAllMovies(user.roles.broker_id));
         }, 3000);
     };

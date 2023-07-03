@@ -11,9 +11,9 @@ const initialState = {
 
 export const createMovie = createAsyncThunk(
     'auth/createMovie',
-    async (category, thunkAPI) => {
+    async (movie, thunkAPI) => {
         try {
-            return await movieService.handleCreateMovie(category);
+            return await movieService.handleCreateMovie(movie);
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
         }
@@ -47,6 +47,28 @@ export const deleteMovies = createAsyncThunk(
     async (id, thunkAPI) => {
         try {
             return await movieService.handleDeleteMovies(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const updateMovie = createAsyncThunk(
+    'auth/updateMovie',
+    async (movie, thunkAPI) => {
+        try {
+            return await movieService.handleUpdateMovie(movie);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
+export const updateWatchList = createAsyncThunk(
+    'auth/updateWatchList',
+    async (movie, thunkAPI) => {
+        try {
+            return await movieService.handleUpdateWatchList(movie);
         } catch (error) {
             return thunkAPI.rejectWithValue(error);
         }
@@ -120,6 +142,38 @@ export const movieSlice = createSlice({
                 state.message = 'success';
             })
             .addCase(deleteMovies.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(updateMovie.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateMovie.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.updateMovie = action.payload;
+                state.message = 'success';
+            })
+            .addCase(updateMovie.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(updateWatchList.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateWatchList.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.updateWatchList = action.payload;
+                state.message = 'success';
+            })
+            .addCase(updateWatchList.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

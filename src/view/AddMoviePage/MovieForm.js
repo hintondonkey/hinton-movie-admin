@@ -5,7 +5,6 @@ import {
     DatePicker,
     Form,
     Input,
-    Modal,
     Row,
     Select,
     Switch,
@@ -22,12 +21,6 @@ import { PRIMARY_COLOR } from '../../constants/colors';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
 
 dayjs.extend(customParseFormat);
-const normFile = (e) => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e?.fileList;
-};
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -40,38 +33,12 @@ const getBase64 = (file) =>
 export default function MovieForm(props) {
     let { form, handleCreateMovie, movie, setMovie, subCategory } = props;
 
-    // //Faked data
-    // subCategory = [
-    //     {
-    //         name: 'Editor',
-    //     },
-    //     {
-    //         name: 'Supervisor',
-    //     },
-    // ];
-
     const [ischecked, setIsChecked] = useState(false);
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
     var [listObjectImage, setListObjectImage] = useState([]);
     const [listImageUrl, setListImageUrl] = useState([]);
     const [listSubIcon, setListSubIcon] = useState([]);
 
     const [isFramePoster, setIsFramePoster] = useState(true);
-
-    const range = (start, end) => {
-        const result = [];
-        for (let i = start; i < end; i++) {
-            result.push(i);
-        }
-        return result;
-    };
-    // const disabledDateTime = () => ({
-    //     disabledHours: () => range(0, 24).splice(4, 20),
-    //     disabledMinutes: () => range(30, 60),
-    //     disabledSeconds: () => [55, 56],
-    // });
 
     const handleFileChange = (file) => {
         const reader = new FileReader();
@@ -85,17 +52,6 @@ export default function MovieForm(props) {
         }
     };
 
-    const handlePreview = async (file) => {
-        console.log('handlePreview', file);
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        setPreviewTitle(
-            file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
-        );
-    };
     const handleChangeUploadImage = (val) => {
         listObjectImage.push(val.file.originFileObj);
 
@@ -104,17 +60,6 @@ export default function MovieForm(props) {
 
     const handleChangeUploadSubIcon = ({ fileList }) => {
         setListSubIcon(fileList);
-    };
-
-    const handleActionUploadImage = async (file) => {
-        await uploadImage(file, changeMovieURL);
-    };
-    const changeMovieURL = (url) => {
-        setMovie({ ...movie, image: url });
-    };
-
-    const handleClosePreview = () => {
-        setPreviewOpen(false);
     };
 
     const disabledDate = (current) => {
@@ -137,14 +82,6 @@ export default function MovieForm(props) {
         }));
     }, [isFramePoster]);
 
-    // useEffect(() => {
-    //     setMovie((movie) => ({
-    //         ...movie,
-    //         active: ischecked,
-    //     }));
-    // }, [ischecked]);
-    // console.log('list image', listImageUrl);
-    // console.log(subCategory);
     const handleSelectChange = (value) => {
         setMovie({
             ...movie,
@@ -480,45 +417,6 @@ export default function MovieForm(props) {
                         </Form.Item>
                     </div>
                 )}
-                {/* <Form.Item
-                    name="fileList"
-                    valuePropName="fileList"
-                    getValueFromEvent={normFile}
-                    noStyle
-                >
-                    <Upload
-                        listType="picture-card"
-                        fileList={fileList}
-                        onPreview={handlePreview}
-                        onChange={handleChangeUploadImage}
-                        maxCount={1}
-                        action={handleActionUploadImage}
-                    >
-                        {movie.image ? (
-                            fileList.length >= 1 ? null : (
-                                <img
-                                    src={movie.image}
-                                    alt="avatar"
-                                    style={{ width: '100%' }}
-                                />
-                            )
-                        ) : fileList.length >= 1 ? null : (
-                            uploadButton
-                        )}
-                    </Upload>
-                    <Modal
-                        open={previewOpen}
-                        title={previewTitle}
-                        footer={null}
-                        onCancel={handleClosePreview}
-                    >
-                        <img
-                            alt="poster movie"
-                            style={{ width: '100%' }}
-                            src={previewImage}
-                        />
-                    </Modal>
-                </Form.Item> */}
                 <Form.Item label="Images" labelCol={{ span: 3 }}>
                     <div
                         style={{

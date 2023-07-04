@@ -1,15 +1,10 @@
-import { Button, Col, Form, Input, Row, Space, Table, Tag } from 'antd';
+import { Button, Col, Row, Space, Table, Tag } from 'antd';
 
 import LoadingSpin from '../../../common/LoadingSpin';
 import MenuNavigator from '../../../components/MenuNavigator';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-    deleteSubCategory,
-    listSubCategory,
-} from '../../../services/category/categorySlice';
-import CustomModal from '../../../components/CustomModal';
 import { getAcount } from '../../../services/auth/authSlice';
 
 export default function ListBusinessAdmin() {
@@ -66,27 +61,6 @@ export default function ListBusinessAdmin() {
             width: 200,
         },
         {
-            // title: 'Action',
-            // render: () => (
-            //     <Space direction="horizontal">
-            //         <Button type="primary">Upgrade</Button>
-            //         <Button type="primary" danger>
-            //             Delete
-            //         </Button>
-            //         <Button
-            //             type="primary"
-            //             style={{
-            //                 backgroundColor: '#5200FF',
-            //                 color: 'white',
-            //             }}
-            //             onClick={() => {
-            //                 navigate('/listBusinessAdmin/123');
-            //             }}
-            //         >
-            //             Services
-            //         </Button>
-            //     </Space>
-            // ),
             title: 'Actions',
             dataIndex: 'Actions',
         },

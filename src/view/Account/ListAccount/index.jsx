@@ -4,10 +4,7 @@ import LoadingSpin from '../../../common/LoadingSpin';
 import MenuNavigator from '../../../components/MenuNavigator';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteAccountId, getAcount } from '../../../services/auth/authSlice';
-import Link from 'antd/es/typography/Link';
-import { BiEdit } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import CustomModal from '../../../components/CustomModal';
 
 const columns = [

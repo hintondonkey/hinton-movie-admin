@@ -109,6 +109,17 @@ export const deleteWatchList = createAsyncThunk(
     }
 );
 
+export const updateActiveMovie = createAsyncThunk(
+    'auth/updateActiveMovie',
+    async (data, thunkAPI) => {
+        try {
+            return await movieService.handleUpdateActiveMovie(data);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+);
+
 export const resetState = createAction('Reset_all');
 
 export const movieSlice = createSlice({
@@ -259,6 +270,22 @@ export const movieSlice = createSlice({
                 state.message = 'success';
             })
             .addCase(getAllWatchList.rejected, (state, action) => {
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+                state.isLoading = false;
+            })
+            .addCase(updateActiveMovie.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateActiveMovie.fulfilled, (state, action) => {
+                state.isError = false;
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.updateActiveMovie = action.payload;
+                state.message = 'success';
+            })
+            .addCase(updateActiveMovie.rejected, (state, action) => {
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;

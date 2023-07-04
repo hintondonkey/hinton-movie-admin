@@ -1,25 +1,13 @@
 import { SearchOutlined } from '@ant-design/icons';
-import {
-    Button,
-    Dropdown,
-    Image,
-    Input,
-    Space,
-    Switch,
-    Table,
-    Tag,
-    Tooltip,
-} from 'antd';
+import { Button, Image, Input, Space, Switch, Table, Tooltip } from 'antd';
 import React, { useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { putMovie, deleteMovie } from '../../services/UserService';
-import jsonData from './jsonData.json';
-import SwitchGreen from '../../common/SwitchGreen';
 import './MovieTable.css';
 import { EMPTY_IMAGE } from '../../constants/Constants';
 
 export default function MovieTable(props) {
-    let { data, handleOpenDetailMovie, handledeleteMovie } = props;
+    let { data, handleOpenDetailMovie, handledeleteMovie, changeActiveMovie } =
+        props;
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -42,9 +30,6 @@ export default function MovieTable(props) {
     const removeMovie = async (param) => {
         if (window.confirm(`Delete ${param.title} ?`)) {
             console.log('Delete : ', param.id);
-            // window.location.href = '/listmovie';
-            // await deleteMovie(config, param.id);
-            // window.location.reload();
             handledeleteMovie(param.id);
         }
     };
@@ -174,12 +159,7 @@ export default function MovieTable(props) {
     });
 
     const handleChangeActive = async (item) => {
-        // const active = item.active === true ? false : true;
-        // const ischecked = false;
-        // const tobody = JSON.stringify({ active, ischecked });
-        // const id = item.id;
-        // await putMovie(tobody, config, id);
-        // window.location.reload();
+        changeActiveMovie(item);
     };
 
     const columns = [
@@ -226,12 +206,6 @@ export default function MovieTable(props) {
             title: 'Active',
             key: 'active',
             render: (item) => (
-                // <span>
-                //     <Tag color={item.active ? 'green' : 'red'}>
-                //         {item.active ? 'Active' : 'Inactive'}
-                //     </Tag>
-                // </span>
-
                 <Switch
                     className="switch_status"
                     defaultChecked={item.active === true ? true : false}

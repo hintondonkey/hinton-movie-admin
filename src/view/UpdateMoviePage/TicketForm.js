@@ -8,8 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     createWatchList,
     deleteWatchList,
-    getAllWatchList,
-    getDetailMovies,
 } from '../../services/movie/moiveSlice';
 
 export default function TicketForm(props) {
@@ -19,9 +17,8 @@ export default function TicketForm(props) {
     const [ticketForEdit, setTicketForEdit] = useState(null);
     const dispatch = useDispatch();
     const detailWatchlist = useSelector((state) => state?.movie);
-    const watchList = useSelector((state) => state?.movie?.watchList);
 
-    const { isError, isSuccess, create_Watch_List } = detailWatchlist;
+    const { isSuccess } = detailWatchlist;
 
     const showModal = () => {
         setOpenModal(true);
@@ -32,30 +29,7 @@ export default function TicketForm(props) {
     };
 
     const handleCreateTicket = (item) => {
-        // let data = {};
-        // data['date_picker'] = item.datePickerStr;
-        // data['time_show_date'] = item.timeShowDateStr;
-        // data['price'] = item.price;
-        // data['website'] = item.website;
-        // data['platform'] = IdMovie;
-        // data['active'] = true;
-
-        // dispatch(createWatchList(data));
-        // if (isSuccess && create_Watch_List) {
-        //     // Update listTicket state with create_Watch_List
-        //     dispatch(getDetailMovies(IdMovie));
-        // }
-
-        // let price = 0.0;
-        // try {
-        //     price = parseFloat(item.price);
-        // } catch (error) {
-        //     console.log('Parse String to float', error);
-        //     price = 0.0;
-        // }
-
         let newTicket = {
-            // id: item.id,
             date_picker: item.datePickerStr,
             time_show_date: item.timeShowDateStr,
             price: item.price,
@@ -182,10 +156,6 @@ export default function TicketForm(props) {
             ),
         },
     ];
-
-    {
-        // console.log('test listTicket', listTicket);
-    }
     return (
         <div
             style={{

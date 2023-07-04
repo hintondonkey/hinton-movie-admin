@@ -5,8 +5,6 @@ import MenuNavigator from '../../components/MenuNavigator';
 import './styles.css';
 
 import { FiSave } from 'react-icons/fi';
-
-import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import LoadingSpin from '../../common/LoadingSpin';
@@ -14,11 +12,8 @@ import '../../constants/colors';
 import { SUCCESS_COLOR } from '../../constants/colors';
 import '../../models/edit_movie_request';
 import { EditMovieRequest } from '../../models/edit_movie_request';
-import { postcreateMovie, putMovie } from '../../services/UserService';
 import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
-import { SHOW_SUCCESS_MESSAGE } from '../../utility/AlertUtility';
-import dayjs from 'dayjs';
 import { getImageUid, uploadImage } from '../../services/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubCategoryToCategoryToBrokerId } from '../../services/category/categorySlice';
@@ -68,7 +63,7 @@ export default function AddMoviePage() {
 
     const current_moive = useSelector((state) => state?.movie);
 
-    const { isSuccess, isError, isLoading } = current_moive;
+    const { isSuccess } = current_moive;
     useEffect(() => {
         dispatch(getSubCategoryToCategoryToBrokerId(data));
         setMovie({ ...movie, category: Number(IdCategory) });
@@ -81,8 +76,6 @@ export default function AddMoviePage() {
     const handleClickSaveMovie = () => {
         form.validateFields()
             .then((val) => {
-                // console.log('Submit form');
-                // console.log('listTicket', listTicket);
                 if (listTicket === null || listTicket.length === 0) {
                     Swal.fire({
                         icon: 'warning',
@@ -119,8 +112,6 @@ export default function AddMoviePage() {
         setLoading(true);
         // Bước upload hình
         try {
-            // console.log('objectSubIcon', objectSubIcon);
-
             const promisesImage = listObjectImage.map((objectImage) => {
                 return new Promise((resolve) => {
                     uploadImage(objectImage, (url) => {
@@ -143,7 +134,6 @@ export default function AddMoviePage() {
             const promisesIcon = () => {
                 return new Promise((resolve) => {
                     uploadImage(objectSubIcon.originFileObj, (url) => {
-                        // imageSubIcon = url;
                         sub_icon = url;
                         uid_sub_icon = getImageUid(url);
                         resolve();

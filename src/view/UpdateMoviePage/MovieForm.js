@@ -5,7 +5,6 @@ import {
     DatePicker,
     Form,
     Input,
-    Modal,
     Row,
     Select,
     Switch,
@@ -22,12 +21,6 @@ import { PRIMARY_COLOR } from '../../constants/colors';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
 
 dayjs.extend(customParseFormat);
-const normFile = (e) => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e?.fileList;
-};
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -42,9 +35,6 @@ export default function MovieForm(props) {
     // console.log(`Movie `, movie);
 
     const [ischecked, setIsChecked] = useState(false);
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
     var [listObjectImage, setListObjectImage] = useState([]);
     const [listImageUrl, setListImageUrl] = useState([]);
     const [listSubIcon, setListSubIcon] = useState([]);
@@ -87,7 +77,6 @@ export default function MovieForm(props) {
         });
         setListImageUrl(detailMovie.stream_platform_image);
         setListSubIcon([detailMovie.sub_icon]);
-        // console.log('listImageUrl', listImageUrl);
     }, [detailMovie]);
 
     const range = (start, end) => {
@@ -97,11 +86,6 @@ export default function MovieForm(props) {
         }
         return result;
     };
-    // const disabledDateTime = () => ({
-    //     disabledHours: () => range(0, 24).splice(4, 20),
-    //     disabledMinutes: () => range(30, 60),
-    //     disabledSeconds: () => [55, 56],
-    // });
 
     const handleFileChange = (file) => {
         const reader = new FileReader();
@@ -114,19 +98,8 @@ export default function MovieForm(props) {
             reader.readAsDataURL(file);
         }
     };
-
-    const handlePreview = async (file) => {
-        console.log('handlePreview', file);
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        setPreviewTitle(
-            file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
-        );
-    };
     const handleChangeUploadImage = (val) => {
+        console.log(val);
         listObjectImage.push(val.file);
 
         handleFileChange(val.fileList[val.fileList.length - 1].originFileObj);
@@ -136,22 +109,18 @@ export default function MovieForm(props) {
         setListSubIcon(fileList);
     };
 
-    const handleActionUploadImage = async (file) => {
-        await uploadImage(file, changeMovieURL);
-    };
-    const changeMovieURL = (url) => {
-        setMovie({ ...movie, image: url });
-    };
-
-    const handleClosePreview = () => {
-        setPreviewOpen(false);
-    };
-
     const disabledDate = (current) => {
         return current && current < moment().startOf('day');
     };
 
     const handleDeleteImage = (linkUrl, index) => {
+        const updatedImages = {
+            ...movie,
+            stream_platform_image: movie.stream_platform_image.filter(
+                (image) => image.id !== linkUrl.id
+            ),
+        };
+        setMovie(updatedImages);
         listObjectImage.splice(index, 1);
         setListImageUrl((preList) => {
             var cloneArray = [...preList];
@@ -159,7 +128,7 @@ export default function MovieForm(props) {
         });
     };
 
-    // console.log('handleUpdateMovie in MovieForm: ', movie);
+    console.log('handleUpdateMovie in MovieForm: ', movie);
     useEffect(() => {
         setMovie((movie) => ({
             ...movie,

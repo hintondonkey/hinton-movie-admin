@@ -34,19 +34,16 @@ const handleUpdateCategory = async (data) => {
 };
 
 const handleDeleteCategory = async (id) => {
-    console.log('delete category : ', id);
     const response = await axios.delete(`/lookup/category/${id}`, config);
     return response;
 };
 
 const handleCreateSubCategory = async (category) => {
-    console.log(category);
     const response = await axios.post(
         '/services/sub_category/',
         category,
         config
     );
-    console.log(response);
     return response;
 };
 
@@ -72,7 +69,6 @@ const handleGetIdSubCategory = async (id) => {
 };
 
 const handleUpdateSubCategory = async (data) => {
-    console.log('handleUpdateSubCategory : ', data);
     const response = await axios.patch(
         `/services/sub_category/${data.id}`,
         data.values,

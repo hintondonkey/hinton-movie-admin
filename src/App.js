@@ -38,15 +38,10 @@ function App() {
                         <Route path=":id" element={<EditMovieTicket />} />
                         <Route index element={<ListMoviePage />} />
                     </Route>
-                    <Route path="/listmovie1">
-                        <Route path=":id" element={<EditMovieTicket />} />
-                        <Route index element={<Listmovie />} />
-                    </Route>
                     <Route path="/addmovie">
                         <Route path=":id" element={<AddMoviePage />} />
                         <Route index element={<AddMoviePage />} />
                     </Route>
-                    <Route path="/addmovie1" element={<EditMovieTicket />} />
                     <Route path="/createAccount" element={<CreateAccount />} />
                     <Route
                         path="/createAccount/:id"

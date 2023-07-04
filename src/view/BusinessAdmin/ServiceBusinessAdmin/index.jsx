@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import LoadingSpin from '../../../common/LoadingSpin';
 import MenuNavigator from '../../../components/MenuNavigator';
 import './ServiceAccount.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     UpdateCategoryActive,
@@ -37,14 +37,6 @@ const columns = [
         dataIndex: 'active',
         key: 'active',
         width: 200,
-        // render: (value) => (
-        //     <Switch
-        //         className="switch_status"
-        //         checkedChildren="Active"
-        //         unCheckedChildren="Inactive"
-        //         style={{ width: 100 }}
-        //     />
-        // ),
     },
     {
         title: 'Price',
@@ -58,11 +50,7 @@ export default function ServiceBusinessAdmin() {
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const getIdBroker = location?.pathname?.split('/')[2];
-    const [checked, setChecked] = useState(false);
-    // const { isSuccess, isError, isLoading, createAccount, updateAccount } =
-    //     current_category;
 
     useEffect(() => {
         dispatch(getCategoryFllowBroker(getIdBroker));

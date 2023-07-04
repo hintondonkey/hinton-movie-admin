@@ -61,6 +61,15 @@ const handleDeleteWatchList = async (id) => {
     return response;
 };
 
+const handleUpdateActiveMovie = async (data) => {
+    const response = await axios.patch(
+        `/movie/stream_platform_update_active/${data.id}/`,
+        data.active,
+        config
+    );
+    return response;
+};
+
 const movieService = {
     handleCreateMovie,
     handleGetAllMovies,
@@ -71,6 +80,7 @@ const movieService = {
     handleCreateWatchList,
     handleUpdateWatchList,
     handleDeleteWatchList,
+    handleUpdateActiveMovie,
 };
 
 export default movieService;

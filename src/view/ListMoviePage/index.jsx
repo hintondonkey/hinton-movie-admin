@@ -1,28 +1,22 @@
-import { Button, Card, Col, Pagination, Row, Switch } from 'antd';
+import { Button, Col, Pagination, Row, Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
-
-import { IoAddCircleOutline } from 'react-icons/io5';
 import LoadingSpin from '../../common/LoadingSpin';
 import MenuNavigator from '../../components/MenuNavigator';
-import { INFO_COLOR } from '../../constants/colors';
-import { getAllMovie } from '../../services/UserService';
 import MovieCard from './MovieCard';
 import { useNavigate } from 'react-router-dom';
 import MovieTable from './MovieTable';
-import axios from '../../axios';
-import { config } from '../../utility/axiosconfig';
-import { listMovies } from '../../services/movie/movieServices';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteMovies, getAllMovies } from '../../services/movie/moiveSlice';
+import {
+    deleteMovies,
+    getAllMovies,
+    updateActiveMovie,
+} from '../../services/movie/moiveSlice';
 import { toast } from 'react-toastify';
 
 export default function ListMoviePage() {
     const [loading, setLoading] = useState(false);
-    // const [listMovie, setListMovie] = useState(listMovies);
-    const [totalItem, setTotalItem] = useState(0);
     const [isCard, setIsCard] = useState(false);
     const user = useSelector((state) => state?.auth?.user?.roles);
-    const del = useSelector((state) => state?.movie.deleteMovies);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -41,9 +35,17 @@ export default function ListMoviePage() {
 
     const handledeleteMovie = (item) => {
         dispatch(deleteMovies(item));
-        // window.location.reload();
         setTimeout(() => {
             toast.success(`Movie deleted successfully`);
+            dispatch(getAllMovies(user.broker_id));
+        }, 3000);
+    };
+
+    const changeActiveMovie = (item) => {
+        const data = { id: item.id, active: { active: !item.active } };
+        dispatch(updateActiveMovie(data));
+        setTimeout(() => {
+            toast.success(`Movie Active successfully`);
             dispatch(getAllMovies(user.broker_id));
         }, 1000);
     };
@@ -108,6 +110,7 @@ export default function ListMoviePage() {
                             }
                             handleOpenDetailMovie={handleOpenDetailMovie}
                             handledeleteMovie={handledeleteMovie}
+                            changeActiveMovie={changeActiveMovie}
                         />
                     ) : (
                         // <FilterTable />

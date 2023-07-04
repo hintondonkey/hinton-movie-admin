@@ -1,21 +1,8 @@
-import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { Col, Row } from 'antd';
 
 import LoadingSpin from '../../../common/LoadingSpin';
 import MenuNavigator from '../../../components/MenuNavigator';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import {
-    getIdSubCategory,
-    listCategory,
-    listSubCategory,
-    resetState,
-    subCreateCategory,
-    updateSubCategory,
-} from '../../../services/category/categorySlice';
-import { toast } from 'react-toastify';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
+import { useState } from 'react';
 
 export default function CreateBusinessAdmin() {
     const [loading, setLoading] = useState(false);

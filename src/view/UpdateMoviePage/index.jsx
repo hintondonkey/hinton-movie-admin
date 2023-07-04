@@ -5,11 +5,8 @@ import MenuNavigator from '../../components/MenuNavigator';
 import './styles.css';
 
 import { FiSave } from 'react-icons/fi';
-
-import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import LoadingSpin from '../../common/LoadingSpin';
 import '../../constants/colors';
 import { SUCCESS_COLOR } from '../../constants/colors';
@@ -17,7 +14,6 @@ import '../../models/edit_movie_request';
 import { getSubCategoryToCategoryToBrokerId } from '../../services/category/categorySlice';
 import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
-import dayjs from 'dayjs';
 import { getDetailMovies, updateMovie } from '../../services/movie/moiveSlice';
 import { toast } from 'react-toastify';
 
@@ -58,7 +54,6 @@ export default function UpdateMoviePage() {
     const user = useSelector((state) => state?.auth?.user);
     const detailMovie = useSelector((state) => state?.movie?.getDetailMovies);
     const update_Movie = useSelector((state) => state?.movie?.update_movie);
-    const isSuccess = useSelector((state) => state?.movie?.isSuccess);
     const subCategory = useSelector(
         (state) => state?.category?.getSubCategoryToCategoryToBrokerId
     );
@@ -104,16 +99,6 @@ export default function UpdateMoviePage() {
         const data = { id: IdMovie, data: newMovie };
         dispatch(updateMovie(data));
         console.log('Movie updated successfully :', update_Movie);
-        // setTimeout(() => {
-        //     setLoading(false);
-        //     console.log('Movie updated :', update_Movie);
-        //     if (update_Movie) {
-        //         toast.success('update Movie Successfullly!');
-        //         navigate('/listmovie');
-        //     } else {
-        //         toast.success('update Movie Error!');
-        //     }
-        // }, 3000);
     };
 
     const _buildHeader = () => (

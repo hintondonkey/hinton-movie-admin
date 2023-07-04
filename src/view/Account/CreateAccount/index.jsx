@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { Col, Row } from 'antd';
 import MenuNavigator from '../../../components/MenuNavigator';
 import LoadingSpin from '../../../common/LoadingSpin';
 import { toast } from 'react-toastify';
@@ -65,8 +65,7 @@ export default function CreateAccount() {
     const userId = useSelector((state) => state?.auth?.userId);
     const current_account = useSelector((state) => state?.auth);
 
-    const { isSuccess, isError, isLoading, createAccount, updateAccount } =
-        current_account;
+    const { isSuccess, updateAccount } = current_account;
 
     useEffect(() => {
         getIdUser && getIdUser !== undefined

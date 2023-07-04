@@ -23,7 +23,6 @@ export default function ListMoviePage() {
     const [isCard, setIsCard] = useState(false);
     const user = useSelector((state) => state?.auth?.user?.roles);
     const del = useSelector((state) => state?.movie.deleteMovies);
-    console.log(`ListMoviePage ${del}`);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();

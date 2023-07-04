@@ -32,6 +32,15 @@ const handleUpdateMovie = async (movie) => {
     return response;
 };
 
+const handleGetAllWatchList = async (id) => {
+    console.log('Get all watch list : ', id);
+    const response = await axios.get(
+        `/movie/watch-list/platform/${id}`,
+        config
+    );
+    return response;
+};
+
 const handleCreateWatchList = async (movie) => {
     const response = await axios.post(`/movie/watch-list/`, movie, config);
     return response;
@@ -46,14 +55,22 @@ const handleUpdateWatchList = async (movie) => {
     return response;
 };
 
+const handleDeleteWatchList = async (id) => {
+    console.log('handleDeleteWatchList : ', id);
+    const response = await axios.delete(`/movie/watch-list/${id}`, config);
+    return response;
+};
+
 const movieService = {
     handleCreateMovie,
     handleGetAllMovies,
     handleGetDetailMovies,
     handleDeleteMovies,
     handleUpdateMovie,
+    handleGetAllWatchList,
     handleCreateWatchList,
     handleUpdateWatchList,
+    handleDeleteWatchList,
 };
 
 export default movieService;

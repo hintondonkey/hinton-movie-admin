@@ -19,15 +19,7 @@ import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import dayjs from 'dayjs';
 import { getDetailMovies, updateMovie } from '../../services/movie/moiveSlice';
-
-const token = localStorage.getItem('mytoken');
-
-const config_json = {
-    headers: {
-        'content-type': 'application/json',
-        Authorization: `Token ${token}`,
-    },
-};
+import { toast } from 'react-toastify';
 
 export default function UpdateMoviePage() {
     const [form] = Form.useForm();
@@ -61,11 +53,12 @@ export default function UpdateMoviePage() {
 
     const location = useLocation();
     const dispatch = useDispatch();
-    const { state } = location;
 
     const IdMovie = location?.pathname?.split('/')[2];
     const user = useSelector((state) => state?.auth?.user);
     const detailMovie = useSelector((state) => state?.movie?.getDetailMovies);
+    const update_Movie = useSelector((state) => state?.movie?.update_movie);
+    const isSuccess = useSelector((state) => state?.movie?.isSuccess);
     const subCategory = useSelector(
         (state) => state?.category?.getSubCategoryToCategoryToBrokerId
     );
@@ -77,6 +70,13 @@ export default function UpdateMoviePage() {
             setListTicket(detailMovie.watchlist);
         }
     }, [detailMovie]);
+
+    useEffect(() => {
+        if (update_Movie) {
+            toast.success('update Movie Successfullly!');
+            navigate('/listmovie');
+        }
+    });
 
     useEffect(() => {
         setLoading(true);
@@ -94,7 +94,7 @@ export default function UpdateMoviePage() {
     }, [IdMovie, detailMovie?.category]);
 
     const handleUpdateMovie = async (movie) => {
-        console.log('Movie :  ', movie);
+        setLoading(true);
         const newMovie = { ...movie };
         delete newMovie.watchlist;
         if (!('is_notification' in newMovie)) {
@@ -103,6 +103,17 @@ export default function UpdateMoviePage() {
         }
         const data = { id: IdMovie, data: newMovie };
         dispatch(updateMovie(data));
+        console.log('Movie updated successfully :', update_Movie);
+        // setTimeout(() => {
+        //     setLoading(false);
+        //     console.log('Movie updated :', update_Movie);
+        //     if (update_Movie) {
+        //         toast.success('update Movie Successfullly!');
+        //         navigate('/listmovie');
+        //     } else {
+        //         toast.success('update Movie Error!');
+        //     }
+        // }, 3000);
     };
 
     const _buildHeader = () => (

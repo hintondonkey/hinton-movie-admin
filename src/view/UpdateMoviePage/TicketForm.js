@@ -7,6 +7,8 @@ import TicketModal from './TicketModal';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     createWatchList,
+    deleteWatchList,
+    getAllWatchList,
     getDetailMovies,
 } from '../../services/movie/moiveSlice';
 
@@ -17,6 +19,7 @@ export default function TicketForm(props) {
     const [ticketForEdit, setTicketForEdit] = useState(null);
     const dispatch = useDispatch();
     const detailWatchlist = useSelector((state) => state?.movie);
+    const watchList = useSelector((state) => state?.movie?.watchList);
 
     const { isError, isSuccess, create_Watch_List } = detailWatchlist;
 
@@ -66,6 +69,7 @@ export default function TicketForm(props) {
             if (isSuccess) {
                 const newList = [...listTicket];
                 newList.push(newTicket);
+                console.log(newList);
                 setListTicket(newList);
             }
         }, 3000);
@@ -100,11 +104,13 @@ export default function TicketForm(props) {
         setListTicket(newList);
     };
 
-    const handleDeleteTicket = (id) => {
-        console.log('index', getIndex(id));
-        listTicket.splice(getIndex(id), 1);
-
-        setListTicket([...listTicket]);
+    const handleDeleteTicket = (item) => {
+        dispatch(deleteWatchList(item.id));
+        // Lọc danh sách mới chỉ bao gồm các phần tử không bị xóa
+        const updatedListTicket = listTicket.filter(
+            (ticket) => ticket.id !== item.id
+        );
+        setListTicket(updatedListTicket);
     };
 
     const getIndex = (id) => {
@@ -167,7 +173,7 @@ export default function TicketForm(props) {
                             type="primary"
                             size="small"
                             danger
-                            onClick={() => handleDeleteTicket(val.key)}
+                            onClick={() => handleDeleteTicket(val)}
                         >
                             <MdDeleteOutline size={20} />
                         </Button>

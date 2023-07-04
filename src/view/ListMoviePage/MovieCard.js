@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 export default function MovieCard(props) {
     let { item, handleOpenDetailMovie } = props;
+    console.log(item);
 
     return (
         <Col
@@ -35,7 +36,11 @@ export default function MovieCard(props) {
                 >
                     <img
                         style={{ height: '100%', width: '100%' }}
-                        src={item.image}
+                        src={
+                            item && item !== ''
+                                ? item.stream_platform_image[0].name
+                                : ''
+                        }
                         alt="Poster of Movie"
                     />
                 </div>

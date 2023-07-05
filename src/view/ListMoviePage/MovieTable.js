@@ -184,7 +184,9 @@ export default function MovieTable(props) {
                         width={80}
                         height={80}
                         src={
-                            image && image !== '' ? image[0].name : EMPTY_IMAGE
+                            image && image !== ''
+                                ? image[0]?.name
+                                : 'https://tophinhanhdep.com/wp-content/uploads/2021/09/4K-Marvel-Wallpapers.jpg'
                         }
                     />
                 </div>

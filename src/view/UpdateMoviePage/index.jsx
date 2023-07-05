@@ -16,7 +16,7 @@ import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import { getDetailMovies, updateMovie } from '../../services/movie/moiveSlice';
 import { toast } from 'react-toastify';
-import { getImageUid, uploadImage } from '../../services/Firebase';
+import { deleteImage, getImageUid, uploadImage } from '../../services/Firebase';
 import { uuidv4 } from '@firebase/util';
 
 export default function UpdateMoviePage() {
@@ -26,6 +26,7 @@ export default function UpdateMoviePage() {
     const [loading, setLoading] = useState(false);
     var [listImage, setListImage] = useState([]);
     var [listObjectImageUpload, setListObjectImageUpload] = useState([]);
+    const [listDeleteImageFirebase, setListDeleteImageFirebase] = useState([]);
 
     var [movie, setMovie] = useState({
         id: '',
@@ -92,6 +93,10 @@ export default function UpdateMoviePage() {
         }, 3000);
     }, [IdMovie, detailMovie?.category]);
 
+    const handleDeleteImageInFirebase = (linkImage) => {
+        setListDeleteImageFirebase([...listDeleteImageFirebase, linkImage]);
+    };
+
     const handleUpdateMovie = async () => {
         setLoading(true);
 
@@ -101,7 +106,7 @@ export default function UpdateMoviePage() {
         try {
             const promisesImage = listObjectImageUpload.map((objectImage) => {
                 return new Promise((resolve) => {
-                    uploadImage(objectImage, (url) => {
+                    uploadImage(objectImage.file, (url) => {
                         listImageSuccessUpload.push({
                             id: uuidv4(),
                             name: url,
@@ -113,6 +118,20 @@ export default function UpdateMoviePage() {
             });
             await Promise.all(promisesImage);
         } catch {}
+
+        if (listDeleteImageFirebase.length > 0) {
+            try {
+                const promisesDeleteImage = listDeleteImageFirebase.map(
+                    (imageUrl) => {
+                        return new Promise((resolve) => {
+                            deleteImage(getImageUid(imageUrl));
+                            resolve();
+                        });
+                    }
+                );
+                await Promise.all(promisesDeleteImage);
+            } catch {}
+        }
 
         listImageSuccessUpload.map((e) => {
             console.log(
@@ -185,6 +204,9 @@ export default function UpdateMoviePage() {
                                 movie={movie}
                                 subCategory={subCategory}
                                 listObjectImageUpload={listObjectImageUpload}
+                                handleDeleteImageInFirebase={
+                                    handleDeleteImageInFirebase
+                                }
                             />
                             <TicketForm
                                 listTicket={listTicket}

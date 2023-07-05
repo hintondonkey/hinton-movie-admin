@@ -1,6 +1,7 @@
 version: '3.9'
 services:
     nginx:
+        container_name: hintonmovieadmin
         image: nginx:1.23.3
         ports:
             - 3001:80

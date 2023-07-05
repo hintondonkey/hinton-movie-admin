@@ -31,7 +31,8 @@ const getBase64 = (file) =>
     });
 
 export default function MovieForm(props) {
-    let { form, detailMovie, movie, setMovie, subCategory } = props;
+    let { form, setListImage, detailMovie, movie, setMovie, subCategory } =
+        props;
     // console.log(`Movie `, movie);
 
     const [ischecked, setIsChecked] = useState(false);
@@ -99,9 +100,9 @@ export default function MovieForm(props) {
         }
     };
     const handleChangeUploadImage = (val) => {
-        console.log(val);
-        listObjectImage.push(val.file);
-
+        listObjectImage.push(val.file.originFileObj);
+        console.log('Upload : ', listObjectImage);
+        setListImage(listObjectImage);
         handleFileChange(val.fileList[val.fileList.length - 1].originFileObj);
     };
 
@@ -502,11 +503,14 @@ export default function MovieForm(props) {
                     {listImageUrl.map((val, index) => (
                         <Col style={{ marginTop: 12 }}>
                             <PhotoProvider>
-                                <PhotoView key={1} src={val.name}>
+                                <PhotoView
+                                    key={1}
+                                    src={val.name ? val.name : val}
+                                >
                                     <img
                                         width={isFramePoster ? 200 : 400}
                                         height={300}
-                                        src={val && val.name ? val.name : ''}
+                                        src={val && val?.name ? val?.name : val}
                                         alt=""
                                         style={{
                                             marginRight: 10,

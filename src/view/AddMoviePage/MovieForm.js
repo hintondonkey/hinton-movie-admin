@@ -53,6 +53,8 @@ export default function MovieForm(props) {
     };
 
     const handleChangeUploadImage = (val) => {
+        console.log(val);
+        console.log(listObjectImage);
         listObjectImage.push(val.file.originFileObj);
 
         handleFileChange(val.fileList[val.fileList.length - 1].originFileObj);
@@ -74,7 +76,7 @@ export default function MovieForm(props) {
         });
     };
 
-    // console.log('handleUpdateMovie in MovieForm: ', movie);
+    console.log('handleUpdateMovie in MovieForm: ', movie);
     useEffect(() => {
         setMovie((movie) => ({
             ...movie,

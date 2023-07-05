@@ -16,12 +16,14 @@ import MovieForm from './MovieForm';
 import TicketForm from './TicketForm';
 import { getDetailMovies, updateMovie } from '../../services/movie/moiveSlice';
 import { toast } from 'react-toastify';
+import { getImageUid, uploadImage } from '../../services/Firebase';
 
 export default function UpdateMoviePage() {
     const [form] = Form.useForm();
     const [formTicket] = Form.useForm();
     const [listTicket, setListTicket] = useState([]);
     const [loading, setLoading] = useState(false);
+    var [listImage, setListImage] = useState([]);
 
     const [movie, setMovie] = useState({
         id: '',
@@ -89,7 +91,31 @@ export default function UpdateMoviePage() {
     }, [IdMovie, detailMovie?.category]);
 
     const handleUpdateMovie = async (movie) => {
+        console.log('Uploading image 110 : ', listImage);
         setLoading(true);
+
+        // Bước upload hình
+        try {
+            const promisesImage = listImage.map((objectImage) => {
+                return new Promise((resolve) => {
+                    uploadImage(objectImage, (url) => {
+                        let requestImageObject = {};
+                        requestImageObject['uid'] = getImageUid(url);
+                        requestImageObject['name'] = url;
+                        requestImageObject['id'] = 10;
+                        setTimeout(() => {
+                            movie.stream_platform_image.push(
+                                requestImageObject
+                            );
+                        }, 600);
+
+                        resolve();
+                    });
+                });
+            });
+            await Promise.all(promisesImage);
+        } catch {}
+        console.log('Uploading image : ', movie);
         const newMovie = { ...movie };
         delete newMovie.watchlist;
         if (!('is_notification' in newMovie)) {
@@ -97,8 +123,9 @@ export default function UpdateMoviePage() {
             newMovie.is_notification = false;
         }
         const data = { id: IdMovie, data: newMovie };
+        console.log('Movie updated successfully :', data);
         dispatch(updateMovie(data));
-        console.log('Movie updated successfully :', update_Movie);
+        setLoading(false);
     };
 
     const _buildHeader = () => (
@@ -149,6 +176,7 @@ export default function UpdateMoviePage() {
                                 setMovie={setMovie}
                                 movie={movie}
                                 subCategory={subCategory}
+                                setListImage={setListImage}
                             />
                             <TicketForm
                                 listTicket={listTicket}

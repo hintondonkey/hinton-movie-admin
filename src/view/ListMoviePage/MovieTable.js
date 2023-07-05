@@ -18,7 +18,7 @@ export default function MovieTable(props) {
         },
     });
     const searchInput = useRef(null);
-    console.log('stream_platform_image : ', data);
+    // console.log('stream_platform_image : ', data);
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
             pagination,

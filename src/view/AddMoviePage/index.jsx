@@ -119,9 +119,8 @@ export default function AddMoviePage() {
                         requestImageObject['uid'] = getImageUid(url);
                         requestImageObject['name'] = url;
                         setTimeout(() => {
-                            setLoading(false);
                             image.push(requestImageObject);
-                        }, 1000);
+                        }, 600);
 
                         resolve();
                     });
@@ -168,7 +167,6 @@ export default function AddMoviePage() {
 
         console.log('editMovieRequest', editMovieRequest);
         setTimeout(() => {
-            setLoading(false);
             dispatch(createMovie(editMovieRequest));
             if (isSuccess) {
                 toast.success(`create ${movie.title} Successfullly!`);
@@ -176,6 +174,7 @@ export default function AddMoviePage() {
         }, 1000);
 
         setTimeout(() => {
+            setLoading(false);
             navigate('/listmovie');
             dispatch(getAllMovies(user.roles.broker_id));
         }, 3000);

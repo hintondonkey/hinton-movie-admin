@@ -19,6 +19,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { PRIMARY_COLOR } from '../../constants/colors';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
+import { uuidv4 } from '@firebase/util';
 
 dayjs.extend(customParseFormat);
 
@@ -31,12 +32,18 @@ const getBase64 = (file) =>
     });
 
 export default function MovieForm(props) {
-    let { form, setListImage, detailMovie, movie, setMovie, subCategory } =
-        props;
+    let {
+        form,
+        detailMovie,
+        movie,
+        setMovie,
+        subCategory,
+        listObjectImageUpload,
+    } = props;
     // console.log(`Movie `, movie);
 
     const [ischecked, setIsChecked] = useState(false);
-    var [listObjectImage, setListObjectImage] = useState([]);
+
     const [listImageUrl, setListImageUrl] = useState([]);
     const [listSubIcon, setListSubIcon] = useState([]);
 
@@ -94,16 +101,19 @@ export default function MovieForm(props) {
         if (file) {
             reader.onload = (e) => {
                 const url = e.target.result;
-                setListImageUrl((preList) => [...preList, url]);
+                let newImageUrl = { id: uuidv4(), name: url };
+                setListImageUrl((preList) => [...preList, newImageUrl]);
             };
             reader.readAsDataURL(file);
         }
     };
     const handleChangeUploadImage = (val) => {
-        listObjectImage.push(val.file.originFileObj);
-        console.log('Upload : ', listObjectImage);
-        setListImage(listObjectImage);
-        handleFileChange(val.fileList[val.fileList.length - 1].originFileObj);
+        listObjectImageUpload.push(val.file.originFileObj);
+        console.log('Upload : ', listObjectImageUpload);
+        // setListImage(listObjectImageUpload);
+        handleFileChange(
+            listObjectImageUpload[listObjectImageUpload.length - 1]
+        );
     };
 
     const handleChangeUploadSubIcon = ({ fileList }) => {
@@ -122,7 +132,7 @@ export default function MovieForm(props) {
             ),
         };
         setMovie(updatedImages);
-        listObjectImage.splice(index, 1);
+        listObjectImageUpload.splice(index, 1);
         setListImageUrl((preList) => {
             var cloneArray = [...preList];
             return cloneArray.filter((obj) => obj !== linkUrl);
@@ -150,6 +160,10 @@ export default function MovieForm(props) {
             subcategory: value,
         });
     };
+
+    {
+        console.log('test listImageUrl', listImageUrl);
+    }
 
     return (
         <div
@@ -510,7 +524,7 @@ export default function MovieForm(props) {
                                     <img
                                         width={isFramePoster ? 200 : 400}
                                         height={300}
-                                        src={val && val?.name ? val?.name : val}
+                                        src={val && val?.name ? val?.name : ''}
                                         alt=""
                                         style={{
                                             marginRight: 10,

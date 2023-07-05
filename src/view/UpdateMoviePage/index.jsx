@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LoadingSpin from '../../common/LoadingSpin';
 import '../../constants/colors';
-import { SUCCESS_COLOR } from '../../constants/colors';
+import { INFO_COLOR, SUCCESS_COLOR } from '../../constants/colors';
 import '../../models/edit_movie_request';
 import { getSubCategoryToCategoryToBrokerId } from '../../services/category/categorySlice';
 import MovieForm from './MovieForm';
@@ -17,6 +17,7 @@ import TicketForm from './TicketForm';
 import { getDetailMovies, updateMovie } from '../../services/movie/moiveSlice';
 import { toast } from 'react-toastify';
 import { getImageUid, uploadImage } from '../../services/Firebase';
+import { uuidv4 } from '@firebase/util';
 
 export default function UpdateMoviePage() {
     const [form] = Form.useForm();
@@ -24,8 +25,9 @@ export default function UpdateMoviePage() {
     const [listTicket, setListTicket] = useState([]);
     const [loading, setLoading] = useState(false);
     var [listImage, setListImage] = useState([]);
+    var [listObjectImageUpload, setListObjectImageUpload] = useState([]);
 
-    const [movie, setMovie] = useState({
+    var [movie, setMovie] = useState({
         id: '',
         subcategory: '',
         category: '',
@@ -42,7 +44,7 @@ export default function UpdateMoviePage() {
         active: true,
         titleNoti: '',
         summaryNoti: '',
-        stream_flatform_image: [],
+        stream_platform_image: [],
         sub_icon: '',
         uid_sub_icon: '',
         is_horizontal: true,
@@ -65,6 +67,7 @@ export default function UpdateMoviePage() {
     useEffect(() => {
         if (detailMovie !== null && detailMovie !== undefined) {
             setListTicket(detailMovie.watchlist);
+            setMovie({ ...detailMovie });
         }
     }, [detailMovie]);
 
@@ -87,34 +90,39 @@ export default function UpdateMoviePage() {
                 })
             );
         }, 3000);
-        setMovie(detailMovie);
     }, [IdMovie, detailMovie?.category]);
 
-    const handleUpdateMovie = async (movie) => {
-        console.log('Uploading image 110 : ', listImage);
+    const handleUpdateMovie = async () => {
         setLoading(true);
+
+        let listImageSuccessUpload = [];
 
         // Bước upload hình
         try {
-            const promisesImage = listImage.map((objectImage) => {
+            const promisesImage = listObjectImageUpload.map((objectImage) => {
                 return new Promise((resolve) => {
                     uploadImage(objectImage, (url) => {
-                        let requestImageObject = {};
-                        requestImageObject['uid'] = getImageUid(url);
-                        requestImageObject['name'] = url;
-                        requestImageObject['id'] = 10;
-                        setTimeout(() => {
-                            movie.stream_platform_image.push(
-                                requestImageObject
-                            );
-                        }, 600);
-
+                        listImageSuccessUpload.push({
+                            id: uuidv4(),
+                            name: url,
+                            uid: getImageUid(url),
+                        });
                         resolve();
                     });
                 });
             });
             await Promise.all(promisesImage);
         } catch {}
+
+        listImageSuccessUpload.map((e) => {
+            console.log(
+                '  movie.stream_platform_image',
+                movie.stream_platform_image
+            );
+            movie.stream_platform_image = [...movie.stream_platform_image, e];
+            return e;
+        });
+
         console.log('Uploading image : ', movie);
         const newMovie = { ...movie };
         delete newMovie.watchlist;
@@ -123,7 +131,7 @@ export default function UpdateMoviePage() {
             newMovie.is_notification = false;
         }
         const data = { id: IdMovie, data: newMovie };
-        console.log('Movie updated successfully :', data);
+
         dispatch(updateMovie(data));
         setLoading(false);
     };
@@ -141,12 +149,12 @@ export default function UpdateMoviePage() {
                     size="large"
                     style={{
                         width: 200,
-                        backgroundColor: SUCCESS_COLOR,
+                        backgroundColor: INFO_COLOR,
                     }}
-                    onClick={() => handleUpdateMovie(movie)}
+                    onClick={handleUpdateMovie}
                 >
                     <FiSave size={25} style={{ marginRight: 8 }} />
-                    Save Movie
+                    Update Movie
                 </Button>
             </Col>
         </Row>
@@ -176,7 +184,7 @@ export default function UpdateMoviePage() {
                                 setMovie={setMovie}
                                 movie={movie}
                                 subCategory={subCategory}
-                                setListImage={setListImage}
+                                listObjectImageUpload={listObjectImageUpload}
                             />
                             <TicketForm
                                 listTicket={listTicket}

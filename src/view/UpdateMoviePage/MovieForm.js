@@ -83,6 +83,10 @@ export default function MovieForm(props) {
             notification_summary: detailMovie.summaryNoti,
             subcategory: detailMovie.subcategory,
         });
+        // let abc = detailMovie.stream_platform_image.map((e) => {
+        //     return { ...e, isSaveDB: true };
+        // });
+
         setListImageUrl(detailMovie.stream_platform_image);
         setListSubIcon([detailMovie.sub_icon]);
     }, [detailMovie]);

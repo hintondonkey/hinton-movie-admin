@@ -39,6 +39,7 @@ export default function MovieForm(props) {
         setMovie,
         subCategory,
         listObjectImageUpload,
+        handleDeleteImageInFirebase,
     } = props;
     // console.log(`Movie `, movie);
 
@@ -83,11 +84,12 @@ export default function MovieForm(props) {
             notification_summary: detailMovie.summaryNoti,
             subcategory: detailMovie.subcategory,
         });
-        // let abc = detailMovie.stream_platform_image.map((e) => {
-        //     return { ...e, isSaveDB: true };
-        // });
 
-        setListImageUrl(detailMovie.stream_platform_image);
+        setListImageUrl(
+            detailMovie.stream_platform_image.map((e) => {
+                return { ...e, isSaveDb: true };
+            })
+        );
         setListSubIcon([detailMovie.sub_icon]);
     }, [detailMovie]);
 
@@ -99,24 +101,33 @@ export default function MovieForm(props) {
         return result;
     };
 
-    const handleFileChange = (file) => {
+    const handleFileChange = (file, imageId) => {
         const reader = new FileReader();
 
         if (file) {
             reader.onload = (e) => {
                 const url = e.target.result;
-                let newImageUrl = { id: uuidv4(), name: url };
+                let newImageUrl = {
+                    id: imageId,
+                    name: url,
+                    uid: '123',
+                    isSaveDb: false,
+                };
                 setListImageUrl((preList) => [...preList, newImageUrl]);
             };
             reader.readAsDataURL(file);
         }
     };
     const handleChangeUploadImage = (val) => {
-        listObjectImageUpload.push(val.file.originFileObj);
+        listObjectImageUpload.push({
+            id: uuidv4(),
+            file: val.file.originFileObj,
+        });
         console.log('Upload : ', listObjectImageUpload);
         // setListImage(listObjectImageUpload);
         handleFileChange(
-            listObjectImageUpload[listObjectImageUpload.length - 1]
+            listObjectImageUpload[listObjectImageUpload.length - 1].file,
+            listObjectImageUpload[listObjectImageUpload.length - 1].id
         );
     };
 
@@ -128,22 +139,33 @@ export default function MovieForm(props) {
         return current && current < moment().startOf('day');
     };
 
-    const handleDeleteImage = (linkUrl, index) => {
-        const updatedImages = {
-            ...movie,
-            stream_platform_image: movie.stream_platform_image.filter(
-                (image) => image.id !== linkUrl.id
-            ),
-        };
-        setMovie(updatedImages);
-        listObjectImageUpload.splice(index, 1);
+    const handleDeleteImage = (imageObject, index) => {
+        console.log('test imageId', imageObject);
+        if (imageObject && imageObject.isSaveDb) {
+            // xóa hình đã có trên firebase
+            setMovie({
+                ...movie,
+                stream_platform_image: movie.stream_platform_image.filter(
+                    (image) => image.id !== imageObject.id
+                ),
+            });
+            handleDeleteImageInFirebase(imageObject.name);
+        } else {
+            // xóa hình khỏi list update
+            listObjectImageUpload.splice(
+                listObjectImageUpload.findIndex(
+                    (object) => object.id === imageObject.id
+                ),
+                1
+            );
+        }
+
         setListImageUrl((preList) => {
             var cloneArray = [...preList];
-            return cloneArray.filter((obj) => obj !== linkUrl);
+            return cloneArray.filter((obj) => obj.id !== imageObject.id);
         });
     };
 
-    console.log('handleUpdateMovie in MovieForm: ', movie);
     useEffect(() => {
         setMovie((movie) => ({
             ...movie,
@@ -166,7 +188,9 @@ export default function MovieForm(props) {
     };
 
     {
+        console.log('test movie', movie);
         console.log('test listImageUrl', listImageUrl);
+        console.log('test listObjectImageUpload', listObjectImageUpload);
     }
 
     return (

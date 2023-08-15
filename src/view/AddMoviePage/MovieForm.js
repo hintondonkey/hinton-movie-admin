@@ -5,10 +5,12 @@ import {
     DatePicker,
     Form,
     Input,
+    List,
     Modal,
     Row,
     Select,
     Switch,
+    Tag,
     Upload,
 } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
@@ -18,8 +20,13 @@ import moment from 'moment';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
-import { PRIMARY_COLOR } from '../../constants/colors';
+import {
+    INFO_COLOR,
+    PRIMARY_COLOR,
+    SECONDARY_COLOR,
+} from '../../constants/colors';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 dayjs.extend(customParseFormat);
 const normFile = (e) => {
@@ -409,7 +416,95 @@ export default function MovieForm(props) {
                         </div>
                     </Col>
                 </Row>
+
                 <Form.Item
+                    name="keywords"
+                    label="Keywords"
+                    labelCol={{ span: 3 }}
+                >
+                    <Row>
+                        <Col span={20}>
+                            <Input />
+                            <div style={{ marginTop: '10px', display: 'flex' }}>
+                                {['Thanh', 'Kiên'].map((tag, index) => (
+                                    <Tag
+                                        key={index}
+                                        closable
+                                        color={INFO_COLOR}
+                                        onClose={() => {}}
+                                    >
+                                        {tag}
+                                    </Tag>
+                                ))}
+                            </div>
+                        </Col>
+                        <Col span={4}>
+                            <Button
+                                type="primary"
+                                style={{
+                                    backgroundColor: SECONDARY_COLOR,
+                                }}
+                            >
+                                Add
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form.Item>
+                <Form.Item label="Location" labelCol={{ span: 3 }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'left',
+                            marginLeft: 16,
+                        }}
+                    >
+                        <Switch
+                            className="switch_status"
+                            defaultChecked={true ? true : false}
+                            checkedChildren="Online"
+                            unCheckedChildren="Offline"
+                            style={{
+                                width: 100,
+                            }}
+                        />
+                    </div>
+                </Form.Item>
+                <Form.Item
+                    name="country"
+                    label="Country"
+                    labelCol={{ span: 3 }}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    name="provinces"
+                    label="Provinces"
+                    labelCol={{ span: 3 }}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    name="address"
+                    label="Address"
+                    labelCol={{ span: 3 }}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item name="city" label="City" labelCol={{ span: 3 }}>
+                    <Row>
+                        <Col span={16} style={{ paddingRight: 40 }}>
+                            <Input />
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item name="city" label="Postal Code">
+                                <Input />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form.Item>
+
+                {/* Cmt lại khúc xử lý Notification */}
+                {/* <Form.Item
                     label="Send Notification"
                     valuePropName="checked"
                     labelCol={{ span: 3 }}
@@ -479,7 +574,7 @@ export default function MovieForm(props) {
                             />
                         </Form.Item>
                     </div>
-                )}
+                )} */}
                 {/* <Form.Item
                     name="fileList"
                     valuePropName="fileList"

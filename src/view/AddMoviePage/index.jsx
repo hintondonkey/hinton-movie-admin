@@ -285,11 +285,11 @@ export default function AddMoviePage() {
                         setMovie={setMovie}
                         subCategory={subCategory}
                     />
-                    <TicketForm
+                    {/* <TicketForm
                         listTicket={listTicket}
                         setListTicket={setListTicket}
                         formTicket={formTicket}
-                    />
+                    /> */}
                 </Col>
             </Row>
             {loading ? <LoadingSpin /> : <></>}

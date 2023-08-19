@@ -65,6 +65,7 @@ export default function MenuNavigator() {
                 getItem('List', '/listSubCategory', null),
             ]
         ),
+        getItem('News List', '/newslist', <HiOutlineHome size={20} />),
     ];
 
     const Business_Admin = [

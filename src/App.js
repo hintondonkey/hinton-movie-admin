@@ -20,6 +20,7 @@ import ListSubCategory from './view/SubCategory/ListSubCategory';
 import LoginPage from './view/login_page';
 import CreateBusinessAdmin from './view/BusinessAdmin/CreateBusinessAdmin';
 import UpdateMoviePage from './view/UpdateMoviePage';
+import NewsListPage from './view/News/NewsList';
 
 function App() {
     return (
@@ -89,6 +90,7 @@ function App() {
                     <Route path="/updateMovie">
                         <Route path=":id" element={<UpdateMoviePage />} />
                     </Route>
+                    <Route path="/newslist" element={<NewsListPage />} />
                 </Routes>
             </BrowserRouter>
             <ToastContainer
